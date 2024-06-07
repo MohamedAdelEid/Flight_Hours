@@ -31,10 +31,6 @@ class Job extends Model
     }
     public function scopeSearch($query, $value)
     {
-        $query->where('job_name', 'like', "%{$value}%")
-            ->orWhere('status', 'like', "%{$value}%")
-            ->orWhereHas('status', function ($subQuery) use ($value) {
-                $subQuery->where('job_type', 'like', "%{$value}%");
-            });
+        $query->where('job_name', 'like', "%{$value}%");
     }
 }
