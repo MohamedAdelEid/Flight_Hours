@@ -15,16 +15,12 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/employee/index', function () {
         return view('employee.index');
     });
-
     // Resource route job
     Route::resource('job', JobController::class);
-
     // Resource route airport
     Route::resource('airport', AirportController::class);
-
     // Resource route aircraft
     Route::resource('aircraft', AircraftController::class);
-
 });
 
 Route::get('/admin/dashboard', function () {

@@ -29,13 +29,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Ckeck role and redirect to this page   
+        // Check role and redirect to this page
         if (Auth::user()->isAdmin()) {
             return redirect()->intended(route('/admin/dashboard'));
         } elseif (Auth::user()->isEmployee()) {
-            return redirect()->intended('/employee/index');
+            return redirect()->intended(route('/employee/index'));
         } elseif (Auth::user()->isCaptain()) {
-            return redirect()->intended('/captain/index');
+            return redirect()->intended(route('/captain/index'));
         } else {
             abort(403);
         }

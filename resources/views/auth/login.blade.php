@@ -50,7 +50,7 @@
                 <div class="d-flex align-items-center justify-content-center p-5 h-100">
 
                     <div class="content-login">
-                        <form action="{{ route('login.store') }}" method="post">
+                        <form action="{{ route('login') }}" method="post">
                             @csrf
                             <div class="text-center mb-5">
                                 <p class="welcome">welcome to</p>
