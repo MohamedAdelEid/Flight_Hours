@@ -11,12 +11,12 @@ class AirportController extends Controller
     public function index()
     {
         $airports = Airport::all()->sortByDesc('created_at');
-        return view('user.airport.index', ['airports' => $airports]);
+        return view('employee.airport.index', ['airports' => $airports]);
     }
 
     public function create()
     {
-        return view('user.airport.add');
+        return view('employee.airport.add');
     }
 
     public function store(Request $request)
@@ -46,12 +46,12 @@ class AirportController extends Controller
 
     public function show(Airport $airport)
     {
-        return view('user.airport.show', ['airport' => $airport]);
+        return view('employee.airport.show', ['airport' => $airport]);
     }
 
     public function edit(Airport $airport)
     {
-        return view('user.airport.edit', ['airport' => $airport]);
+        return view('employee.airport.edit', ['airport' => $airport]);
     }
 
     public function update(Request $request, Airport $airport)

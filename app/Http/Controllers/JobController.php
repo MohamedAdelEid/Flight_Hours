@@ -55,8 +55,9 @@ class JobController extends Controller
 
     public function edit(Job $job)
     {
-        return view('user.job.edit', [
-            'job' => $job
+        return view('employee.job.edit', [
+            'job' => $job,
+            'job_types' => JobType::all()
         ]);
     }
 
@@ -64,16 +65,20 @@ class JobController extends Controller
     {
         $validatedData = $request->validate([
             'job_name' => ['required', 'string', 'max:255'],
-            'type_id' => ['required|exists:job_types,id'],
+            'type_id' => ['required','exists:job_types,id'],
+            'status' => ['required', 'in:active,inactive'],
         ], [
             'job_name.required' => 'The job name field is required.',
             'job_name.string' => 'The job name must be a string.',
             'job_name.max' => 'The job name may not be greater than 255 characters.',
+            'status.required' => 'The job status field is required.',
+            'status.in' => 'Invalid job status.',
         ]);
 
         $job->update([
             'job_name' => $validatedData['job_name'],
             'type_id' => $validatedData['type_id'],
+            'status' => $validatedData['status'],
         ]);
 
         return redirect()->back()->with('success', 'Job Updated Successfully');

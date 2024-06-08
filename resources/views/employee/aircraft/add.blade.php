@@ -1,4 +1,4 @@
-@extends('layouts.admin.main')
+@extends('layouts.employee.main')
 
 @section('alerts')
         {{-- alert add AirCraft success --}}
@@ -55,7 +55,56 @@
                     </div>
 
                     </div>
+                        <div>
+                            <label class="block text-xl">
+                                <span class="text-gray-700 dark:text-white block mb-2">اسم الصانع </span>
+                                <input name="manufacturer"
+                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                            </label>
+                            @error('manufacturer')
+                            <span class="text-xs text-red-600 dark:text-red-400">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div>
+                            <div>
+                                <label class="block text-xl">
+                                    <span class="text-gray-700 dark:text-white block mb-2"> رقم التسجيل </span>
+                                    <input name="registration_number"
+                                           class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                </label>
+                                @error('registration_number')
+                                <span class="text-xs text-red-600 dark:text-red-400">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
 
+                        </div>
+                        <div>
+                            <div>
+                                <label class="block text-xl">
+                                <span class="text-gray-700 dark:text-white block mb-2">
+                                    حالة الطائرة
+                                </span>
+                                    <select id="job-status" name="status"
+                                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                        <option disabled selected>اختر الحالة</option>
+                                        <option value="active">نشطة</option>
+                                        <option value="inactive">غير نشطة</option>
+                                        <option value="maintenance"> داخل الصيانة </option>
+                                    </select>
+                                </label>
+                                @error('status')
+                                <span class="text-xs text-red-600 dark:text-red-400">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
+
+                        </div>
+                        <div></div>
                     <button
                         class="px-9 py-3 mt-6 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
                         إضافة
@@ -67,3 +116,6 @@
         </div>
     </main>
 @endsection
+@push('script')
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+@endpush

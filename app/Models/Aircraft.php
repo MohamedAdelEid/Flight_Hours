@@ -25,4 +25,15 @@ class Aircraft extends Model
     {
         return $this->hasMany(FlightHour::class);
     }
+    public function scopeSearch($query, $value)
+    {
+        $query->where('aircraft_name', 'like', "%{$value}%")
+            ->orWhere('aircraft_code', 'like', "%{$value}%")
+            ->orWhere('status', 'like', "%{$value}%")
+            ->orWhere('manufacturer', 'like', "%{$value}%")
+            ->orWhere('registration_number', 'like', "%{$value}%")
+            ->orWhereHas('user',function ($subQuery) use($value){
+                $subQuery->where('name', 'like', "%{$value}%");
+            } );
+    }
 }

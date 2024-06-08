@@ -35,6 +35,10 @@ class Job extends Model
             ->orWhere('status', 'like', "%{$value}%")
             ->orWhereHas('job_type', function ($subQuery) use ($value) {
                 $subQuery->where('job_type', 'like', "%{$value}%");
-            });
+            })
+            ->orWhereHas('user',function ($subQuery) use($value){
+                $subQuery->where('name', 'like', "%{$value}%");
+            } )
+        ;
     }
 }

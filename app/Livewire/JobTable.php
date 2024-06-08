@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Job;
+use Illuminate\Database\QueryException;
 use Livewire\Component;
 use App\Models\JobType;
 use Livewire\WithPagination;
@@ -14,6 +15,9 @@ class JobTable extends Component
     public $perPage = 5;
     public $job_type = '';
 
+    public function delete(Job $job){
+            $job->delete();
+    }
     public function render()
     {
         return view(

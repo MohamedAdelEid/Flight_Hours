@@ -12,32 +12,31 @@ class AircraftController extends Controller
     public function index()
     {
         $aircrafts = Aircraft::all()->sortByDesc('created_at');
-        return view('user.aircraft.index', ['aircrafts' => $aircrafts]);
+        return view('employee.aircraft.index', ['aircrafts' => $aircrafts]);
     }
 
     public function create()
     {
-        return view('user.aircraft.add');
+        return view('employee.aircraft.add');
     }
 
     public function store(AircraftRequest $aircraftRequest)
     {
-        $aircraftRequest->merge([
-            'user_id' => Auth::guard('web')->id(),
-        ]);
-        Aircraft::create($aircraftRequest->validated());
+        Aircraft::create(array_merge($aircraftRequest->validated(), [
+            'user_id' => Auth::id(),
+        ]));
         return redirect()->route('aircraft.create')
             ->with('success', 'Aircraft Created Successfully');
     }
 
     public function show(Aircraft $aircraft)
     {
-        return view('user.aircraft.show', ['aircraft' => $aircraft]);
+        return view('employee.aircraft.show', ['aircraft' => $aircraft]);
     }
 
     public function edit(Aircraft $aircraft)
     {
-        return view('user.aircraft.edit', ['aircraft' => $aircraft]);
+        return view('employee.aircraft.edit', ['aircraft' => $aircraft]);
     }
 
     public function update(AircraftRequest $aircraftRequest, Aircraft $aircraft)

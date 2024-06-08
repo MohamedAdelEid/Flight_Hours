@@ -1,19 +1,27 @@
+@extends('layouts.employee.main')
 
-    <h1>Aircraft List</h1>
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+@section('alerts')
+    {{-- alert add job success --}}
+    @if (Session::has('successCreate'))
+        <script>
+            iziToast.success({
+                title: "{{ session('successCreate') }}",
+                position: 'topRight',
+            });
+        </script>
     @endif
-    <ul>
-        @foreach($aircrafts as $aircraft)
-            <li>{{ $aircraft->aircraft_name }} -
-                <a href="{{ route('aircraft.edit', $aircraft) }}">Edit</a>
-                - <a href="{{ route('aircraft.show', $aircraft) }}">View</a>
-                <form action="{{ route('aircraft.destroy', $aircraft) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        @endforeach
-    </ul>
+@endsection
 
+@section('content')
+    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
+        <div class="container grid px-6 mx-auto">
+
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                الوظائف
+            </h2>
+
+            @livewire('aircraft-table')
+
+        </div>
+    </main>
+@endsection

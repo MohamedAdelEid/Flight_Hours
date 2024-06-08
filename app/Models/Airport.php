@@ -18,4 +18,12 @@ class Airport extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function scopeSearch($query, $value)
+    {
+        $query->where('airport_name', 'like', "%{$value}%")
+            ->orWhere('airport_code', 'like', "%{$value}%")
+            ->orWhereHas('user',function ($subQuery) use($value){
+                $subQuery->where('name', 'like', "%{$value}%");
+            } );
+    }
 }

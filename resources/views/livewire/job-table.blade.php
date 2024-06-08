@@ -62,13 +62,21 @@
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm font-bold">
-                                        {{ $job->user_id }}
+                                        {{ $job->user->name }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm font-bold">{{ $job->created_at }}</td>
+                                    <td class="px-4 py-3 text-sm font-bold">
+                                        @if($job->created_at)
+                                            {{ $job->created_at->format('Y-m-d') }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+
                                     <td class="flex justify-center px-4 py-3">
                                         <div class="w-fit flex items-center text-sm">
 
-                                            <button
+                                            <a
+                                                href="{{route('job.edit',$job->id)}}"
                                                 class="py-1 ml-1 text-sm font-medium leading-5 text-blue-400 rounded-lg dark:text-blue-400 focus:outline-none transition duration-200 ease-in-out hover:text-blue-600"
                                                 aria-label="Edit">
                                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -77,10 +85,11 @@
                                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
                                                     </path>
                                                 </svg>
-                                            </button>
+                                            </a>
 
-                                            <form action="">
+
                                                 <button
+                                                    wire:click="delete({{$job->id}})"
                                                     class="py-1 mr-1 text-sm font-medium leading-5 text-red-400 rounded-lg dark:text-red-400 focus:outline-none transition duration-200 ease-in-out hover:text-red-600"
                                                     aria-label="Delete">
                                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -90,7 +99,7 @@
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 </button>
-                                            </form>
+
 
                                         </div>
                                     </td>
