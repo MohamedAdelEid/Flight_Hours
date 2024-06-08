@@ -4,17 +4,21 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Notifications\Adminnotification;
 use App\Notifications\updatedEmailnotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-
+    public function sendPasswordResetNotification($token)
+    {
+       $this->notify(new Adminnotification($token)) ;
+    }
+  
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +29,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
     ];
 
     /**
@@ -46,22 +49,5 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'role' => 'string'
     ];
-
-    public function aircrafts(){
-        return $this->hasMany(Aircraft::class);
-    }
-    public function airports(){
-        return $this->hasMany(Airport::class);
-    }
-    public function jobs(){
-        return $this->hasMany(Job::class);
-    }
-    public function crews(){
-        return $this->hasMany(Crew::class);
-    }
-    public function flights(){
-        return $this->hasMany(Flight::class);
-    }
 }

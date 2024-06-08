@@ -29,8 +29,11 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class, 'type_id');
     }
-    public function scopeSearch($query, $value)
-    {
-        $query->where('job_name', 'like', "%{$value}%");
+    public function scopeSearch($query,$value){
+        $query->where('job_name','like',"%{$value}%")
+            ->orWhere('status','like',"%{$value}%")
+            ->orWhereHas('job_type',function ($subQuery) use ($value){
+                $subQuery->where('job_type','like',"%{$value}%");
+            });
     }
 }

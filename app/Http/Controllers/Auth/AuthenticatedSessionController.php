@@ -28,8 +28,22 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = Auth::user();
+        dd($user);
+        switch ($user->role) {
+            case 'admin':
+                $redirectRoute = '/admin/dashboard';
+                break;
+            case 'employee':
+                $redirectRoute = '/employee/index';
+                break;
+            case 'captain':
+                $redirectRoute = '/captain/index';
+                break;
+            default:
+                $redirectRoute = RouteServiceProvider::HOME;
+        }
+        return redirect()->intended($redirectRoute);
     }
 
     /**
@@ -43,6 +57,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
