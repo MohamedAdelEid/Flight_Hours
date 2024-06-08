@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Mohamed Adel',
-            'email' => 'admin@gmail.com',
+            'email' => 'dev.mohamedadell@gmail.com',
             'password' => Hash::make('12345678'), // It's a good practice to hash passwords
             'role' => 'admin'
         ]);
@@ -27,5 +27,5 @@ class UserSeeder extends Seeder
             'role' => 'captain'
         ]);
 
-    }
+    }   
 }

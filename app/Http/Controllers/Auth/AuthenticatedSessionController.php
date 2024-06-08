@@ -28,22 +28,17 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        $user = Auth::user();
-        dd($user);
-        switch ($user->role) {
-            case 'admin':
-                $redirectRoute = '/admin/dashboard';
-                break;
-            case 'employee':
-                $redirectRoute = '/employee/index';
-                break;
-            case 'captain':
-                $redirectRoute = '/captain/index';
-                break;
-            default:
-                $redirectRoute = RouteServiceProvider::HOME;
+
+        // Ckeck role and redirect to this page   
+        if (Auth::user()->isAdmin()) {
+            return redirect()->intended(route('/admin/dashboard'));
+        } elseif (Auth::user()->isEmployee()) {
+            return redirect()->intended('/employee/index');
+        } elseif (Auth::user()->isCaptain()) {
+            return redirect()->intended('/captain/index');
+        } else {
+            abort(403);
         }
-        return redirect()->intended($redirectRoute);
     }
 
     /**

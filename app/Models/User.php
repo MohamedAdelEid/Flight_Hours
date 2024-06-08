@@ -49,19 +49,41 @@ class User extends Authenticatable
         'role' => 'string'
     ];
 
-    public function aircrafts(){
+    public function aircrafts()
+    {
         return $this->hasMany(Aircraft::class);
     }
-    public function airports(){
+    public function airports()
+    {
         return $this->hasMany(Airport::class);
     }
-    public function jobs(){
+    public function jobs()
+    {
         return $this->hasMany(Job::class);
     }
-    public function crews(){
+    public function crews()
+    {
         return $this->hasMany(Crew::class);
     }
-    public function flights(){
+    public function flights()
+    {
         return $this->hasMany(Flight::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === "admin";
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === "employee";
+    }
+
+    public function isCaptain(): bool
+    {
+        return $this->role === "captain";
+    }
+
+
 }

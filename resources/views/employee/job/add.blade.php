@@ -1,4 +1,4 @@
-@extends('layouts.admin.main')
+@extends('layouts.employee.main')
 
 @section('alerts')
     {{-- alert add job success --}}
@@ -94,3 +94,7 @@
         </div>
     </main>
 @endsection
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+@endpush

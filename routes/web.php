@@ -4,15 +4,28 @@ use App\Http\Controllers\AircraftController;
 use App\Http\Controllers\AirportController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\EmployeeMiddleware as employee;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+//**------------------------------------ Routes Employee ------------------------------------**//
 
-Route::get('/employee/index', function () {
-    return view('user.index');
-})->middleware('auth');
+Route::middleware(employee::class)->group(function () {
+
+    // Home Route
+    Route::get('/employee/index', function () {
+        return view('employee.index');
+    });
+
+    // Resource route job
+    Route::resource('job', JobController::class);
+
+    // Resource route airport
+    Route::resource('airport', AirportController::class);
+
+    // Resource route aircraft
+    Route::resource('aircraft', AircraftController::class);
+
+});
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
@@ -28,9 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::resource('job', JobController::class);
-Route::resource('aircraft', AircraftController::class);
-Route::resource('airport', AirportController::class);
+Route::get('/welcome' ,function(){
+return view ('welcome');
+});
 

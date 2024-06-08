@@ -18,7 +18,7 @@ class Job extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function crews()
@@ -29,11 +29,12 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class, 'type_id');
     }
-    public function scopeSearch($query,$value){
-        $query->where('job_name','like',"%{$value}%")
-            ->orWhere('status','like',"%{$value}%")
-            ->orWhereHas('job_type',function ($subQuery) use ($value){
-                $subQuery->where('job_type','like',"%{$value}%");
+    public function scopeSearch($query, $value)
+    {
+        $query->where('job_name', 'like', "%{$value}%")
+            ->orWhere('status', 'like', "%{$value}%")
+            ->orWhereHas('job_type', function ($subQuery) use ($value) {
+                $subQuery->where('job_type', 'like', "%{$value}%");
             });
     }
 }

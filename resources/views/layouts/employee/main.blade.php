@@ -4,7 +4,7 @@
 <head>
 
     <!-- ===== Header Start ===== -->
-    @include('layouts.admin.partials.header')
+    @include('layouts.employee.partials.header')
     @stack('style')
     <!-- ===== Header End ===== -->
 
@@ -16,24 +16,24 @@
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
 
         <!-- ===== Sidebar Start ===== -->
-        @include('layouts.admin.partials.sidebar')
+        @include('layouts.employee.partials.sidebar')
         <!-- ===== Sidebar End ===== -->
 
 
         <div class="flex flex-col flex-1 w-full">
 
             <!-- ===== Navbar Start ===== -->
-            @include('layouts.admin.partials.navbar')
+            @include('layouts.employee.partials.navbar')
             <!-- ===== Navbar End ===== -->
 
             @yield('content')
 
             <!-- ===== Footer Start ===== -->
-            @include('layouts.admin.partials.footer')
+            @include('layouts.employee.partials.footer')
             <!-- ===== Footer End ===== -->
 
             <!-- ===== Footer Script  Start ===== -->
-            @include('layouts.admin.partials.footer-script')
+            @include('layouts.employee.partials.footer-script')
             @stack('script')
             <!-- ===== Footer Script End ===== -->
 

@@ -111,10 +111,12 @@
                             </div>
                             <div x-show="open"
                                 class="text-sm border-r-2 border-gray-800 mr-3.5 ml-4 mb-2 mt-1 pr-2 flex flex-col gap-y-1">
-                                <a href="{{route('airport.create')}}" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
+                                <a href="{{ route('airport.create') }}"
+                                    class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                                     اضافة مطار
                                 </a>
-                                <a href="{{route('airport.index')}}" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
+                                <a href="{{ route('airport.index') }}"
+                                    class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                                     عرض المطارات
                                 </a>
                             </div>
@@ -143,10 +145,12 @@
                             </div>
                             <div x-show="open"
                                 class="text-sm border-r-2 border-gray-800 mr-3.5 ml-4 mb-2 mt-1 pr-2 flex flex-col gap-y-1">
-                                <a href="{{route('aircraft.create')}}" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
+                                <a href="{{ route('aircraft.create') }}"
+                                    class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                                     اضافة طائرة
                                 </a>
-                                <a href="{{route('aircraft.index')}}" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
+                                <a href="{{ route('aircraft.index') }}"
+                                    class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                                     عرض الطائرات
                                 </a>
                             </div>
@@ -250,16 +254,19 @@
 
         <!-- Logout -->
         <div class="px-6 my-6">
-            <a href="Logout.php"
-                class="flex items-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple hover:text-red-500">
-                <svg class="w-6 h-6 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                    </path>
-                </svg>
-                <p class="mb-1 ml-2">تسجيل الخروج</p>
-            </a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" href="Logout.php"
+                    class="flex items-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple hover:text-red-500">
+                    <svg class="w-6 h-6 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    <p class="mb-1 ml-2">تسجيل الخروج</p>
+                </button>
+            </form>
         </div>
     </div>
 </aside>
@@ -488,7 +495,7 @@
 
         <!-- Logout -->
         <div class="px-6 my-6">
-            <a href="{{route('logout')}}"
+            <a href="{{ route('logout') }}"
                 class="flex items-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple hover:text-red-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">

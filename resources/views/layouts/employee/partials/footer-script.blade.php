@@ -1,5 +1,3 @@
-<!-- script js cdn -->
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
 {{-- include script init  --}}
 <script src="{{ asset('assets/js/admin/init-alpine.js') }}"></script>
@@ -16,6 +14,6 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {{-- include scripts livewire --}}
-@livewireScripts
+{{-- @livewireScripts --}}
 
 
