@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AircraftRequest extends FormRequest
 {
@@ -23,13 +24,19 @@ class AircraftRequest extends FormRequest
      */
     public function rules()
     {
+        $aircraftId = $this->route('aircraft')->id;
+
         return [
             'aircraft_name' => ['required', 'string', 'max:255'],
             'aircraft_code' => ['required', 'string', 'max:255'],
             'manufacturer' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:active,inactive,maintenance'],
-            'registration_number' => ['nullable', 'string', 'max:20', 'unique:aircrafts,registration_number'],
-        ];
+            'registration_number' => [
+                'nullable',
+                'string',
+                'max:20',
+                Rule::unique('aircrafts', 'registration_number')->ignore($aircraftId),
+            ],        ];
     }
     public function messages()
     {

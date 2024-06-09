@@ -73,7 +73,8 @@ class AirportController extends Controller
             'airport_code' => $validatedData['airport_code'],
         ]);
 
-        return redirect()->route('airport.index')->with('success', 'Airport Updated Successfully');
+        return redirect()->route('airport.index')
+            ->with('success', 'Airport Updated Successfully');
     }
 
     public function destroy(Airport $airport)

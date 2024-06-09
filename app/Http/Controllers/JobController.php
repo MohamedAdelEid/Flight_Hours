@@ -81,7 +81,8 @@ class JobController extends Controller
             'status' => $validatedData['status'],
         ]);
 
-        return redirect()->back()->with('success', 'Job Updated Successfully');
+        return redirect()->route('job.index')
+            ->with('success', 'Job Updated Successfully');
     }
 
     public function destroy(Job $job)
