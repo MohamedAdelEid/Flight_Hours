@@ -14,4 +14,5 @@ class JobType extends Model
     public function jobs(){
         return $this->hasMany(Job::class,'type_id');
     }
+
 }

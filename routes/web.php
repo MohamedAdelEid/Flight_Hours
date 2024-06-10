@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AircraftController;
 use App\Http\Controllers\AirportController;
+use App\Http\Controllers\CrewController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\EmployeeMiddleware as employee;
@@ -21,6 +22,7 @@ Route::middleware(employee::class)->group(function () {
     Route::resource('airport', AirportController::class);
     // Resource route aircraft
     Route::resource('aircraft', AircraftController::class);
+    Route::resource('crew', CrewController::class);
 });
 
 Route::get('/admin/dashboard', function () {
@@ -39,7 +41,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/welcome' ,function(){
-return view ('welcome');
-});
 

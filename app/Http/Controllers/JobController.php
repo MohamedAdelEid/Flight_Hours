@@ -11,8 +11,9 @@ class JobController extends Controller
 {
     public function index()
     {
-        $jobs = Job::all()->sortByDesc('created_at');
-        return view('employee.job.index');
+        return view('employee.job.index', [
+            'jobs' => Job::with('user')->orderByDesc('created_at')->get()
+        ]);
     }
 
     public function create()

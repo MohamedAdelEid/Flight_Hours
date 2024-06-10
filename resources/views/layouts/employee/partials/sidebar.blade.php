@@ -190,11 +190,11 @@
                     </div>
                     <div x-show="open"
                         class="text-sm border-r-2 border-gray-800 mr-6 my-2.5 pr-2.5 flex flex-col gap-y-1">
-                        <a href="<?= isset($base_url_link) ? $base_url_link : '' ?>add/add-category.php"
+                        <a href="{{route('crew.create')}}"
                             class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                             اضافة موظف
                         </a>
-                        <a href="#" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
+                        <a href="{{route('crew.index')}}" class="block py-2 px-4 hover:bg-gray-800 hover:text-white rounded">
                             عرض الموظفين
                         </a>
                     </div>

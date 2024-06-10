@@ -13,7 +13,7 @@ class Job extends Model
         'job_name',
         'type_id',
         'status',
-        'user_id'
+        'user_id',
     ];
 
     public function user()
