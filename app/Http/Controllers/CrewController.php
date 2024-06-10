@@ -27,9 +27,7 @@ class CrewController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(CrewRequest $crewRequest)
     {
         Crew::create(array_merge($crewRequest->validated(),[
@@ -39,17 +37,11 @@ class CrewController extends Controller
                     ->with('success','Crew Member Created Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Crew $crew)
     {
         return view('employee.crew.show',['crew'=>$crew]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Crew $crew)
     {
         return view('employee.crew.edit',[
@@ -58,9 +50,6 @@ class CrewController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(CrewRequest $crewRequest, Crew $crew)
     {
         $crew->update($crewRequest->validated());
@@ -68,9 +57,6 @@ class CrewController extends Controller
             ->with('success', 'Crew Member Updated Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Crew $crew)
     {
         $crew->delete();
