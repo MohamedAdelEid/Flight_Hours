@@ -43,6 +43,7 @@
                             <th scope="col" class="px-4 py-3"> تاريخ الرحلة </th>
                             <th scope="col" class="px-4 py-3">مطار القيام </th>
                             <th scope="col" class="px-4 py-3"> مطار الوصول </th>
+                            <th scope="col" class="px-4 py-3"> عدد ساعات الرحلة </th>
                             <th scope="col" class="px-4 py-3"> اسم الموظف  </th>
                             <th scope="col" class="px-4 py-3">
                                 <span class="sr-only">إجراءات</span>
@@ -59,6 +60,13 @@
                                 <td class="px-4 py-3 text-sm font-bold">{{ $flight->flight_date }}</td>
                                 <td class="px-4 py-3 text-sm font-bold">{{ $flight->originAirport->airport_name }}</td>
                                 <td class="px-4 py-3 text-sm font-bold">{{ $flight->destinationAirport->airport_name }}</td>
+                                <td class="px-4 py-3 text-sm font-bold">
+                                    @if($flight->flightHours->isNotEmpty())
+                                        {{ $flight->flightHours->first()->hours }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3 text-sm font-bold">
                                     {{ $flight->user->name }}
                                 </td>
