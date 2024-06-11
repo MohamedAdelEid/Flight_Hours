@@ -25,6 +25,9 @@ class Aircraft extends Model
     {
         return $this->hasMany(FlightHour::class);
     }
+    public function flights(){
+        return $this->hasMany(Flight::class);
+    }
     public function scopeSearch($query, $value)
     {
         $query->where('aircraft_name', 'like', "%{$value}%")

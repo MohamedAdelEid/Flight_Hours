@@ -21,6 +21,7 @@ class CrewRequest extends FormRequest
             'date_of_birth' => 'nullable|date',
             'license_number' => 'nullable|string|max:255',
             'job_id' => 'required|exists:jobs,id',
+            'job_type' => 'required|exists:job_types,id',
             'status' => 'required|in:active,inactive',
         ];
     }
@@ -28,9 +29,9 @@ class CrewRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'financial_number.required' => 'رقم المالية مطلوب.',
-            'financial_number.string' => 'رقم المالية يجب أن يكون نصاً.',
-            'financial_number.max' => 'رقم المالية يجب ألا يتجاوز 255 حرفاً.',
+            'financial_number.required' => 'الرقم المالي مطلوب.',
+            'financial_number.string' => 'الرقم المالي يجب أن يكون نصاً.',
+            'financial_number.max' => 'الرقم المالي يجب ألا يتجاوز 255 حرفاً.',
 
             'first_name.required' => 'الاسم الأول مطلوب.',
             'first_name.string' => 'الاسم الأول يجب أن يكون نصاً.',
@@ -50,6 +51,9 @@ class CrewRequest extends FormRequest
 
             'job_id.required' => 'المسمى الوظيفي مطلوب.',
             'job_id.exists' => 'المسمى الوظيفي غير موجود.',
+
+            'job_type.required' => 'نوع الوظيفة مطلوب.',
+            'job_type.exists' => 'نوع الوظيفة غير موجود.',
 
             'status.required' => 'الحالة مطلوبة.',
             'status.in' => 'الحالة يجب أن تكون إما نشط أو غير نشط.',

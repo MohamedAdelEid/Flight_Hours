@@ -19,6 +19,7 @@ Route::middleware(employee::class)->group(function () {
     });
     // Resource route job
     Route::resource('job', JobController::class);
+    Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
     // Resource route airport
     Route::resource('airport', AirportController::class);
     // Resource route aircraft

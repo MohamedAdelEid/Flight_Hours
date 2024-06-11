@@ -41,12 +41,9 @@
                             <th scope="col" class="px-4 py-3">الاسم الاول </th>
                             <th scope="col" class="px-4 py-3">اسم الاب </th>
                             <th scope="col" class="px-4 py-3">اللقب</th>
-                            <th scope="col" class="px-4 py-3">تاريخ الميلاد </th>
                             <th scope="col" class="px-4 py-3">الرقم المالي </th>
-                            <th scope="col" class="px-4 py-3">نوع الوظيفة</th>
+                            <th scope="col" class="px-4 py-3"> الوظيفة </th>
                             <th scope="col" class="px-4 py-3">حالة فرد الطاقم </th>
-                            <th scope="col" class="px-4 py-3">اسم الموظف </th>
-                            <th scope="col" class="px-4 py-3">وقت الإضافة</th>
                             <th scope="col" class="px-4 py-3">
                                 <span class="sr-only">إجراءات</span>
                             </th>
@@ -62,7 +59,6 @@
                                     <p class="font-semibold">{{ $crew->last_name }}</p>
                                 </th>
                                 <td class="px-4 py-3 text-sm font-bold">{{ $crew->nickname ? $crew->nickname : 'N/A' }}</td>
-                                <td class="px-4 py-3 text-sm font-bold">{{ $crew->date_of_birth ? $crew->date_of_birth : 'N/A' }}</td>
                                 <td class="px-4 py-3 text-sm font-bold">{{ $crew->financial_number }}</td>
                                 <td class="px-4 py-3 text-sm font-bold">{{ $crew->job->job_name }}</td>
                                 <td class="px-4 py-3 text-xs">
@@ -71,17 +67,6 @@
                                             {{ $crew->status }}
                                         </span>
                                 </td>
-                                <td class="px-4 py-3 text-sm font-bold">
-                                    {{ $crew->user->name }}
-                                </td>
-                                <td class="px-4 py-3 text-sm font-bold">
-                                    @if($crew->created_at)
-                                        {{ $crew->created_at->format('Y-m-d') }}
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
-
                                 <td class="flex justify-center px-4 py-3">
                                     <div class="w-fit flex items-center text-sm">
 

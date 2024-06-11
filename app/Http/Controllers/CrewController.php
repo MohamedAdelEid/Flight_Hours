@@ -24,6 +24,7 @@ class CrewController extends Controller
     {
         return view('employee.crew.add', [
             'jobs' => Job::all(),
+            'job_types' => JobType::all()
         ]);
     }
 
@@ -34,7 +35,7 @@ class CrewController extends Controller
             'user_id' => Auth::id()
         ]));
         return redirect()->route('crew.index')
-                    ->with('success','Crew Member Created Successfully');
+                    ->with('success','تم اضافة عضوالطاقم بنجاح');
     }
 
     public function show(Crew $crew)
@@ -54,13 +55,19 @@ class CrewController extends Controller
     {
         $crew->update($crewRequest->validated());
         return redirect()->route('crew.index')
-            ->with('success', 'Crew Member Updated Successfully');
+            ->with('success', 'تم التعديل علي عضوالطاقم بنجاح');
     }
 
     public function destroy(Crew $crew)
     {
         $crew->delete();
         return redirect()->route('crew.index')
-            ->with('success', 'Crew Member Deleted Successfully');
+            ->with('success', 'تم حذف عضو الطاقم بنجاح');
+    }
+
+    public function getJobsByType($type_id)
+    {
+        $jobs = Job::where('type_id', $type_id)->get();
+        return response()->json($jobs);
     }
 }

@@ -26,7 +26,7 @@ class AircraftController extends Controller
             'user_id' => Auth::id(),
         ]));
         return redirect()->route('aircraft.create')
-            ->with('success', 'Aircraft Created Successfully');
+            ->with('success', 'تم اضافة الطائرة  بنجاح');
     }
 
     public function show(Aircraft $aircraft)
@@ -43,13 +43,13 @@ class AircraftController extends Controller
     {
         $aircraft->update($aircraftRequest->validated());
         return redirect()->route('aircraft.index')
-            ->with('success', 'Aircraft Updated Successfully');
+            ->with('success', 'تم التعديل علي الطائرة بنجاح');
     }
 
     public function destroy(Aircraft $aircraft)
     {
         $aircraft->delete();
         return redirect()->route('aircraft.index')
-            ->with('success', 'Aircraft Deleted Successfully');
+            ->with('success', 'تم حذف الطائرة بنجاح');
     }
 }

@@ -74,12 +74,12 @@ class AirportController extends Controller
         ]);
 
         return redirect()->route('airport.index')
-            ->with('success', 'Airport Updated Successfully');
+            ->with('success', 'تم التعديل علي المطار بنجاح');
     }
 
     public function destroy(Airport $airport)
     {
         $airport->delete();
-        return redirect()->route('airport.index')->with('success', 'Airport Deleted Successfully');
+        return redirect()->route('airport.index')->with('success', 'تم حذف المطار بنجاح');
     }
 }

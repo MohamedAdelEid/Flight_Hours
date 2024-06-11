@@ -83,12 +83,14 @@ class JobController extends Controller
         ]);
 
         return redirect()->route('job.index')
-            ->with('success', 'Job Updated Successfully');
+            ->with('success', 'تم تعديل الوظيفة بنجاح');
     }
 
     public function destroy(Job $job)
     {
         $job->delete();
-        return redirect()->route('job.index')->with('success', 'Job deleted successfully');
+        return redirect()->route('job.index')->with('success', 'تم حذف الوظيفة بنجاح');
     }
+
+
 }

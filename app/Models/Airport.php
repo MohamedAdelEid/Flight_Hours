@@ -18,6 +18,9 @@ class Airport extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function flights(){
+        return $this->hasMany(Flight::class);
+    }
     public function scopeSearch($query, $value)
     {
         $query->where('airport_name', 'like', "%{$value}%")

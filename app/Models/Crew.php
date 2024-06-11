@@ -17,6 +17,7 @@ class Crew extends Model
         'date_of_birth',
         'license_number',
         'job_id',
+        'job_type',
         'status',
         'user_id',
     ];
@@ -26,6 +27,9 @@ class Crew extends Model
     }
     public function job(){
         return $this->belongsTo(Job::class);
+    }
+    public function job_type(){
+        return $this->belongsTo(JobType::class);
     }
     public function scopeSearch($query, $value)
     {
