@@ -15,9 +15,6 @@ class JobTable extends Component
     public $perPage = 5;
     public $job_type = '';
 
-    public function delete(Job $job){
-            $job->delete();
-    }
     public function render()
     {
         return view(
@@ -28,9 +25,27 @@ class JobTable extends Component
                         $query->where('type_id', $this->job_type);
                     })
                     ->paginate($this->perPage),
-                    'jobTypes' => JobType::all()
+                'jobTypes' => JobType::all()
             ]
         );
 
+    }
+
+    public function deleteConfirm($id)
+    {
+        $job = Job::find($id);
+        $this->dispatch('swalConfirm',[
+            'title' => 'هل انت متاكد ؟',
+            'html' => 'انت تريد حذف <strong>'.$job->job_name.'</strong>',
+            'id' => $job->id,
+        ]);
+    }
+
+    public function delete(Job $job)
+    {
+        $deleteJob = $job->delete();
+        if($deleteJob){
+            $this->dispatch('deleted');
+        }
     }
 }

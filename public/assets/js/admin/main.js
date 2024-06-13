@@ -86,25 +86,31 @@ for (let i = 0; i < passwordIcon.length; ++i) {
 document.addEventListener('DOMContentLoaded', function () {
     const selectElement = document.getElementById('job-status');
 
-    function updateClass() {
-        if (selectElement.value === 'active') {
-            selectElement.classList.add('border-green-600');
-            selectElement.classList.remove('border-red-600');
-            selectElement.classList.remove('dark:border-gray-600');
-        } else if (selectElement.value === 'inactive') {
-            selectElement.classList.add('border-red-600');
-            selectElement.classList.remove('border-green-600');
-            selectElement.classList.remove('dark:border-gray-600');
-        } else {
-            selectElement.classList.add('dark:border-gray-600');
+    if (selectElement) {
+        function updateClass() {
+            if (selectElement.value === 'active') {
+                selectElement.classList.add('border-green-600');
+                selectElement.classList.remove('border-red-600');
+                selectElement.classList.remove('dark:border-gray-600');
+            } else if (selectElement.value === 'inactive') {
+                selectElement.classList.add('border-red-600');
+                selectElement.classList.remove('border-green-600');
+                selectElement.classList.remove('dark:border-gray-600');
+            } else {
+                selectElement.classList.add('dark:border-gray-600');
+            }
         }
+        updateClass();
+        selectElement.addEventListener('change', updateClass);
     }
-
-    // Initial class update
-    updateClass();
-
-    // Update class on change
-    selectElement.addEventListener('change', updateClass);
 });
 
 // end page add job
+
+// start page add flight
+
+
+
+// end page add flight
+
+

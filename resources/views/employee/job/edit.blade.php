@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <main class="h-full pb-16 overflow-y-auto">
+    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
         <div class="container px-6 mx-auto grid">
 
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -21,7 +21,7 @@
             </h2>
 
             <div class="px-7 pt-8 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <form action="{{ route('job.update',$job->id) }}" method="POST">
+                <form action="{{ route('job.update', $job->id) }}" method="POST">
                     @method('PUT')
                     @csrf
 
@@ -31,12 +31,11 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم الوظيفة</span>
-                                <input name="job_name"
-                                       value="{{$job->job_name}}"
-                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                <input name="job_name" value="{{ $job->job_name }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('job_name')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
@@ -48,9 +47,10 @@
                                     نوع الوظيفة
                                 </span>
                                 <select name="type_id"
-                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     @forelse($job_types as $job_type)
-                                        <option value="{{ $job_type->id }}" {{$job_type->id == $job->job_type->id ? 'selected':''}}>
+                                        <option value="{{ $job_type->id }}"
+                                            {{ $job_type->id == $job->job_type->id ? 'selected' : '' }}>
                                             {{ $job_type->job_type }}
                                         </option>
                                     @empty
@@ -59,7 +59,7 @@
                                 </select>
                             </label>
                             @error('type_id')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
@@ -71,14 +71,15 @@
                                     حالة الوظيفة
                                 </span>
                                 <select id="job-status" name="status"
-                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     <option disabled selected>اختر الحالة</option>
-                                    <option value="active" {{$job->status == 'active' ? 'selected' : ''}}>نشطة</option>
-                                    <option value="inactive"{{$job->status == 'inactive' ? 'selected' : ''}}>غير نشطة</option>
+                                    <option value="active" {{ $job->status == 'active' ? 'selected' : '' }}>نشطة</option>
+                                    <option value="inactive"{{ $job->status == 'inactive' ? 'selected' : '' }}>غير نشطة
+                                    </option>
                                 </select>
                             </label>
                             @error('status')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror

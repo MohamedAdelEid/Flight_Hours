@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <main class="h-full pb-16 overflow-y-auto">
+    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
         <div class="container px-6 mx-auto grid">
 
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -31,7 +31,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم الوظيفة</span>
-                                <input name="job_name"
+                                <input name="job_name" value="{{ old('job_name') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('job_name')
@@ -49,7 +49,7 @@
                                 <select name="type_id"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     @forelse($job_types as $job_type)
-                                        <option value="{{ $job_type->id }}">{{ $job_type->job_type }}</option>
+                                        <option value="{{ $job_type->id }}" {{ old('type_id') == $job_type->id ? 'selected' : '' }}> {{ $job_type->job_type }}</option>
                                     @empty
                                         <option disabled>لا يوجد نوع وظيفة</option>
                                     @endforelse
@@ -70,8 +70,8 @@
                                 <select id="job-status" name="status"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     <option disabled selected>اختر الحالة</option>
-                                    <option value="active">نشطة</option>
-                                    <option value="inactive">غير نشطة</option>
+                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>نشطة</option>
+                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير نشطة</option>
                                 </select>
                             </label>
                             @error('status')
