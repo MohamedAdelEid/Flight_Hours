@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FlightRequest;
 use App\Models\Aircraft;
 use App\Models\Airport;
+use App\Models\Crew;
 use App\Models\Flight;
 use App\Models\FlightHour;
+use App\Models\Job;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,17 +18,19 @@ class FlightController extends Controller
 
     public function index()
     {
-       return view('employee.flight.index',[
-           'flight'=> Flight::with('flightHours')
-               ->orderByDesc('created_at')->get()
-       ]);
+        return view('employee.flight.index', [
+            'flight' => Flight::with('flightHours')
+                ->orderByDesc('created_at')->get()
+        ]);
     }
 
     public function create()
     {
-        return view('employee.flight.add',[
-            'aircrafts'=> Aircraft::all(),
+        return view('employee.flight.add', [
+            'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
+            'jobs' => Job::all(),
+
         ]);
     }
 
@@ -35,7 +39,7 @@ class FlightController extends Controller
      */
     public function store(FlightRequest $flightRequest)
     {
-        $flight = Flight::create(array_merge($flightRequest->validated(),[
+        $flight = Flight::create(array_merge($flightRequest->validated(), [
             'user_id' => Auth::id()
         ]));
         $departureTime = Carbon::parse($flight->departure_time);
@@ -47,7 +51,7 @@ class FlightController extends Controller
             'flight_id' => $flight->id,
             'hours' => $hours
         ]);
-        return redirect()->route('flight.index')->with('success','تم اضافة الرحلة بنجاح ');
+        return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلة بنجاح ');
     }
 
     /**
@@ -65,7 +69,7 @@ class FlightController extends Controller
     {
         return view('employee.flight.edit', [
             'flight' => $flight,
-            'aircrafts'=> Aircraft::all(),
+            'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
         ]);
 
@@ -74,7 +78,7 @@ class FlightController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(FlightRequest $flightRequest,Flight $flight)
+    public function update(FlightRequest $flightRequest, Flight $flight)
     {
         $flight->update($flightRequest->validated());
         return redirect()->route('flight.index')
@@ -89,5 +93,11 @@ class FlightController extends Controller
         $flight->delete();
         return redirect()->route('flight.index')
             ->with('success', 'تم حذف الرحلة بنجاح');
+    }
+
+    public function getCrewsByJob($job_id)
+    {
+        $crews = Crew::where('job_id', $job_id)->get();
+        return response()->json($crews);
     }
 }

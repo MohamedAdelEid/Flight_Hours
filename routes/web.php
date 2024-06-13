@@ -22,10 +22,12 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
     // Resource route airport
     Route::resource('airport', AirportController::class);
+    // Route::get('airport/json', [AirportController::class, 'airportJson'])->name('airport.json');
     // Resource route aircraft
     Route::resource('aircraft', AircraftController::class);
     Route::resource('crew', CrewController::class);
     Route::resource('flight', FlightController::class);
+    Route::get('/crews-by-job/{job_id}', [FlightController::class, 'getCrewsByJob']);
 });
 
 Route::get('/admin/dashboard', function () {

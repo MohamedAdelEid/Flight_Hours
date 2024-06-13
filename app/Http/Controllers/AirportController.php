@@ -82,4 +82,10 @@ class AirportController extends Controller
         $airport->delete();
         return redirect()->route('airport.index')->with('success', 'تم حذف المطار بنجاح');
     }
+
+    public function airportJson()
+    {
+        $airports = Airport::all();
+        return response()->json($airports);
+    }
 }
