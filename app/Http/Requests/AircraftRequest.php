@@ -24,7 +24,7 @@ class AircraftRequest extends FormRequest
      */
     public function rules()
     {
-        $aircraftId = $this->route('aircraft')->id;
+        $aircraftId = optional($this->route('aircraft'))->id;
 
         return [
             'aircraft_name' => ['required', 'string', 'max:255'],

@@ -11,7 +11,7 @@ class Flight extends Model
     protected $table = 'flights';
     protected $fillable = [
         'flight_number','flight_date','aircraft_id','origin_airport_id','destination_airport_id',
-        'departure_time','arrival_time','user_id'
+        'door_opened_at','door_closed_at','departure_time','arrival_time','user_id'
     ];
     public function user(){
         return $this->belongsTo(User::class);

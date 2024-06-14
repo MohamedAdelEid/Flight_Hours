@@ -39,7 +39,7 @@
                                 <div class="flex items-center mt-2">
 
                                     <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                        <select id="from-airport-going"
+                                        <select id="from-airport-going" name="origin_airport_id"
                                             class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
                                                     focus:pt-7
                                                     focus:pb-2
@@ -84,7 +84,7 @@
                                     </div>
 
                                     <div class="relative w-full ms-1 lg:ms-0 xl:ms-0">
-                                        <select id="to-airport-going"
+                                        <select id="to-airport-going"  name="destination_airport_id"
                                             class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
                                                     focus:pt-7
                                                     focus:pb-2
@@ -111,7 +111,7 @@
                                             <i
                                                 class="fa-solid fa-plane-arrival text-blue-500 ms-2 transform -scale-x-100"></i>
                                         </label>
-                                        @error('origin_airport_id')
+                                        @error('destination_airport_id')
                                             <span class="absolute text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -162,7 +162,7 @@
                                     <div class="w-full ms-1">
                                         <div>
                                             <label class="block text-xl">
-                                                <span class="text-gray-700 dark:text-white block">وقت الرحلة </span>
+                                                <span class="text-gray-700 dark:text-white block">تاريخ  الرحلة </span>
                                                 <input name="flight_date" type="date"
                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
@@ -179,10 +179,10 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت إغلاق الباب </span>
-                                            <input name="departure_time" type="datetime-local"
+                                            <input name="door_closed_at" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('departure_time')
+                                        @error('door_closed_at')
                                             <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -192,7 +192,7 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الإقلاع </span>
-                                            <input name="arrival_time" type="datetime-local"
+                                            <input name="arrival_time" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                         @error('arrival_time')
@@ -207,7 +207,7 @@
                                     <label class="block text-xl">
                                         <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط <span
                                                 class="text-blue-500 text-sm">'Landing'</span> </span>
-                                        <input name="arrival_time" type="datetime-local"
+                                        <input name="arrival_time" type="time"
                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
                                     @error('arrival_time')
@@ -221,10 +221,10 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت فتح الباب </span>
-                                            <input name="departure_time" type="datetime-local"
+                                            <input name="door_opened_at" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('departure_time')
+                                        @error('door_opened_at')
                                             <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -234,7 +234,7 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الوصول </span>
-                                            <input name="arrival_time" type="datetime-local"
+                                            <input name="arrival_time" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                         @error('arrival_time')
@@ -260,7 +260,7 @@
                                 <div class="flex items-center mt-2">
 
                                     <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                        <select id="from-airport-back"
+                                        <select id="from-airport-back" name="origin_airport_id"
                                             class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
                                                     focus:pt-7
                                                     focus:pb-2
@@ -305,7 +305,7 @@
                                     </div>
 
                                     <div class="relative w-full ms-1 lg:ms-0 xl:ms-0">
-                                        <select id="to-airport-back"
+                                        <select id="to-airport-back" name="destination_airport_id"
                                             class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
                                                     focus:pt-7
                                                     focus:pb-2
@@ -332,7 +332,7 @@
                                             <i
                                                 class="fa-solid fa-plane-arrival text-blue-500 ms-2 transform -scale-x-100"></i>
                                         </label>
-                                        @error('origin_airport_id')
+                                        @error('destination_airport_id')
                                             <span class="absolute text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -383,7 +383,7 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
                                         <div>
                                             <label class="block text-xl">
-                                                <span class="text-gray-700 dark:text-white block">وقت الرحلة </span>
+                                                <span class="text-gray-700 dark:text-white block">تاريخ الرحلة </span>
                                                 <input name="flight_date" type="date"
                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
@@ -400,10 +400,10 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت إغلاق الباب </span>
-                                            <input name="departure_time" type="datetime-local"
+                                            <input name="door_closed_at" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('departure_time')
+                                        @error('door_closed_at')
                                             <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -413,7 +413,7 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الإقلاع </span>
-                                            <input name="arrival_time" type="datetime-local"
+                                            <input name="arrival_time" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                         @error('arrival_time')
@@ -428,7 +428,7 @@
                                     <label class="block text-xl">
                                         <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط <span
                                                 class="text-blue-500 text-sm">'Landing'</span> </span>
-                                        <input name="arrival_time" type="datetime-local"
+                                        <input name="arrival_time" type="time"
                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
                                     @error('arrival_time')
@@ -442,10 +442,10 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت فتح الباب </span>
-                                            <input name="departure_time" type="datetime-local"
+                                            <input name="door_opened_at" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('departure_time')
+                                        @error('door_opened_at')
                                             <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
@@ -455,7 +455,7 @@
                                     <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الوصول </span>
-                                            <input name="arrival_time" type="datetime-local"
+                                            <input name="arrival_time" type="time"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                         @error('arrival_time')
@@ -465,45 +465,41 @@
                                         @enderror
                                     </div>
                                 </div>
-
                             </div>
+                                <input type="submit" value="اضافة">
                         </div>
 
                     </div>
+
                 </form>
 
-                <div class="px-7 pt-4 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+{{--                <div class="px-7 pt-4 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">--}}
 
-                    {{-- number of craw --}}
-                    <div class="me-1 mb-5">
-                        <form id="crew_flight">
-                            <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">عدد طاقم الرحلة</span>
-                                <div class="flex items-center relative">
-                                    <input type="number" placeholder="ادخل عدد الطاقم" id="num-of-crew"
-                                        class="block w-52 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input" />
-                                    <button id="submit-num-of-crew"
-                                        class="p-2 font-medium text-sm leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-tl-lg rounded-bl-lg rounded-tr-sm rounded-br-sm active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
-                                        إضافة
-                                    </button>
-                                </div>
-                            </label>
-                        </form>
-                    </div>
+{{--                    --}}{{-- number of craw --}}
+{{--                    <div class="me-1 mb-5">--}}
+{{--                        <label class="block text-xl">--}}
+{{--                            <span class="text-gray-700 dark:text-white block mb-2">عدد طاقم الرحلة</span>--}}
+{{--                            <div class="flex items-center relative">--}}
+{{--                                <input type="number" placeholder="ادخل عدد الطاقم" id="num-of-crew"--}}
+{{--                                       class="block w-52 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input" />--}}
+{{--                                <button id="submit-num-of-crew"--}}
+{{--                                        class="p-2 font-medium text-sm leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-tl-lg rounded-bl-lg rounded-tr-sm rounded-br-sm active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">--}}
+{{--                                    إضافة--}}
+{{--                                </button>--}}
+{{--                            </div>--}}
+{{--                        </label>--}}
+{{--                    </div>--}}
+{{--                    <form action="" id="icontainer-inputs-crew">--}}
+{{--                        --}}{{-- Dynamic crew inputs will be added here --}}
+{{--                    </form>--}}
 
-                    <form action="" id="icontainer-inputs-crew">
 
-                        {{-- add inputs crew here using js  --}}
+{{--                    <button id="submit_flight_crew"--}}
+{{--                    class="px-9 py-3 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">--}}
+{{--                    إضافة--}}
+{{--                </button>--}}
 
-                    </form>
-                </div>
-
-                <button id="submit_flight_crew"
-                    class="px-9 py-3 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
-                    إضافة
-                </button>
-
-            </div>
+{{--            </div>--}}
         </div>
     </main>
 @endsection
@@ -537,98 +533,90 @@
         });
     </script>
 
-    {{-- add number of crew  --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var numOfCrew = document.querySelector('#num-of-crew');
-            var submitOfCrew = document.querySelector('#submit-num-of-crew');
-            var divInputsCrew = document.querySelector('#icontainer-inputs-crew');
+{{--    --}}{{-- add number of crew  --}}
+{{--    <script>--}}
+{{--        document.addEventListener('DOMContentLoaded', function() {--}}
+{{--            var numOfCrew = document.querySelector('#num-of-crew');--}}
+{{--            var submitOfCrew = document.querySelector('#submit-num-of-crew');--}}
+{{--            var divInputsCrew = document.querySelector('#icontainer-inputs-crew');--}}
 
-            console.log('divInputsCrew:', divInputsCrew);
+{{--            submitOfCrew.addEventListener('click', function(event) {--}}
+{{--                event.preventDefault();--}}
 
-            submitOfCrew.addEventListener('click', function(event) {
-                event.preventDefault();
+{{--                var numberOfCrew = parseInt(numOfCrew.value);--}}
 
-                var numberOfCrew = parseInt(numOfCrew.value);
+{{--                if (isNaN(numberOfCrew) || numberOfCrew <= 0) {--}}
+{{--                    alert('Please enter a valid number greater than 0.');--}}
+{{--                    return;--}}
+{{--                }--}}
 
-                if (isNaN(numberOfCrew) || numberOfCrew <= 0) {
-                    alert('Please enter a valid number greater than 0.');
-                    return;
-                }
+{{--                var htmlContent = '';--}}
+{{--                for (var i = 0; i < numberOfCrew; i++) {--}}
+{{--                    htmlContent += `--}}
+{{--            <div class="block md:flex lg:flex xl:flex items-center mb-3">--}}
+{{--                <div class="w-full me-2">--}}
+{{--                    <label class="text-gray-700 dark:text-white block text-lg">الوظيفة--}}
+{{--                        <select name="job_id[]" class="job_id block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">--}}
+{{--                            <option disabled selected> اختر نوع الوظيفة</option>--}}
+{{--                            @forelse($jobs as $job)--}}
+{{--                    <option value="{{ $job->id }}"> {{ $job->job_name }} </option>--}}
+{{--                            @empty--}}
+{{--                    <option>لا يوجد وظائف</option>--}}
+{{--                  @endforelse--}}
+{{--                    </select>--}}
+{{--                </label>--}}
+{{--                @error('job_id')--}}
+{{--                    <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">--}}
+{{--                {{ $message }}--}}
+{{--                    </span>--}}
+{{--                @enderror--}}
+{{--                    </div>--}}
+{{--                    <div class="w-full ms-2">--}}
+{{--                        <label class="text-gray-700 dark:text-white block text-lg">الموظف--}}
+{{--                            <select name="crew_id[]" class="crew_id block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">--}}
+{{--                                <option disabled selected>اختر الموظف</option>--}}
+{{--                            </select>--}}
+{{--                        </label>--}}
+{{--                    </div>--}}
+{{--                            </div>`;--}}
+{{--                }--}}
 
-                var htmlContent = '';
-                for (var i = 0; i < numberOfCrew; i++) {
-                    htmlContent += `
-                    <div class="block md:flex lg:flex xl:flex items-center mb-3">
-                        
-                        <div class="w-full me-2">
-                        <label class="text-gray-700 dark:text-white block text-lg">الوظيفة
-                            <select name="job_id" id="job_id"
-                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                <option disabled selected> اختر نوع الوظيفة</option>
-                                @forelse($jobs as $job)
-                                    <option value="{{ $job->id }}"> {{ $job->job_name }} </option>
-                                @empty
-                                    <option>لا يوجد وظائف</option>
-                                @endforelse
-                            </select>
-                        </label>
-                        @error('job_id')
-                            <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
-                                {{ $message }}
-                            </span>
-                        @enderror
-                    </div>
+{{--                if (divInputsCrew) {--}}
+{{--                    divInputsCrew.innerHTML = htmlContent;--}}
+{{--                }--}}
+{{--            });--}}
+{{--        });--}}
+{{--    </script>--}}
 
-                    <div class="w-full ms-2">
-                        <label class="text-gray-700 dark:text-white block text-lg">الموظف
-                            <select name="crew_id" id="crew_id"
-                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                <option disabled selected>اختر الوظيفة اولا</option>
-                            </select>
-                        </label>
-                        @error('')
-                            <span class="absolute buttom-0 text-xs text-red-600 dark:text-red-400 ms-3">
-                                {{ $message }}
-                            </span>
-                        @enderror
-                    </div>
-                </div>`;
-                }
+{{--    --}}{{-- add crew using ajax --}}
+{{--    <script>--}}
+{{--        $(document).on('change', '.job_id', function() {--}}
+{{--            var job_id = $(this).val();--}}
+{{--            var crewDropdown = $(this).closest('.block').find('.crew_id');--}}
 
-                if (divInputsCrew) {
-                    divInputsCrew.innerHTML = htmlContent;
-                }
-            });
-        });
-    </script>
+{{--            if (job_id) {--}}
+{{--                $.ajax({--}}
+{{--                    url: '/crews-by-job/' + job_id,--}}
+{{--                    type: 'GET',--}}
+{{--                    dataType: 'json',--}}
+{{--                    success: function(data) {--}}
+{{--                        crewDropdown.empty();--}}
+{{--                        crewDropdown.append('<option disabled selected>اختر الموظف</option>');--}}
+{{--                        $.each(data, function(key, crew) {--}}
+{{--                            crewDropdown.append('<option value="' + crew.id + '">' +--}}
+{{--                                crew.first_name + ' ' + crew.last_name + '</option>');--}}
+{{--                        });--}}
+{{--                    },--}}
+{{--                    error: function(xhr, status, error) {--}}
+{{--                        console.error("Error fetching crews:", error);--}}
+{{--                    }--}}
+{{--                });--}}
+{{--            } else {--}}
+{{--                crewDropdown.empty();--}}
+{{--                crewDropdown.append('<option disabled selected>اختر نوع الموظف أولا</option>');--}}
+{{--            }--}}
+{{--        });--}}
+{{--    </script>--}}
 
-    {{-- add crew using ajax --}}
-    <script>
-        $(document).ready(function() {
-            $('#job_id').change(function() {
-                var job_id = $(this).val();
-                if (job_id) {
-                    $.ajax({
-                        url: '/crews-by-job/' + job_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#crew_id').empty();
-                            $('#crew_id').append(
-                                '<option disabled selected>اختر الوظيفة</option>');
-                            $.each(data, function(key, crew) {
-                                $('#crew_id').append('<option value="' + crew.id +
-                                    '">' +
-                                    crew.first_name + crew.last_name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#crew_id').empty();
-                    $('#crew_id').append('<option disabled selected>اختر نوع الموظف أولا</option>');
-                }
-            });
-        });
-    </script>
+
 @endpush

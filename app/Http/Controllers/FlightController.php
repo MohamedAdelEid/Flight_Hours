@@ -39,18 +39,14 @@ class FlightController extends Controller
      */
     public function store(FlightRequest $flightRequest)
     {
-        $flight = Flight::create(array_merge($flightRequest->validated(), [
+        $goingflight = Flight::create(array_merge($flightRequest->validated(), [
             'user_id' => Auth::id()
         ]));
-        $departureTime = Carbon::parse($flight->departure_time);
-        $arrivalTime = Carbon::parse($flight->arrival_time);
-        $diff = $departureTime->diff($arrivalTime);
-        $hours = $diff->h + ($diff->i / 60);
-        FlightHour::create([
-            'aircraft_id' => $flight->aircraft_id,
-            'flight_id' => $flight->id,
-            'hours' => $hours
-        ]);
+        $backflight = Flight::create(array_merge($flightRequest->validated(), [
+            'user_id' => Auth::id()
+        ]));
+//        FlightHour::calcFlightHours($goingflight);
+
         return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلة بنجاح ');
     }
 
@@ -100,4 +96,5 @@ class FlightController extends Controller
         $crews = Crew::where('job_id', $job_id)->get();
         return response()->json($crews);
     }
+
 }

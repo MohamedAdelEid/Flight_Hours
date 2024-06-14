@@ -18,18 +18,20 @@ class FlightRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {
         return [
-            'flight_number'=>'required|string|max:200',
-            'flight_date'=>'required|date',
+            'flight_number' => 'required|string|max:200|unique:flights,flight_number',
+            'flight_date' => 'required|date',
             'aircraft_id' => 'required|exists:aircrafts,id',
             'origin_airport_id' => 'required|exists:airports,id',
             'destination_airport_id' => 'required|exists:airports,id',
-            'departure_time' => 'required|date',
-            'arrival_time' => 'required|date|after:departure_time',
+            'departure_time' => 'required|date_format:H:i',
+            'arrival_time' => 'required|date_format:H:i|after:departure_time',
+            'door_closed_at' => 'required|date_format:H:i',
+            'door_opened_at' => 'required|date_format:H:i|after:door_closed_at',
         ];
     }
 
@@ -43,6 +45,7 @@ class FlightRequest extends FormRequest
         return [
             'flight_number.required' => ' رقم الرحله مطلوب.',
             'flight_number.max' => 'رقم الرحلة يجب ألا يزيد عن 200 حرف.',
+            'flight_number.unique' => 'رقم الرحلة موجود بالفعل.',
             'flight_date.required' => ' تاريخ الرحلة مطلوب.',
             'flight_date.date' => '  تاريخ الرحلة يجب أن يكون تاريخ صحيح.',
             'aircraft_id.required' => ' اسم الطائرة مطلوب.',
@@ -52,10 +55,15 @@ class FlightRequest extends FormRequest
             'destination_airport_id.required' => 'مطار الوصول  مطلوب.',
             'destination_airport_id.exists' => 'مطار الوصول هذا غير صالح.',
             'departure_time.required' => ' وقت المغادرة مطلوب.',
-            'departure_time.date' => ' وقت المغادرة يجب أن يكون تاريخ صحيح.',
+            'departure_time.date_format' => ' وقت المغادرة يجب أن يكون في صيغة ساعات و دقائق.',
             'arrival_time.required' => ' وقت الوصول مطلوب.',
-            'arrival_time.date' => ' وقت الوصول يجب أن يكون تاريخ صحيح.',
+            'arrival_time.date_format' => ' وقت الوصول يجب أن يكون في صيغة صيغة ساعات و دقائق.',
             'arrival_time.after' => ' وقت الوصول يجب أن يكون بعد وقت المغادرة.',
+            'door_closed_at.required' => ' وقت إغلاق الباب مطلوب.',
+            'door_closed_at.date_format' => ' وقت إغلاق الباب يجب أن يكون في صيغة صيغة ساعات و دقائق.',
+            'door_opened_at.required' => ' وقت فتح الباب مطلوب.',
+            'door_opened_at.date_format' => ' وقت فتح الباب يجب أن يكون في صيغةصيغة ساعات و دقائق.',
+            'door_opened_at.after' => ' وقت فتح الباب  يجب أن يكون بعد وقت غلق الباب .',
         ];
     }
 }

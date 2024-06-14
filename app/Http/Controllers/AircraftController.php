@@ -25,7 +25,7 @@ class AircraftController extends Controller
         Aircraft::create(array_merge($aircraftRequest->validated(), [
             'user_id' => Auth::id(),
         ]));
-        return redirect()->route('aircraft.create')
+        return redirect()->route('aircraft.index')
             ->with('success', 'تم اضافة الطائرة  بنجاح');
     }
 
