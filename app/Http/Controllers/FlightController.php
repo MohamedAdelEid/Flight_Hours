@@ -39,20 +39,42 @@ class FlightController extends Controller
      */
     public function store(FlightRequest $flightRequest)
     {
-        $goingflight = Flight::create(array_merge($flightRequest->validated(), [
-            'user_id' => Auth::id()
-        ]));
-        $backflight = Flight::create(array_merge($flightRequest->validated(), [
-            'user_id' => Auth::id()
-        ]));
-//        FlightHour::calcFlightHours($goingflight);
+        $data = $flightRequest->validated();
+        try {
+            $departureFlight = Flight::create([
+                'flight_number' => $data['departure_flight_number'],
+                'flight_date' => $data['departure_flight_date'],
+                'aircraft_id' => $data['departure_aircraft_id'],
+                'origin_airport_id' => $data['departure_origin_airport_id'],
+                'destination_airport_id' => $data['departure_destination_airport_id'],
+                'departure_time' => $data['departure_departure_time'],
+                'arrival_time' => $data['departure_arrival_time'],
+                'door_closed_at' => $data['departure_door_closed_at'],
+                'door_opened_at' => $data['departure_door_opened_at'],
+                'user_id' => auth()->user()->id,
+            ]);
+            $returnFlight = Flight::create([
+                'flight_number' => $data['return_flight_number'],
+                'flight_date' => $data['return_flight_date'],
+                'aircraft_id' => $data['return_aircraft_id'],
+                'origin_airport_id' => $data['return_origin_airport_id'],
+                'destination_airport_id' => $data['return_destination_airport_id'],
+                'departure_time' => $data['return_departure_time'],
+                'arrival_time' => $data['return_arrival_time'],
+                'door_closed_at' => $data['return_door_closed_at'],
+                'door_opened_at' => $data['return_door_opened_at'],
+                'user_id' => auth()->user()->id,
+            ]);
 
-        return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلة بنجاح ');
+            if ($departureFlight && $returnFlight) {
+                return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلتين بنجاح');
+            } else {
+                return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الرحلتين. الرجاء المحاولة مرة أخرى.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الرحلتين: ' . $e->getMessage());
+        }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
