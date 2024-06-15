@@ -10,6 +10,16 @@
             });
         </script>
     @endif
+
+    {{-- alert update crew success --}}
+    @if (Session::has('successUpdate'))
+        <script>
+            iziToast.success({
+                title: "{{ session('successUpdate') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
 @endsection
 
 @section('content')

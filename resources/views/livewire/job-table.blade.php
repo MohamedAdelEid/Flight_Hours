@@ -1,4 +1,5 @@
 <div>
+
     <section class="w-full">
         <div class="mx-auto max-w-screen-xl w-full">
             <!-- Start coding here -->
@@ -133,6 +134,8 @@
                 </div>
             </div>
         </div>
+
+        {{-- delete row  --}}
         <script>
             function confirmDelete(id, jobName) {
                 window.dispatchEvent(new CustomEvent('swalConfirm', {

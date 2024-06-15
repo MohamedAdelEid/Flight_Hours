@@ -10,6 +10,7 @@
             });
         </script>
     @endif
+    
     {{-- alert update job success --}}
     @if (Session::has('successUpdate'))
         <script>
@@ -20,35 +21,6 @@
         </script>
     @endif
 
-    <script>
-        // window.addEventListener('swalConfirm', event =>     {
-        //     Swal.fire({
-        //         title: event.title,
-        //         // html: event.detail.html,
-        //         icon: "warning",
-        //         showCancelButton: true,
-        //         showCloseButton: true,
-        //         confirmButtonColor: "#3085d6",
-        //         cancelButtonColor: "#d33",
-        //         cancelButtonText: "إلغاء",
-        //         confirmButtonText: "نعم  , احذفة!",
-        //         allowOutSideClick: false,
-        //     }).then(function(result) {
-        //         if (result.value) {
-        //             console.log(window.livewire);
-
-        //             window.livewire.emit('delete', event.detail.id);
-        //         }
-        //     });
-        // });
-
-        // window.addEventListener('deleted', function(event) {
-        //     iziToast.success({
-        //         title: "تم حذف الوظيفة بنجاح",
-        //         position: 'topRight',
-        //     });
-        // })
-    </script>
 @endsection
 
 @section('content')

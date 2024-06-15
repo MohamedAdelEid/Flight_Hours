@@ -12,12 +12,17 @@ class AirportTable extends Component
 
     public $search = '';
     public $perPage = 5;
-    public function delete(Airport $airport){
-        $airport->delete();
+
+    public function delete(Airport $airport)
+    {
+        $deleteAirport = $airport->delete();
+        if ($deleteAirport) {
+            $this->dispatch('deleted');
+        }
     }
     public function render()
     {
-        return view('livewire.airport-table',[
+        return view('livewire.airport-table', [
             'airports' => Airport::search($this->search)->paginate($this->perPage)
         ]);
     }

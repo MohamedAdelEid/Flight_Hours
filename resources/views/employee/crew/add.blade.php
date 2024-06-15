@@ -31,7 +31,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">الاسم</span>
-                                <input name="first_name" placeholder="ادخل اسم الموظف "
+                                <input name="first_name" placeholder="ادخل اسم الموظف " value="{{ old('first_name') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('first_name')
@@ -44,7 +44,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم الاب </span>
-                                <input name="last_name" placeholder="ادخل اسم الاب "
+                                <input name="last_name" placeholder="ادخل اسم الاب " value="{{ old('last_name') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('last_name')
@@ -57,7 +57,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اللقب </span>
-                                <input name="nickname" placeholder="ادخل لقب الموظف "
+                                <input name="nickname" placeholder="ادخل لقب الموظف " value="{{ old('nickname') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('nickname')
@@ -70,7 +70,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">تاريخ الميلاد</span>
-                                <input name="date_of_birth" type="date" placeholder="ادخل تاريخ الميلاد "
+                                <input name="date_of_birth" type="date" placeholder="ادخل تاريخ الميلاد " value="{{ old('date_of_birth') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('date_of_birth')
@@ -83,7 +83,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">الرقم المالي </span>
-                                <input name="financial_number" placeholder="ادخل الرقم المالي الخاص بالموظف "
+                                <input name="financial_number" placeholder="ادخل الرقم المالي الخاص بالموظف " value="{{ old('financial_number') }}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('financial_number')
@@ -97,7 +97,7 @@
                             <div>
                                 <label class="block text-xl">
                                     <span class="text-gray-700 dark:text-white block mb-2"> رقم الرخصة </span>
-                                    <input name="license_number" placeholder="ادخل رقم الرخصة"
+                                    <input name="license_number" placeholder="ادخل رقم الرخصة" value="{{ old('license_number') }}"
                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                 </label>
                                 @error('license_number')
@@ -115,9 +115,9 @@
                                 </span>
                                 <select id="job-status" name="status"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                    <option disabled selected>اختر الحالة</option>
-                                    <option value="active">فعال</option>
-                                    <option value="inactive">غير فعال </option>
+                                    <option disabled {{ old('status') ? '' : 'selected' }}>اختر الحالة</option>
+                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>فعال</option>
+                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير فعال </option>
                                 </select>
                             </label>
                             @error('status')
@@ -135,7 +135,7 @@
                                 <select name="job_type" id="job_type"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     @forelse($job_types as $job_type)
-                                        <option value="{{ $job_type->id }}">{{ $job_type->job_type }}</option>
+                                        <option value="{{ $job_type->id }}" {{ old('job_type') == $job_type->id ? 'selected' : '' }}>{{ $job_type->job_type }}</option>
                                     @empty
                                         <option disabled>لا يوجد نوع وظيفة</option>
                                     @endforelse
@@ -147,7 +147,7 @@
                                 </span>
                             @enderror
                         </div>
-                        
+
 
                         <div>
                             <label class="block text-xl">

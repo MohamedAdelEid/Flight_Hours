@@ -1,7 +1,7 @@
 @extends('layouts.employee.main')
 
 @section('alerts')
-        {{-- alert add AirCraft success --}}
+    {{-- alert add AirCraft success --}}
     @if (Session::has('successCreate'))
         <script>
             iziToast.success({
@@ -31,38 +31,38 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم الطائرة</span>
-                                <input name="aircraft_name"
-                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                <input name="aircraft_name" value="{{ old('aircraft_name') }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('aircraft_name')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
                         </div>
-                      <div>
-                          <div>
-                        <label class="block text-xl">
-                            <span class="text-gray-700 dark:text-white block mb-2">طراز الطائرة</span>
-                            <input name="aircraft_code"
-                                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                        @error('aircraft_code')
-                        <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
-                        @enderror
-                    </div>
+                        <div>
+                            <div>
+                                <label class="block text-xl">
+                                    <span class="text-gray-700 dark:text-white block mb-2">طراز الطائرة</span>
+                                    <input name="aircraft_code" value="{{ old('aircraft_code') }}"
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                </label>
+                                @error('aircraft_code')
+                                    <span class="text-xs text-red-600 dark:text-red-400">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
 
-                    </div>
+                        </div>
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم الصانع </span>
-                                <input name="manufacturer"
-                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                <input name="manufacturer" value="{{ old('manufacturer') }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('manufacturer')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
@@ -71,13 +71,13 @@
                             <div>
                                 <label class="block text-xl">
                                     <span class="text-gray-700 dark:text-white block mb-2"> رقم التسجيل </span>
-                                    <input name="registration_number"
-                                           class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                    <input name="registration_number" value="{{ old('registration_number') }}"
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                 </label>
                                 @error('registration_number')
-                                <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
+                                    <span class="text-xs text-red-600 dark:text-red-400">
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
 
@@ -85,35 +85,39 @@
                         <div>
                             <div>
                                 <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">
-                                    حالة الطائرة
-                                </span>
+                                    <span class="text-gray-700 dark:text-white block mb-2">
+                                        حالة الطائرة
+                                    </span>
                                     <select id="job-status" name="status"
-                                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                        <option disabled selected>اختر الحالة</option>
-                                        <option value="active">نشطة</option>
-                                        <option value="inactive">غير نشطة</option>
-                                        <option value="maintenance"> داخل الصيانة </option>
+                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                        <option disabled {{ old('status') ? '' : 'selected' }}>اختر الحالة</option>
+                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>نشطة
+                                        </option>
+                                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير
+                                            نشطة</option>
+                                        <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>
+                                            داخل الصيانة </option>
                                     </select>
                                 </label>
                                 @error('status')
-                                <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
+                                    <span class="text-xs text-red-600 dark:text-red-400">
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
 
                         </div>
-                        <div></div>
+
+
+                    </div>
+
                     <button
                         class="px-9 py-3 mt-6 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
                         إضافة
                     </button>
-
                 </form>
-            </div>
 
-        </div>
+            </div>
     </main>
 @endsection
 @push('script')

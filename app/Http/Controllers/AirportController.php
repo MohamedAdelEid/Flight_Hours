@@ -74,7 +74,7 @@ class AirportController extends Controller
         ]);
 
         return redirect()->route('airport.index')
-            ->with('success', 'تم التعديل علي المطار بنجاح');
+            ->with('successUpdate', 'تم التعديل علي المطار بنجاح');
     }
 
     public function destroy(Airport $airport)
@@ -83,9 +83,4 @@ class AirportController extends Controller
         return redirect()->route('airport.index')->with('success', 'تم حذف المطار بنجاح');
     }
 
-    public function airportJson()
-    {
-        $airports = Airport::all();
-        return response()->json($airports);
-    }
 }
