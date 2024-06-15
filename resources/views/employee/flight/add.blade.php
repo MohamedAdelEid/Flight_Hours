@@ -218,11 +218,11 @@
                                     <label class="block text-xl">
                                         <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط <span
                                                 class="text-blue-500 text-sm">'Landing'</span> </span>
-                                        <input name="departure_arrival_time" type="time"
-                                            value="{{ old('departure_arrival_time') }}"
+                                        <input name="departure_landing_time" type="time"
+                                            value="{{ old('departure_landing_time') }}"
                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
-                                    @error('departure_arrival_time')
+                                    @error('departure_landing_time')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{ $message }}
                                         </span>
@@ -453,11 +453,11 @@
                                     <label class="block text-xl">
                                         <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط <span
                                                 class="text-blue-500 text-sm">'Landing'</span> </span>
-                                        <input name="return_arrival_time" type="time"
-                                            value="{{ old('return_arrival_time') }}"
+                                        <input name="return_landing_time" type="time"
+                                            value="{{ old('return_landing_time') }}"
                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
-                                    @error('return_arrival_time')
+                                    @error('return_landing_time')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{ $message }}
                                         </span>
@@ -617,6 +617,11 @@
                             <option disabled selected>اختر الوظيفة أولا</option>
                         </select>
                     </label>
+                     @error('crew_id')
+                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                {{ $message }}
+                    </span>
+                @enderror
                 </div>
             </div>`;
                 }

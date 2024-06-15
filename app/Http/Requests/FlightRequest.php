@@ -28,6 +28,7 @@ class FlightRequest extends FormRequest
             'departure_origin_airport_id' => 'required|exists:airports,id',
             'departure_destination_airport_id' => 'required|exists:airports,id',
             'departure_departure_time' => 'required|date_format:H:i',
+            'departure_landing_time' => 'required|date_format:H:i',
             'departure_arrival_time' => 'required|date_format:H:i|after:departure_time',
             'departure_door_closed_at' => 'required|date_format:H:i',
             'departure_door_opened_at' => 'required|date_format:H:i|after:door_closed_at',
@@ -37,9 +38,12 @@ class FlightRequest extends FormRequest
             'return_origin_airport_id' => 'required|exists:airports,id',
             'return_destination_airport_id' => 'required|exists:airports,id',
             'return_departure_time' => 'required|date_format:H:i',
+            'return_landing_time' => 'required|date_format:H:i',
             'return_arrival_time' => 'required|date_format:H:i|after:departure_time',
             'return_door_closed_at' => 'required|date_format:H:i',
             'return_door_opened_at' => 'required|date_format:H:i|after:door_closed_at',
+            'job_id' => 'required|array|exists:jobs,id',
+            'crew_id' => 'required|array|exists:crews,id',
         ];
     }
 
@@ -93,6 +97,12 @@ class FlightRequest extends FormRequest
             'return_door_opened_at.required' => ' وقت فتح الباب مطلوب.',
             'return_door_opened_at.date_format' => ' وقت فتح الباب يجب أن يكون في صيغةصيغة ساعات و دقائق.',
             'return_door_opened_at.after' => ' وقت فتح الباب  يجب أن يكون بعد وقت غلق الباب .',
+            'job_id.required' => 'اختر وظيفة اولا ',
+            'job_id.exists' => 'هذه الوظيفة غير صالحه',
+            'job_id.array' => 'يجب ان تختار مجموعة من الوظائف',
+            'crew_id.required' => 'اختر الموظف اولا',
+            'crew_id.exists' => 'هذه الموظف غير صالحه',
+            'crew_id.array' => 'يجب ان تختار مجموعة من الموظفين',
         ];
     }
 }
