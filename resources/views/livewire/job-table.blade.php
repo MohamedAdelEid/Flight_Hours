@@ -87,7 +87,9 @@
                                             </a>
 
 
-                                            <button wire:click="deleteConfirm({{ $job->id }})"  id="delete-button"
+                                            <button
+                                                onclick="confirmDelete({{ $job->id }}, '{{ $job->job_name }}')"
+                                                id="delete-button_{{ $job->id }}"
                                                 class="py-1 mr-1 text-sm font-medium leading-5 text-red-400 rounded-lg dark:text-red-400 focus:outline-none transition duration-200 ease-in-out hover:text-red-600"
                                                 aria-label="Delete">
                                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -131,6 +133,51 @@
                 </div>
             </div>
         </div>
+        <script>
+            function confirmDelete(id, jobName) {
+                window.dispatchEvent(new CustomEvent('swalConfirm', {
+                    detail: {
+                        title: 'هل انت متاكد ؟',
+                        html: 'انت تريد حذف <strong>' + jobName + '</strong>',
+                        id: id
+                    }
+                }));
+            }
+
+            window.addEventListener('swalConfirm', event => {
+                Swal.fire({
+                    title: event.detail.title,
+                    html: event.detail.html,
+                    icon: "warning",
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    cancelButtonText: "إلغاء",
+                    confirmButtonText: "نعم , احذفة!",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        const confirmButton = Swal.getConfirmButton();
+                        confirmButton.addEventListener('click', () => {
+                            const deleteButton = document.getElementById(
+                                `delete-button_${event.detail.id}`);
+                            deleteButton.removeAttribute('onclick');
+                            deleteButton.setAttribute('onclick',
+                                `@this.call('delete', ${event.detail.id})`);
+                            deleteButton.click();
+                        });
+                    }
+                });
+            });
+
+            window.addEventListener('deleted', event => {
+                iziToast.success({
+                    title: "تم حذف الوظيفة بنجاح",
+                    position: 'topRight',
+                });
+            });
+        </script>
+
     </section>
 
 </div>
