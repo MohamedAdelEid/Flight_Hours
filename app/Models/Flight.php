@@ -11,7 +11,7 @@ class Flight extends Model
     protected $table = 'flights';
     protected $fillable = [
         'flight_number','flight_date','aircraft_id','origin_airport_id','destination_airport_id',
-        'door_opened_at','door_closed_at','departure_time','arrival_time','user_id'
+        'door_closed_at','door_opened_at','departure_time','landing_time','arrival_time','user_id'
     ];
     public function user(){
         return $this->belongsTo(User::class);
@@ -32,7 +32,10 @@ class Flight extends Model
     {
         return $this->belongsTo(Airport::class, 'destination_airport_id');
     }
-
+    public function crews()
+    {
+        return $this->belongsToMany(Crew::class, 'crews_flights');
+    }
     public function scopeSearch($query, $value)
     {
         return $query->where('flight_number', 'like', "%{$value}%")
@@ -49,6 +52,9 @@ class Flight extends Model
             ->orWhereHas('aircraft', function ($subQuery) use ($value) {
                 $subQuery->where('aircraft_name', 'like', "%{$value}%");
             });
+    }
+    static function ِassignFlightCrewForEachFlight(){
+
     }
 }
 

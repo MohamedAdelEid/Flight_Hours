@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class CrewFlight extends Model
 {
     use HasFactory;
+    protected $table = 'crews_flights';
     protected $fillable = [
         'flight_id','crew_id','user_id'
     ];
 
     public function flights(){
-        return $this->belongsToMany(Flight::class);
+        return $this->belongsTo(Flight::class);
     }
     public function crews(){
-        return $this->belongsToMany(Crew::class);
+        return $this->belongsTo(Crew::class);
     }
 }

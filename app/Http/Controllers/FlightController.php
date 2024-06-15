@@ -6,6 +6,7 @@ use App\Http\Requests\FlightRequest;
 use App\Models\Aircraft;
 use App\Models\Airport;
 use App\Models\Crew;
+use App\Models\CrewFlight;
 use App\Models\Flight;
 use App\Models\FlightHour;
 use App\Models\Job;
@@ -47,17 +48,20 @@ class FlightController extends Controller
                 'aircraft_id' => $data['departure_aircraft_id'],
                 'origin_airport_id' => $data['departure_origin_airport_id'],
                 'destination_airport_id' => $data['departure_destination_airport_id'],
+                'landing_time' => $data['departure_landing_time'],
                 'departure_time' => $data['departure_departure_time'],
                 'arrival_time' => $data['departure_arrival_time'],
                 'door_closed_at' => $data['departure_door_closed_at'],
                 'door_opened_at' => $data['departure_door_opened_at'],
                 'user_id' => auth()->user()->id,
             ]);
+            FlightHour::calcFlightHours($departureFlight);
             $returnFlight = Flight::create([
                 'flight_number' => $data['return_flight_number'],
                 'flight_date' => $data['return_flight_date'],
                 'aircraft_id' => $data['return_aircraft_id'],
                 'origin_airport_id' => $data['return_origin_airport_id'],
+                'landing_time' => $data['return_landing_time'],
                 'destination_airport_id' => $data['return_destination_airport_id'],
                 'departure_time' => $data['return_departure_time'],
                 'arrival_time' => $data['return_arrival_time'],
@@ -65,7 +69,20 @@ class FlightController extends Controller
                 'door_opened_at' => $data['return_door_opened_at'],
                 'user_id' => auth()->user()->id,
             ]);
-
+            FlightHour::calcFlightHours($returnFlight);
+            $crews = $data['crew_id'];
+            foreach ($crews as $crewId) {
+                CrewFlight::create([
+                    'flight_id' => $departureFlight->id,
+                    'crew_id' => $crewId,
+                    'user_id' => auth()->user()->id,
+                ]);
+                CrewFlight::create([
+                    'flight_id' => $returnFlight->id,
+                    'crew_id' => $crewId,
+                    'user_id' => auth()->user()->id,
+                ]);
+            }
             if ($departureFlight && $returnFlight) {
                 return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلتين بنجاح');
             } else {

@@ -21,7 +21,8 @@ class FlightHour extends Model
     {
         return $this->belongsTo(Flight::class);
     }
-    static function calcFlightHours($flight){
+    static function calcFlightHours($flight)
+    {
         $departureTime = Carbon::parse($flight->departure_time);
         $arrivalTime = Carbon::parse($flight->arrival_time);
         $diff = $departureTime->diff($arrivalTime);

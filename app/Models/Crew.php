@@ -28,6 +28,10 @@ class Crew extends Model
     public function job(){
         return $this->belongsTo(Job::class);
     }
+    public function flights()
+    {
+        return $this->belongsToMany(Flight::class, 'crews_flights');
+    }
     public function job_type(){
         return $this->belongsTo(JobType::class);
     }
