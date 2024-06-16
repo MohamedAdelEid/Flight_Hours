@@ -25,7 +25,7 @@ class FlightHour extends Model
     {
         $departureTime = Carbon::parse($flight->departure_time);
         $arrivalTime = Carbon::parse($flight->arrival_time);
-        $diff = $departureTime->diff($arrivalTime);
+        $diff = $arrivalTime->diff($departureTime);
         $hours = $diff->h + ($diff->i / 60);
         FlightHour::create([
             'aircraft_id' => $flight->aircraft_id,

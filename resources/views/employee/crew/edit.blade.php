@@ -82,7 +82,7 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">الرقم المالي </span>
-                                <input name="financial_number" value="{{ $crew->financial_number }}"
+                                <input name="financial_number" value="{{ $crew->financial_number}}"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('financial_number')
@@ -124,14 +124,33 @@
                                 </span>
                             @enderror
                         </div>
-
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">
                                     نوع الموظف
                                 </span>
-                                <select name="job_id"
-                                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                <select name="job_type" id="job_type"
+                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                    @foreach ($job_types as $jobType)
+                                        <option value="{{ $jobType->id }}"
+                                            {{  $jobType->id === $crew->job_type ? 'selected' : '' }}>{{ $jobType->job_type }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </label>
+                            @error('job_type')
+                            <span class="text-xs text-red-600 dark:text-red-400">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xl">
+                                <span class="text-gray-700 dark:text-white block mb-2">
+                                    الوظيفة
+                                </span>
+                                <select name="job_id" id="job_id"
+                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                     @foreach ($jobs as $job)
                                         <option value="{{ $job->id }}"
                                             {{ $job->id === $crew->job_id ? 'selected' : '' }}>{{ $job->job_name }}
@@ -140,7 +159,7 @@
                                 </select>
                             </label>
                             @error('job_id')
-                                <span class="text-xs text-red-600 dark:text-red-400">
+                            <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
@@ -160,4 +179,31 @@
 @endsection
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#job_type').change(function() {
+                var type_id = $(this).val();
+                if (type_id) {
+                    $.ajax({
+                        url: '/jobs-by-type/' + type_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#job_id').empty();
+                            $('#job_id').append(
+                                '<option disabled selected>اختر الوظيفة</option>');
+                            $.each(data, function(key, job) {
+                                $('#job_id').append('<option value="' + job.id + '">' +
+                                    job.job_name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#job_id').empty();
+                    $('#job_id').append('<option disabled selected>اختر نوع الموظف أولا</option>');
+                }
+            });
+        });
+    </script>
 @endpush

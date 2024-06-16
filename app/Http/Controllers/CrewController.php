@@ -48,6 +48,7 @@ class CrewController extends Controller
         return view('employee.crew.edit',[
             'crew' => $crew,
             'jobs' => Job::all(),
+            'job_types' => JobType::all()
         ]);
     }
 
