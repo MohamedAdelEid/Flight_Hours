@@ -35,7 +35,7 @@ class CrewController extends Controller
             'user_id' => Auth::id()
         ]));
         return redirect()->route('crew.index')
-                    ->with('successCreate','تم اضافة عضوالطاقم بنجاح');
+                    ->with('successCreate','تم اضافة عضو الطاقم بنجاح');
     }
 
     public function show(Crew $crew)
@@ -56,7 +56,7 @@ class CrewController extends Controller
     {
         $crew->update($crewRequest->validated());
         return redirect()->route('crew.index')
-            ->with('successUpdate', 'تم التعديل علي عضوالطاقم بنجاح');
+            ->with('successUpdate', 'تم التعديل علي عضو الطاقم بنجاح');
     }
 
     public function destroy(Crew $crew)

@@ -10,7 +10,7 @@ class Crew extends Model
     use HasFactory;
     protected $table = 'crews';
     protected $fillable = [
-      'financial_number',
+        'financial_number',
         'first_name',
         'last_name',
         'nickname',
@@ -22,17 +22,20 @@ class Crew extends Model
         'user_id',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function job(){
+    public function job()
+    {
         return $this->belongsTo(Job::class);
     }
     public function flights()
     {
         return $this->belongsToMany(Flight::class, 'crews_flights');
     }
-    public function job_type(){
+    public function job_type()
+    {
         return $this->belongsTo(JobType::class);
     }
     public function scopeSearch($query, $value)
@@ -46,9 +49,9 @@ class Crew extends Model
             ->orWhereHas('job', function ($subQuery) use ($value) {
                 $subQuery->where('job_name', 'like', "%{$value}%");
             })
-            ->orWhereHas('user',function ($subQuery) use($value){
+            ->orWhereHas('user', function ($subQuery) use ($value) {
                 $subQuery->where('name', 'like', "%{$value}%");
-            } )
+            })
         ;
     }
 }

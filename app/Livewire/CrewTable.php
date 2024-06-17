@@ -14,12 +14,16 @@ class CrewTable extends Component
     public $search = '';
     public $perPage = 5;
 
-    public function delete(Crew $crew){
-        $crew->delete();
+    public function delete(Crew $crew)
+    {
+        $deleteCrew = $crew->delete();
+        if ($deleteCrew) {
+            $this->dispatch('deleted');
+        }
     }
     public function render()
     {
-        return view('livewire.crew-table',[
+        return view('livewire.crew-table', [
             'crews' => Crew::search($this->search)->paginate($this->perPage)
         ]);
     }

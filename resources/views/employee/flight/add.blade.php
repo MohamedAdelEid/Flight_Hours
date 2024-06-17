@@ -49,7 +49,7 @@
                                             <option value="" disabled>اختر مطار المغادرة ... </option>
                                             @forelse($airports as $airport)
                                                 <option
-                                                    value="{{ $airport->id }} {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }} ">
+                                                    value="{{ $airport->id }}" {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
                                                     {{ $airport->airport_name }}</option>
                                             @empty
                                                 <option disabled>لا يوجد مطارات </option>
@@ -534,19 +534,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- submit two form flight , crew_flight --}}
-    <script>
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var submitFlightAndCrewFlight = document.querySelector('#submit_flight_crew');
-        //     submitFlightAndCrewFlight.onclick = function() {
-        //         var formFlight = document.querySelector('#flight');
-        //         var formFlightCrew = document.querySelector('#crew_flight');
-        //         formFlight.submit();
-        //         formFlightCrew.submit();
-        //     }
-        // });
-    </script>
-
     {{--  select ToAirportGoing -> FromAirportBack --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -617,7 +604,7 @@
                             <option disabled selected>اختر الوظيفة أولا</option>
                         </select>
                     </label>
-                     @error('crew_id')
+                    @error('crew_id')
                     <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                 {{ $message }}
                     </span>
@@ -666,56 +653,5 @@
                 }
             }
         });
-
-
-
-
-        // function generateCrewInputs(numberOfCrew) {
-        //     var htmlContent = '';
-        //     for (var i = 0; i < numberOfCrew; i++) {
-        //         htmlContent += `
-    //         <div class="block md:flex lg:flex xl:flex items-center mb-3">
-    //             <div class="w-full me-2">
-    //                 <label class="text-gray-700 dark:text-white block text-lg">الوظيفة
-    //                     <select name="job_id[]" class="job_id block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-    //                         <option disabled selected> اختر نوع الوظيفة</option>
-    //                         @forelse($jobs as $job)
-    //                             <option value="{{ $job->id }}"> {{ $job->job_name }} </option>
-    //                         @empty
-    //                             <option>لا يوجد وظائف</option>
-    //                         @endforelse
-    //                     </select>
-    //                 </label>
-    //                 @error('job_id')
-    //                     <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-    //                         {{ $message }}
-    //                     </span>
-    //                 @enderror
-    //             </div>
-    //             <div class="w-full ms-2">
-    //                 <label class="text-gray-700 dark:text-white block text-lg">الموظف
-    //                     <select name="crew_id[]" class="crew_id block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-    //                         <option disabled selected>اختر الموظف</option>
-    //                     </select>
-    //                 </label>
-    //             </div>
-    //         </div>
-    // `;
-        //     }
-
-        //     if (divInputsCrew) {
-        //         divInputsCrew.innerHTML = htmlContent;
-        //     }
-        // }
-
-        const formData = new FormData(document.querySelector('#flight'));
-
-        // Log each form field with its name
-        formData.forEach((value, key) => {
-            console.log(`${key}:`, value);
-        });
     </script>
-
-    {{-- add crew using ajax --}}
-    <script></script>
 @endpush

@@ -14,12 +14,16 @@ class FlightTable extends Component
     public $search = '';
     public $perPage = 5;
     public $status = '';
-    public function delete(Flight $flight){
-        $flight->delete();
+    public function delete(Flight $flight)
+    {
+        $deleteFlight = $flight->delete();
+        if ($deleteFlight) {
+            $this->dispatch('deleted');
+        }
     }
     public function render()
     {
-        return view('livewire.flight-table',[
+        return view('livewire.flight-table', [
             'flights' => Flight::search($this->search)->paginate($this->perPage)
         ]);
     }

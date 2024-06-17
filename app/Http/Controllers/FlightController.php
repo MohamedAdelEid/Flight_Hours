@@ -31,7 +31,6 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-
         ]);
     }
 
@@ -84,7 +83,7 @@ class FlightController extends Controller
                 ]);
             }
             if ($departureFlight && $returnFlight) {
-                return redirect()->route('flight.index')->with('success', 'تم اضافة الرحلتين بنجاح');
+                return redirect()->route('flight.index')->with('successCreate', 'تم اضافة الرحلتين بنجاح');
             } else {
                 return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الرحلتين. الرجاء المحاولة مرة أخرى.');
             }
@@ -102,12 +101,17 @@ class FlightController extends Controller
      */
     public function edit(Flight $flight)
     {
+        // $crew = Crew::whereIn('id', CrewFlight::where('flight_id', $flight->id)->pluck('crew_id'))->get();
+        $crewFlight = CrewFlight::where('flight_id', $flight->id)->get();
+
         return view('employee.flight.edit', [
             'flight' => $flight,
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
+            'jobs' => Job::all(),
+            'crew' => Crew::all(),
+            'crewFlight' => $crewFlight,
         ]);
-
     }
 
     /**

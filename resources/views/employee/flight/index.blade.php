@@ -8,6 +8,9 @@
                 title: "{{ session('successCreate') }}",
                 position: 'topRight',
             });
+
+            // reset num of crew
+            localStorage.removeItem('numOfCrew');
         </script>
     @endif
 @endsection
