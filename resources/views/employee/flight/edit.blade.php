@@ -272,9 +272,9 @@
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">عدد طاقم الرحلة</span>
                                 <div class="flex items-center relative">
-                                    <input type="number" placeholder="ادخل عدد الطاقم" id="num-of-crew"
+                                    <input type="number" placeholder="ادخل عدد الطاقم" id="num-of-crew" disabled
                                         class="block w-52 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input" />
-                                    <button id="submit-num-of-crew"
+                                    <button id="submit-num-of-crew" disabled
                                         class="p-2 font-medium text-sm leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-tl-lg rounded-bl-lg rounded-tr-sm rounded-br-sm active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
                                         إضافة
                                     </button>
@@ -320,7 +320,7 @@
             var divInputsCrew = document.querySelector('#icontainer-inputs-crew');
 
             // Retrieve the saved number of crew from local storage, if it exists
-            var savedNumberOfCrew = {{ $crewFlight->count() }};
+            var savedNumberOfCrew = {{ $crewFlights->count() }};
             if (savedNumberOfCrew) {
                 numOfCrew.value = savedNumberOfCrew;
                 generateCrewInputs(parseInt(savedNumberOfCrew));
@@ -342,15 +342,15 @@
 
             function generateCrewInputs(numberOfCrew) {
                 var htmlContent = '';
-                for (let j = 1; j <= numberOfCrew; j++) {
+                @for ($j = 0; $j < $crewFlights->count(); $j++)
                     htmlContent += `
             <div class="block md:flex lg:flex xl:flex items-center mb-3">
                 <div class="w-full me-2">
                     <label class="text-gray-700 dark:text-white block text-lg">الوظيفة
-                        <select name="job_id[]" class="job_id_${j} block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                        <select name="job_id[]" class="job_id_{{ $j }} block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                             <option disabled selected> اختر نوع الوظيفة</option>
                             @forelse($jobs as $job)
-                                <option value="{{ $job->id }}"> {{ $job->job_name }} </option>
+                                <option value="{{ $job->id }}" {{ $crewFlights[$j]->crew->job_id == $job->id ? 'selected' : '' }}  > {{ $job->job_name }} </option>
                             @empty
                                 <option>لا يوجد وظائف</option>
                             @endforelse
@@ -364,8 +364,13 @@
                 </div>
                 <div class="w-full ms-2">
                     <label class="text-gray-700 dark:text-white block text-lg">الموظف
-                        <select name="crew_id[]" class="crew_id_${j} block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                        <select name="crew_id[]" class="crew_id_{{$j}} block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                             <option disabled selected>اختر الوظيفة أولا</option>
+                            @forelse($crews as $crew)
+                                <option value="{{ $crew->id }}" {{ $crewFlights[$j]->crew->id == $crew->id ? 'selected' : '' }}> {{ $crew->first_name }} {{ $crew->last_name }}</option>
+                            @empty
+                                <option>لا يوجد وظائف</option>
+                            @endforelse
                         </select>
                     </label>
                     @error('crew_id')
@@ -375,14 +380,14 @@
                 @enderror
                 </div>
             </div>`;
-                }
+                @endfor
 
                 if (divInputsCrew) {
                     divInputsCrew.innerHTML = htmlContent;
                 }
 
                 // Attach change event listeners to each job_id dropdown
-                for (let j = 1; j <= numberOfCrew; j++) {
+                for (let j = 0; j < numberOfCrew; j++) {
                     $(`.job_id_${j}`).change(function() {
                         var job_id = $(this).val();
                         var crewDropdown = $(`.crew_id_${j}`);

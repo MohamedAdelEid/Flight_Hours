@@ -19,19 +19,6 @@
                                 placeholder="Search" required="">
                         </div>
                     </div>
-                    <div class="flex space-x-3">
-                        {{--                        <div class="flex space-x-3 items-center"> --}}
-                        {{--                            <label class="w-40 text-sm font-medium text-gray-900 dark:text-white">نوع الوظيفة</label> --}}
-                        {{--                            <select wire:model.live = "job_type" --}}
-                        {{--                                    class="bg-gray-50 dark:bg-gray-700 border border-gray-500 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "> --}}
-                        {{--                                <option value="">All</option> --}}
-                        {{--                                @forelse($jobTypes as $job_type) --}}
-                        {{--                                    <option value="{{ $job_type->id }}">{{ $job_type->job_type }}</option> --}}
-                        {{--                                @empty --}}
-                        {{--                                @endforelse --}}
-                        {{--                            </select> --}}
-                        {{--                        </div> --}}
-                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full whitespace-no-wrap">

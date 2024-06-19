@@ -16,7 +16,7 @@ class CrewFlight extends Model
     public function flights(){
         return $this->belongsTo(Flight::class);
     }
-    public function crews(){
+    public function crew(){
         return $this->belongsTo(Crew::class);
     }
 }

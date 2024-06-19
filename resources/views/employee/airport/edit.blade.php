@@ -21,7 +21,7 @@
             </h2>
 
             <div class="px-7 pt-8 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <form action="{{ route('airport.update',$airport->id) }}" method="POST">
+                <form action="{{ route('airport.update', $airport->id) }}" method="POST">
                     @method('PUT')
                     @csrf
 
@@ -30,12 +30,11 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">اسم المطار </span>
-                                <input name="airport_name"
-                                       value="{{$airport->airport_name}}"
-                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                <input name="airport_name" value="{{ $airport->airport_name }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('airport_name')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror
@@ -44,12 +43,11 @@
                         <div>
                             <label class="block text-xl">
                                 <span class="text-gray-700 dark:text-white block mb-2">كود المطار </span>
-                                <input name="airport_code"
-                                       value="{{$airport->airport_code}}"
-                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                <input name="airport_code" value="{{ $airport->airport_code }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
                             @error('airport_code')
-                            <span class="text-xs text-red-600 dark:text-red-400">
+                                <span class="text-xs text-red-600 dark:text-red-400">
                                     {{ $message }}
                                 </span>
                             @enderror

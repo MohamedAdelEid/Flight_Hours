@@ -24,7 +24,7 @@ class CustomGuestMiddleware
             } elseif ($user->isEmployee()) {
                 return redirect()->intended('/employee/index');
             } elseif ($user->isCaptain()) {
-                return redirect()->intended('/captain/index');
+                return redirect()->intended('/captain/in ex');
             } else {
                 abort(403);
             }
