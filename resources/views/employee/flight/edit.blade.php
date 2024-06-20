@@ -288,7 +288,7 @@
 
                         <button id="submit_flight_crew"
                             class="px-9 py-3 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
-                            إضافة
+                            تعديل
                         </button>
                 </form>
             </div>
