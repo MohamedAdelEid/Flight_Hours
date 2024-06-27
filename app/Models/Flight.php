@@ -11,7 +11,7 @@ class Flight extends Model
     protected $table = 'flights';
     protected $fillable = [
         'flight_number','flight_date','aircraft_id','origin_airport_id','destination_airport_id',
-        'door_closed_at','door_opened_at','departure_time','landing_time','arrival_time','user_id'
+        'departure_time','arrival_time','user_id','aircraft_number','flight_type'
     ];
     public function user(){
         return $this->belongsTo(User::class);
@@ -53,8 +53,6 @@ class Flight extends Model
                 $subQuery->where('aircraft_name', 'like', "%{$value}%");
             });
     }
-    static function ِassignFlightCrewForEachFlight(){
 
-    }
 }
 

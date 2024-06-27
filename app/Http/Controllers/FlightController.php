@@ -26,7 +26,6 @@ class FlightController extends Controller
                 ->orderByDesc('created_at')->get()
         ]);
     }
-
     public function create()
     {
         return view('employee.flight.add', [
@@ -45,11 +44,10 @@ class FlightController extends Controller
                 'aircraft_id' => $data['departure_aircraft_id'],
                 'origin_airport_id' => $data['departure_origin_airport_id'],
                 'destination_airport_id' => $data['departure_destination_airport_id'],
-                'landing_time' => $data['departure_landing_time'],
                 'departure_time' => $data['departure_departure_time'],
                 'arrival_time' => $data['departure_arrival_time'],
-                'door_closed_at' => $data['departure_door_closed_at'],
-                'door_opened_at' => $data['departure_door_opened_at'],
+                'aircraft_number' => $data['departure_aircraft_number'],
+                'flight_type' => $data['departure_flight_type'],
                 'user_id' => auth()->user()->id,
             ]);
             FlightHour::calcFlightHours($departureFlight);
@@ -58,12 +56,11 @@ class FlightController extends Controller
                 'flight_date' => $data['return_flight_date'],
                 'aircraft_id' => $data['return_aircraft_id'],
                 'origin_airport_id' => $data['return_origin_airport_id'],
-                'landing_time' => $data['return_landing_time'],
                 'destination_airport_id' => $data['return_destination_airport_id'],
                 'departure_time' => $data['return_departure_time'],
                 'arrival_time' => $data['return_arrival_time'],
-                'door_closed_at' => $data['return_door_closed_at'],
-                'door_opened_at' => $data['return_door_opened_at'],
+                'aircraft_number' => $data['return_aircraft_number'],
+                'flight_type' => $data['return_flight_type'],
                 'user_id' => auth()->user()->id,
             ]);
             FlightHour::calcFlightHours($returnFlight);
@@ -103,8 +100,6 @@ class FlightController extends Controller
             'crewFlights' => $crewFlight,
         ]);
     }
-
-
     public function update(Request $updateFlightRequest, Flight $flight)
     {
 
@@ -139,63 +134,12 @@ class FlightController extends Controller
             return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء تعديل الرحلة: ' . $e->getMessage());
         }
     }
-
-
-
-//    public function update(Request $request, Flight $flight)
-//    {
-//        $validator = Validator::make($request->all(), [
-//            'origin_airport_id' => 'required|exists:airports,id',
-//            'destination_airport_id' => 'required|exists:airports,id|different:origin_airport_id',
-//            'aircraft_id' => 'required|exists:aircrafts,id',
-//            'flight_number' => 'required|numeric',
-//            'flight_date' => 'required|date',
-//            'door_closed_at' => 'required|date_format:H:i:s',
-//            'departure_time' => 'required|date_format:H:i:s|after:door_closed_at',
-//            'landing_time' => 'required|date_format:H:i:s|after:departure_time',
-//            'door_opened_at' => 'required|date_format:H:i:s|after:landing_time',
-//            'arrival_time' => 'required|date_format:H:i:s|after:door_opened_at',
-//            'job_id.*' => 'required|exists:jobs,id',
-//            'crew_id.*' => 'required|exists:crews,id',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return redirect()->back()
-//                ->withErrors($validator)
-//                ->withInput();
-//        }
-//
-//        try {
-//            $flight->update($validator->validated());
-//
-//            if ($request->has('crew_id')) {
-//                CrewFlight::where('flight_id', $flight->id)->delete();
-//                foreach ($request->input('crew_id') as $crewId) {
-//                    CrewFlight::create([
-//                        'flight_id' => $flight->id,
-//                        'crew_id' => $crewId,
-//                        'user_id' => auth()->user()->id,
-//                    ]);
-//                }
-//            }
-//
-//            return redirect()->route('flight.index')
-//                ->with('success', 'تم التعديل علي الرحلة بنجاح');
-//        } catch (\Exception $e) {
-//            return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء تعديل الرحلة: ' . $e->getMessage());
-//        }
-//    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Flight $flight)
     {
         $flight->delete();
         return redirect()->route('flight.index')
             ->with('success', 'تم حذف الرحلة بنجاح');
     }
-
     public function getCrewsByJob($job_id)
     {
         $crews = Crew::where('job_id', $job_id)->get();
