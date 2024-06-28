@@ -27,7 +27,7 @@
                     @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-6 gap-y-4">
 
-                        {{-- One way trip --}}
+                        {{-- departure flight --}}
                         <div>
 
                             <div class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -48,8 +48,8 @@
                                                     autofill:pt-6">
                                             <option value="" disabled>اختر مطار المغادرة ... </option>
                                             @forelse($airports as $airport)
-                                                <option
-                                                    value="{{ $airport->id }}" {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
+                                                <option value="{{ $airport->id }}"
+                                                    {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
                                                     {{ $airport->airport_name }}</option>
                                             @empty
                                                 <option disabled>لا يوجد مطارات </option>
@@ -127,49 +127,84 @@
 
                             <div class="px-7 pt-6 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
 
+                                {{-- date of flight --}}
                                 <div class="mb-3">
-                                    <label class="text-gray-700 dark:text-white block text-lg"> الطائرة
-                                        <select name="departure_aircraft_id"
-                                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                            <option disabled> اختر طائرة</option>
-                                            @forelse($aircrafts as $aircraft)
-                                                <option value="{{ $aircraft->id }}"
-                                                    {{ old('departure_aircraft_id') == $aircraft->id ? 'selected' : '' }}>
-                                                    {{ $aircraft->aircraft_name }}
-                                                </option>
-                                            @empty
-                                                <option disabled>لا يوجد طائرات </option>
-                                            @endforelse
-                                        </select>
+                                    <label class="block text-xl">
+                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة </span>
+                                        <input name="departure_flight_date" type="date"
+                                            value="{{ old('departure_flight_date') }}"
+                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
-                                    @error('departure_aircraft_id')
+                                    @error('departure_flight_date')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{ $message }}
                                         </span>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">
-                                    نوع الرحلة
-                                </span>
-                                        <select id="job-status" name="departure_flight_type"
-                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                            <option disabled selected>اختر نوع الرحلة </option>
-                                            <option value="normal_flight" {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات عادية </option>
-                                            <option value="simulated_flight" {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران تشبيهي </option>
-                                            <option value="unloaded_flight" {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران غير محمل </option>
-                                            <option value="airplane_test" {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار الطائرة </option>
-                                        </select>
-                                    </label>
-                                    @error('departure_flight_type')
-                                    <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
-                                    @enderror
-                                </div>
+
                                 <div class="lg:flex xl:flex md:block items-center mb-3">
-                                    <div class="w-full me-1">
+
+                                    {{-- aircraft --}}
+                                    <div class="w-full lg:me-1">
+                                        <label class="text-gray-700 dark:text-white block text-lg"> الطائرة
+                                            <select name="departure_aircraft_id"
+                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                                <option disabled> اختر طائرة</option>
+                                                @forelse($aircrafts as $aircraft)
+                                                    <option value="{{ $aircraft->id }}"
+                                                        {{ old('departure_aircraft_id') == $aircraft->id ? 'selected' : '' }}>
+                                                        {{ $aircraft->aircraft_name }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled>لا يوجد طائرات </option>
+                                                @endforelse
+                                            </select>
+                                        </label>
+                                        @error('departure_aircraft_id')
+                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- type of flight --}}
+                                    <div class="w-full lg:ms-1">
+                                        <label class="block text-xl">
+                                            <span class="text-gray-700 dark:text-white block">
+                                                نوع الرحلة
+                                            </span>
+                                            <select id="job-status" name="departure_flight_type"
+                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                                <option disabled selected>اختر نوع الرحلة </option>
+                                                <option value="normal_flight"
+                                                    {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات
+                                                    عادية
+                                                </option>
+                                                <option value="simulated_flight"
+                                                    {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران
+                                                    تشبيهي </option>
+                                                <option value="unloaded_flight"
+                                                    {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران
+                                                    غير
+                                                    محمل </option>
+                                                <option value="airplane_test"
+                                                    {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار
+                                                    الطائرة </option>
+                                            </select>
+                                        </label>
+                                        @error('departure_flight_type')
+                                            <span class="text-xs text-red-600 dark:text-red-400">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                                <div class="lg:flex xl:flex md:block items-center mb-3">
+
+                                    {{-- flight number --}}
+                                    <div class="w-full lg:me-1">
                                         <div>
                                             <label class="block text-xl">
                                                 <span class="text-gray-700 dark:text-white block">رقم الرحلة </span>
@@ -185,43 +220,31 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="w-full me-1">
+
+                                    {{-- number aircraft --}}
+                                    <div class="w-full lg:ms-1">
                                         <div>
                                             <label class="block text-xl">
                                                 <span class="text-gray-700 dark:text-white block">رقم تسجيل الطائرة </span>
                                                 <input name="departure_aircraft_number" type="number"
-                                                       value="{{ old('departure_aircraft_number') }}"
-                                                       placeholder="ادخل رقم تسجيل الطائرة "
-                                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-                                            @error('departure_aircraft_number')
-                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="w-full ms-1">
-                                        <div>
-                                            <label class="block text-xl">
-                                                <span class="text-gray-700 dark:text-white block">تاريخ الرحلة </span>
-                                                <input name="departure_flight_date" type="date"
-                                                    value="{{ old('departure_flight_date') }}"
+                                                    value="{{ old('departure_aircraft_number') }}"
+                                                    placeholder="ادخل رقم تسجيل الطائرة "
                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
-                                            @error('departure_flight_date')
+                                            @error('departure_aircraft_number')
                                                 <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="lg:flex xl:flex md:block items-center mb-3">
 
-
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
+                                    {{-- time of departure --}}
+                                    <div class="w-full lg:me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الإقلاع </span>
                                             <input name="departure_departure_time" type="time"
@@ -234,11 +257,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div>
 
-
-
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
+                                    {{-- time of arrival --}}
+                                    <div class="w-full lg:ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط </span>
                                             <input name="departure_arrival_time" type="time"
@@ -251,12 +272,14 @@
                                             </span>
                                         @enderror
                                     </div>
+
                                 </div>
 
                             </div>
+
                         </div>
 
-                        {{-- Return trip --}}
+                        {{-- return flight --}}
                         <div>
 
                             <div class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -356,49 +379,86 @@
 
                             <div class="px-7 pt-6 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
 
+                                {{-- date of flight --}}
                                 <div class="mb-3">
-                                    <label class="text-gray-700 dark:text-white block text-lg"> الطائرة
-                                        <select name="return_aircraft_id"
-                                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                            <option disabled> اختر طائرة</option>
-                                            @forelse($aircrafts as $aircraft)
-                                                <option value="{{ $aircraft->id }}"
-                                                    {{ old('return_aircraft_id') == $aircraft->id ? 'selected' : '' }}>
-                                                    {{ $aircraft->aircraft_name }}
-                                                </option>
-                                            @empty
-                                                <option disabled>لا يوجد طائرات </option>
-                                            @endforelse
-                                        </select>
+                                    <label class="block text-xl">
+                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة </span>
+                                        <input name="return_flight_date" type="date"
+                                            value="{{ old('return_flight_date') }}"
+                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                     </label>
-                                    @error('return_aircraft_id')
+                                    @error('return_flight_date')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{ $message }}
                                         </span>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">
-                                    نوع الرحلة
-                                </span>
-                                        <select id="job-status" name="return_flight_type"
-                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                            <option disabled selected>اختر نوع الرحلة </option>
-                                            <option value="normal_flight" {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات عادية </option>
-                                            <option value="simulated_flight" {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران تشبيهي </option>
-                                            <option value="unloaded_flight" {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران غير محمل </option>
-                                            <option value="airplane_test" {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار الطائرة </option>
-                                        </select>
-                                    </label>
-                                    @error('return_flight_type')
-                                    <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
-                                    @enderror
-                                </div>
+
                                 <div class="lg:flex xl:flex md:block items-center mb-3">
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
+
+                                    {{-- aircraft --}}
+                                    <div class="w-full lg:me-1">
+                                        <label class="text-gray-700 dark:text-white block text-lg"> الطائرة
+                                            <select name="return_aircraft_id"
+                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                                <option disabled> اختر طائرة</option>
+                                                @forelse($aircrafts as $aircraft)
+                                                    <option value="{{ $aircraft->id }}"
+                                                        {{ old('return_aircraft_id') == $aircraft->id ? 'selected' : '' }}>
+                                                        {{ $aircraft->aircraft_name }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled>لا يوجد طائرات </option>
+                                                @endforelse
+                                            </select>
+                                        </label>
+                                        @error('return_aircraft_id')
+                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- type flight --}}
+                                    <div class="w-full lg:ms-1">
+                                        <label class="block text-xl">
+                                            <span class="text-gray-700 dark:text-white block">
+                                                نوع الرحلة
+                                            </span>
+                                            <select id="job-status" name="return_flight_type"
+                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray dark:border-gray-600">
+                                                <option disabled selected>اختر نوع الرحلة </option>
+                                                <option value="normal_flight"
+                                                    {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات
+                                                    عادية
+                                                </option>
+                                                <option value="simulated_flight"
+                                                    {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران
+                                                    تشبيهي
+                                                </option>
+                                                <option value="unloaded_flight"
+                                                    {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران
+                                                    غير
+                                                    محمل
+                                                </option>
+                                                <option value="airplane_test"
+                                                    {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار
+                                                    الطائرة
+                                                </option>
+                                            </select>
+                                        </label>
+                                        @error('return_flight_type')
+                                            <span class="text-xs text-red-600 dark:text-red-400">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="lg:flex xl:flex md:block items-center mb-3">
+
+                                    {{-- number flight --}}
+                                    <div class="w-full lg:me-1">
                                         <div>
                                             <label class="block text-xl">
                                                 <span class="text-gray-700 dark:text-white block">رقم الرحلة </span>
@@ -414,43 +474,32 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full me-1">
+
+                                    {{-- number aircraft --}}
+                                    <div class="w-full lg:ms-1">
                                         <div>
                                             <label class="block text-xl">
-                                                <span class="text-gray-700 dark:text-white block">رقم تسجيل الطائرة </span>
-                                                <input name="return_aircraft_number" type="number"
-                                                       value="{{ old('return_aircraft_number') }}"
-                                                       placeholder="ادخل رقم تسجيل الطائرة "
-                                                       class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-                                            @error('return_aircraft_number')
-                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                    {{ $message }}
+                                                <span class="text-gray-700 dark:text-white block">رقم تسجيل الطائرة
                                                 </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
-                                        <div>
-                                            <label class="block text-xl">
-                                                <span class="text-gray-700 dark:text-white block">تاريخ الرحلة </span>
-                                                <input name="return_flight_date" type="date"
-                                                    value="{{ old('return_flight_date') }}"
+                                                <input name="return_aircraft_number" type="number"
+                                                    value="{{ old('return_aircraft_number') }}"
+                                                    placeholder="ادخل رقم تسجيل الطائرة "
                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
-                                            @error('return_flight_date')
+                                            @error('return_aircraft_number')
                                                 <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="lg:flex xl:flex md:block items-center mb-3">
 
-
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
+                                    {{-- departure time --}}
+                                    <div class="w-full lg:me-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الإقلاع </span>
                                             <input name="return_departure_time" type="time"
@@ -463,14 +512,9 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div>
 
-
-
-                                <div class="lg:flex xl:flex md:block items-center mb-3">
-
-
-                                    <div class="lg:w-1/2 xg:w-1/2 w-full ms-1">
+                                    {{-- time arrival --}}
+                                    <div class="w-full lg:ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط </span>
                                             <input name="return_arrival_time" type="time"
@@ -483,12 +527,14 @@
                                             </span>
                                         @enderror
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
 
                     </div>
-
 
                     <div class="px-7 pt-4 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
 
@@ -506,7 +552,7 @@
                                 </div>
                             </label>
                         </div>
-                        <div action="" id="icontainer-inputs-crew">
+                        <div id="icontainer-inputs-crew">
                             {{-- Dynamic crew inputs will be added here --}}
                         </div>
 
