@@ -44,12 +44,6 @@ class FlightRequest extends FormRequest
             'crew_id' => 'required|array|exists:crews,id',
         ];
     }
-
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [

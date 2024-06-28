@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AircraftController;
 use App\Http\Controllers\AirportController;
 use App\Http\Controllers\CrewController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\EmployeeMiddleware as employee;
+use App\Http\Middleware\AdminMiddleware as admin;
 use Illuminate\Support\Facades\Route;
 
 //**------------------------------------ Routes Employee ------------------------------------**//
@@ -24,11 +26,17 @@ Route::middleware(employee::class)->group(function () {
     Route::resource('flight', FlightController::class);
     Route::get('/crews-by-job/{job_id}', [FlightController::class, 'getCrewsByJob']);
     Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
+    });
+
+
+// Admin Routes
+Route::middleware(admin::class)->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    });
+    Route::resource('admin',AdminController::class);
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware('auth');
 
 Route::get('/captain/index', function () {
     return view('captain.index');
