@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
         // Check role and redirect to this page
         if (Auth::user()->isAdmin()) {
-            return redirect()->intended(route('/admin/dashboard'));
+            return redirect()->intended('/admin/dashboard');
         } elseif (Auth::user()->isEmployee()) {
             return redirect()->intended('/employee/index');
         } elseif (Auth::user()->isCaptain()) {

@@ -34,8 +34,9 @@ class FlightController extends Controller
             'jobs' => Job::all(),
         ]);
     }
-    public function store(FlightRequest $flightRequest)
+    public function store(Request $flightRequest)
     {
+        dd($flightRequest);
         $data = $flightRequest->validated();
         try {
             $departureFlight = Flight::create([

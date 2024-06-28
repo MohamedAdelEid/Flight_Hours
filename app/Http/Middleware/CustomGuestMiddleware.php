@@ -9,22 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomGuestMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
             $user = Auth::user();
 
             if ($user->isAdmin()) {
-                return redirect()->intended(route('admin.dashboard'));
+                return redirect()->intended('/admin/dashboard');
             } elseif ($user->isEmployee()) {
                 return redirect()->intended('/employee/index');
             } elseif ($user->isCaptain()) {
-                return redirect()->intended('/captain/in ex');
+                return redirect()->intended('/captain/index');
             } else {
                 abort(403);
             }
