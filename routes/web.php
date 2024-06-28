@@ -34,7 +34,11 @@ Route::middleware(admin::class)->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     });
-    Route::resource('admin',AdminController::class);
+    Route::get('admin/create-user',[AdminController::class,'createUser'])->name('admin.createUser');
+    Route::post('admin/store-user',[AdminController::class,'storeUser'])->name('admin.storeUser');
+    Route::get('admin/edit-user',[AdminController::class,'editUser'])->name('admin.editUser');
+    Route::post('admin/update-user',[AdminController::class,'updateUser'])->name('admin.updateUser');
+    Route::post('admin/delete-user',[AdminController::class,'deleteUser'])->name('admin.deleteUser');
 });
 
 
