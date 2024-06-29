@@ -245,8 +245,7 @@
             <li class="relative px-6">
                 <span class="absolute inset-y-0 right-0 w-1 bg-blue-600 rounded-tl-lg rounded-bl-lg"
                     aria-hidden="true"></span>
-                <a href="{{ route('profile') }}"
-                    class="block py-2.5 px-4 flex items-center space-x-2 hover:bg-gray-800 transition duration-200 transform hover:text-white rounded">
+                <a href="#" class="block py-2.5 px-4 flex items-center space-x-2 hover:bg-gray-800 transition duration-200 transform hover:text-white rounded">
                     <i class="fa-solid fa-user me-2"></i>
                     <span>الصفحة الشخصية</span>
                 </a>

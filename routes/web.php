@@ -19,14 +19,14 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/employee/index', function () {
         return view('employee.index');
     });
-    Route::resource('job', JobController::class);
-    Route::resource('airport', AirportController::class);
-    Route::resource('aircraft', AircraftController::class);
-    Route::resource('crew', CrewController::class);
-    Route::resource('flight', FlightController::class);
-    Route::get('/crews-by-job/{job_id}', [FlightController::class, 'getCrewsByJob']);
-    Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
-    Route::get('/profile', [ProfileController::class , 'index'])->name('profile');
+    Route::resource('job',JobController::class);
+    Route::resource('airport',AirportController::class);
+    Route::resource('aircraft',AircraftController::class);
+    Route::resource('crew',CrewController::class);
+    Route::resource('flight',FlightController::class);
+    Route::get('/crews-by-job/{job_id}',[FlightController::class,'getCrewsByJob']);
+    Route::get('/jobs-by-type/{type_id}',[CrewController::class,'getJobsByType']);
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });
 
 
