@@ -37,7 +37,6 @@ class FlightController extends Controller
     }
     public function store(FlightRequest $flightRequest)
     {
-//        dd($flightRequest);
         $data = $flightRequest->validated();
         try {
             $departureFlight = Flight::create([
@@ -102,40 +101,43 @@ class FlightController extends Controller
             'crewFlights' => $crewFlight,
         ]);
     }
-    public function update(Request $updateFlightRequest, Flight $flight)
+    public function update(Request $request, Flight $flight)
     {
+//        dd($flight);
+        $validatedData = $request->validate([
+            'origin_airport_id' => 'required|exists:airports,id',
+            'destination_airport_id' => 'required|exists:airports,id|different:origin_airport_id',
+            'flight_date' => 'required|date',
+            'aircraft_id' => 'required|exists:aircrafts,id',
+            'flight_type' => 'required|string',
+            'flight_number' => 'required|integer',
+            'aircraft_number' => 'required|integer',
+            'departure_time' => 'required|date_format:H:i',
+            'arrival_time' => 'required|date_format:H:i|after:departure_time',
+        ]);
 
-        $data = $updateFlightRequest->all();
-        try {
-            $flight->update([
-                'flight_number' => $data['flight_number'],
-                'flight_date' => $data['flight_date'],
-                'aircraft_id' => $data['aircraft_id'],
-                'origin_airport_id' => $data['origin_airport_id'],
-                'destination_airport_id' => $data['destination_airport_id'],
-                'landing_time' => $data['landing_time'],
-                'departure_time' => $data['departure_time'],
-                'arrival_time' => $data['arrival_time'],
-                'door_closed_at' => $data['door_closed_at'],
-                'door_opened_at' => $data['door_opened_at'],
+        $flight->update($validatedData);
+        $flight->refresh();
+        $departureTime = Carbon::parse($flight->departure_time);
+        $arrivalTime = Carbon::parse($flight->arrival_time);
+        $diff = $arrivalTime->diff($departureTime);
+        $hours = $diff->h + ($diff->i / 60);
+
+        $flightHours = FlightHour::where('flight_id',$flight->id)->first();
+        if ($flightHours){
+            $flightHours->update([
+                'hours' => $hours
             ]);
-            if (isset($data['crew_id'])) {
-                CrewFlight::where('flight_id', $flight->id)->delete();
-            foreach ($data['crew_id'] as $crewId) {
-                    CrewFlight::create([
-                        'flight_id' => $flight->id,
-                        'crew_id' => $crewId,
-                        'user_id' => auth()->user()->id,
-                    ]);
-                }
-            }
-
-            return redirect()->route('flight.index')
-                ->with('success', 'تم التعديل علي الرحلة بنجاح');
-        } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء تعديل الرحلة: ' . $e->getMessage());
+        }else{
+            FlightHour::create([
+                'aircraft_id' => $flight->aircraft_id,
+                'flight_id' => $flight->id,
+                'hours' => $hours
+            ]);
         }
+        return redirect()->route('flight.index')->with('success', 'تم تعديل الرحلة بنجاح');
     }
+
     public function destroy(Flight $flight)
     {
         $flight->delete();

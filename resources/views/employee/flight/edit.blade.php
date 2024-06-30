@@ -256,7 +256,7 @@
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الإقلاع </span>
                                             <input name="departure_time" type="time"
-                                                value="{{ old('departure_time', $flight->departure_time) }}"
+                                                   value="{{ old('departure_time', $flight->departure_time ? \Carbon\Carbon::parse($flight->departure_time)->format('H:i') : '') }}"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                         @error('departure_time')
@@ -270,11 +270,11 @@
                                     <div class="w-full lg:ms-1">
                                         <label class="block text-xl">
                                             <span class="text-gray-700 dark:text-white block mb-2">وقت الهبوط </span>
-                                            <input name="landing_time" type="time"
-                                                value="{{ old('landing_time', $flight->arrival_time) }}"
+                                            <input name="arrival_time" type="time"
+                                                   value="{{ old('arrival_time', $flight->arrival_time ? \Carbon\Carbon::parse($flight->arrival_time)->format('H:i') : '') }}"
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('landing_time')
+                                        @error('arrival_time')
                                             <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{ $message }}
                                             </span>
