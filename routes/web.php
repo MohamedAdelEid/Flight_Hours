@@ -19,13 +19,18 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/employee/index', function () {
         return view('employee.index');
     });
-    Route::resource('job',JobController::class);
-    Route::resource('airport',AirportController::class);
-    Route::resource('aircraft',AircraftController::class);
-    Route::resource('crew',CrewController::class);
-    Route::resource('flight',FlightController::class);
-    Route::get('/crews-by-job/{job_id}',[FlightController::class,'getCrewsByJob']);
-    Route::get('/jobs-by-type/{type_id}',[CrewController::class,'getJobsByType']);
+    Route::resource('job', JobController::class);
+    Route::resource('airport', AirportController::class);
+    Route::resource('aircraft', AircraftController::class);
+    Route::resource('crew', CrewController::class);
+    // Flights
+    Route::get('/flight/createNormalFlight', [FlightController::class, 'createNormalFlight'])->name('flight.createNormalFlight');
+    Route::get('/flight/createSimulatedFlight', [FlightController::class, 'createSimulatedFlight'])->name('flight.createSimulatedFlight');
+    Route::get('/flight/createUnloadedFlight', [FlightController::class, 'createUnloadedFlight'])->name('flight.createUnloadedFlight');
+    Route::get('/flight/createFlyingTest', [FlightController::class, 'createFlyingTest'])->name('flight.createFlyingTest');
+    Route::resource('flight', FlightController::class)->except(['create']);
+    Route::get('/crew-by-financial-number/{job_id}', [FlightController::class, 'getCrewsByFinancialNumber']);
+    Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });
 

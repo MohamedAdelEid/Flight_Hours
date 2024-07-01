@@ -26,10 +26,39 @@ class FlightController extends Controller
             'flight' => Flight::with('flightHours')
                 ->orderByDesc('created_at')->get()
         ]);
+
     }
-    public function create()
+    // create normal flight
+    public function createNormalFlight()
     {
-        return view('employee.flight.add', [
+        return view('employee.flight.add.main-flight', [
+            'aircrafts' => Aircraft::all(),
+            'airports' => Airport::all(),
+            'jobs' => Job::all(),
+        ]);
+    }
+    // create unloaded flight
+    public function createUnloadedFlight()
+    {
+        return view('employee.flight.add.sub-flights.unloaded-flight', [
+            'aircrafts' => Aircraft::all(),
+            'airports' => Airport::all(),
+            'jobs' => Job::all(),
+        ]);
+    }
+    // create simulated flight
+    public function createSimulatedFlight()
+    {
+        return view('employee.flight.add.sub-flights.simulated-flight', [
+            'aircrafts' => Aircraft::all(),
+            'airports' => Airport::all(),
+            'jobs' => Job::all(),
+        ]);
+    }
+    // create flying test
+    public function createFlyingTest()
+    {
+        return view('employee.flight.add.sub-flights.flying-test', [
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
@@ -103,7 +132,7 @@ class FlightController extends Controller
     }
     public function update(Request $request, Flight $flight)
     {
-//        dd($flight);
+        //        dd($flight);
         $validatedData = $request->validate([
             'origin_airport_id' => 'required|exists:airports,id',
             'destination_airport_id' => 'required|exists:airports,id|different:origin_airport_id',
@@ -123,12 +152,12 @@ class FlightController extends Controller
         $diff = $arrivalTime->diff($departureTime);
         $hours = $diff->h + ($diff->i / 60);
 
-        $flightHours = FlightHour::where('flight_id',$flight->id)->first();
-        if ($flightHours){
+        $flightHours = FlightHour::where('flight_id', $flight->id)->first();
+        if ($flightHours) {
             $flightHours->update([
                 'hours' => $hours
             ]);
-        }else{
+        } else {
             FlightHour::create([
                 'aircraft_id' => $flight->aircraft_id,
                 'flight_id' => $flight->id,
@@ -144,10 +173,13 @@ class FlightController extends Controller
         return redirect()->route('flight.index')
             ->with('success', 'تم حذف الرحلة بنجاح');
     }
-    public function getCrewsByJob($job_id)
+    public function getCrewsByFinancialNumber($financialNumber)
     {
-        $crews = Crew::where('job_id', $job_id)->get();
-        return response()->json($crews);
+        $crew = Crew::where('financial_number', $financialNumber)
+            ->join('jobs', 'crews.job_id', '=', 'jobs.id')
+            ->get();
+
+        return response()->json($crew);
     }
 
 }

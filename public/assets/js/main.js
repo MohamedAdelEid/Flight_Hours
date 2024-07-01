@@ -76,41 +76,5 @@ for (let i = 0; i < passwordIcon.length; ++i) {
     });
 }
 
-
 // end show password 
-
-
-// start page add job
-
-//check any option select selected and add class to select input 
-document.addEventListener('DOMContentLoaded', function () {
-    const selectElement = document.getElementById('job-status');
-
-    if (selectElement) {
-        function updateClass() {
-            if (selectElement.value === 'active') {
-                selectElement.classList.add('border-green-600');
-                selectElement.classList.remove('border-red-600');
-                selectElement.classList.remove('dark:border-gray-600');
-            } else if (selectElement.value === 'inactive') {
-                selectElement.classList.add('border-red-600');
-                selectElement.classList.remove('border-green-600');
-                selectElement.classList.remove('dark:border-gray-600');
-            } else {
-                selectElement.classList.add('dark:border-gray-600');
-            }
-        }
-        updateClass();
-        selectElement.addEventListener('change', updateClass);
-    }
-});
-
-// end page add job
-
-// start page add flight
-
-
-
-// end page add flight
-
 

@@ -2,7 +2,10 @@
 <script src="{{ asset('assets/js/admin/init-alpine.js') }}"></script>
 
 {{-- include script main  --}}
-<script src="{{ asset('assets/js/admin/main.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
+
+{{-- include script main "employee"  --}}
+<script src="{{ asset('assets/js/employee/main.js') }}"></script>
 
 <!-- script chart -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
