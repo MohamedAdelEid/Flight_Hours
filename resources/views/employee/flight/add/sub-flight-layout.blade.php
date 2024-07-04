@@ -24,7 +24,7 @@
                             <div class="flex items-center mt-2 mb-5">
 
                                 <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                    <select id="from-airport-going" name="origin_airport_id"
+                                    <select id="from-airport-going" name="airport_name"
                                         class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
                                                 focus:pt-7
                                                 focus:pb-2
@@ -34,7 +34,7 @@
                                         <option value="" disabled>اختر مطار ... </option>
                                         @forelse($airports as $airport)
                                             <option value="{{ $airport->id }}"
-                                                {{ old('origin_airport_id') == $airport->id ? 'selected' : '' }}>
+                                                {{ old('airport_name') == $airport->id ? 'selected' : '' }}>
                                                 {{ $airport->airport_name }}</option>
                                         @empty
                                             <option disabled>لا يوجد مطارات </option>
@@ -52,7 +52,7 @@
                                                 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">مطار
                                         <i
                                             class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
-                                    @error('origin_airport_id')
+                                    @error('airport_name')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{-- {{ $message }} --}}
                                         </span>
@@ -81,12 +81,12 @@
                                 {{-- aircraft --}}
                                 <div class="w-full lg:me-1">
                                     <label class="text-gray-700 dark:text-white block text-lg"> الطائرة
-                                        <select name="aircraft_id"
+                                        <select name="aircraft_name"
                                             class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                                             <option disabled> اختر طائرة</option>
                                             @forelse($aircrafts as $aircraft)
                                                 <option value="{{ $aircraft->id }}"
-                                                    {{ old('aircraft_id') == $aircraft->id ? 'selected' : '' }}>
+                                                    {{ old('aircraft_name') == $aircraft->id ? 'selected' : '' }}>
                                                     {{ $aircraft->aircraft_name }}
                                                 </option>
                                             @empty
@@ -94,7 +94,7 @@
                                             @endforelse
                                         </select>
                                     </label>
-                                    @error('aircraft_id')
+                                    @error('aircraft_name')
                                         <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                             {{-- {{ $message }} --}}
                                         </span>
@@ -105,13 +105,13 @@
                                 <div class="w-full lg:ms-1 mt-3 lg:mt-0">
                                     <div>
                                         <label class="block text-xl">
-                                            <span class="text-gray-700 dark:text-white block">رقم تسجيل</span>
-                                            <input name="aircraft_number" type="number"
-                                                value="{{ old('aircraft_number') }}"
+                                            <span class="text-gray-700 dark:text-white block">رقم تسجيل الطائرة</span>
+                                            <input name="flight_number" type="number"
+                                                value="{{ old('flight_number') }}"
                                                 placeholder="ادخل رقم تسجيل الطائرة "
                                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
-                                        @error('aircraft_number')
+                                        @error('flight_number')
                                             <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                                 {{-- {{ $message }} --}}
                                             </span>

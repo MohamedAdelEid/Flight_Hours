@@ -10,7 +10,7 @@ class CrewFlight extends Model
     use HasFactory;
     protected $table = 'crews_flights';
     protected $fillable = [
-        'flight_id','crew_id','user_id'
+        'flight_id','crew_id','training_start_at','training_end_at','user_id'
     ];
 
     public function flights(){

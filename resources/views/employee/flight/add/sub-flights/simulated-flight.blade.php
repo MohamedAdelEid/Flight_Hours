@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    @include('employee/flight/add/sub-flight-layout' , ['title' => 'إضافة رحلة طيران تشبيهي' , 'route' => 'flight.store'])
+    @include('employee/flight/add/sub-flight-layout' , ['title' => 'إضافة رحلة طيران تشبيهي' , 'route' => 'flight.storeSimulatedFlight'])
 @endsection
 
 @push('script')
