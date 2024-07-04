@@ -168,36 +168,36 @@
                                     </div>
 
                                     {{-- type of flight --}}
-                                    <div class="w-full lg:ms-1">
-                                        <label class="block text-xl">
-                                            <span class="text-gray-700 dark:text-white block">
-                                                نوع الرحلة
-                                            </span>
-                                            <select id="job-status" name="departure_flight_type"
-                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                                <option disabled selected>اختر نوع الرحلة </option>
-                                                <option value="normal_flight"
-                                                    {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات
-                                                    عادية
-                                                </option>
-                                                <option value="simulated_flight"
-                                                    {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران
-                                                    تشبيهي </option>
-                                                <option value="unloaded_flight"
-                                                    {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران
-                                                    غير
-                                                    محمل </option>
-                                                <option value="airplane_test"
-                                                    {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار
-                                                    الطائرة </option>
-                                            </select>
-                                        </label>
-                                        @error('departure_flight_type')
-                                            <span class="text-xs text-red-600 dark:text-red-400">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
+{{--                                    <div class="w-full lg:ms-1">--}}
+{{--                                        <label class="block text-xl">--}}
+{{--                                            <span class="text-gray-700 dark:text-white block">--}}
+{{--                                                نوع الرحلة--}}
+{{--                                            </span>--}}
+{{--                                            <select id="job-status" name="departure_flight_type"--}}
+{{--                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">--}}
+{{--                                                <option disabled selected>اختر نوع الرحلة </option>--}}
+{{--                                                <option value="normal_flight"--}}
+{{--                                                    {{ old('flight_type') == 'normal_flight' ? 'selected' : '' }}>رحلات--}}
+{{--                                                    عادية--}}
+{{--                                                </option>--}}
+{{--                                                <option value="simulated_flight"--}}
+{{--                                                    {{ old('flight_type') == 'simulated_flight' ? 'selected' : '' }}> طيران--}}
+{{--                                                    تشبيهي </option>--}}
+{{--                                                <option value="unloaded_flight"--}}
+{{--                                                    {{ old('flight_type') == 'unloaded_flight' ? 'selected' : '' }}> طيران--}}
+{{--                                                    غير--}}
+{{--                                                    محمل </option>--}}
+{{--                                                <option value="airplane_test"--}}
+{{--                                                    {{ old('flight_type') == 'airplane_test' ? 'selected' : '' }}> اختبار--}}
+{{--                                                    الطائرة </option>--}}
+{{--                                            </select>--}}
+{{--                                        </label>--}}
+{{--                                        @error('departure_flight_type')--}}
+{{--                                            <span class="text-xs text-red-600 dark:text-red-400">--}}
+{{--                                                {{ $message }}--}}
+{{--                                            </span>--}}
+{{--                                        @enderror--}}
+{{--                                    </div>--}}
 
                                 </div>
 

@@ -26,16 +26,13 @@ class UpdateFlightRequest extends FormRequest
         return [
             'origin_airport_id' => 'required|exists:airports,id',
             'destination_airport_id' => 'required|exists:airports,id|different:origin_airport_id',
+            'flight_date' => 'required|date',
             'aircraft_id' => 'required|exists:aircrafts,id',
-            'flight_number' => 'required|numeric',
-            'flight_date' => 'required|date|after_or_equal:today',
-            'door_closed_at' => 'required|date_format:H:i',
-            'departure_time' => 'required|date_format:H:i|after:door_closed_at',
-            'landing_time' => 'required|date_format:H:i|after:departure_time',
-            'door_opened_at' => 'required|date_format:H:i|after:landing_time',
-            'arrival_time' => 'required|date_format:H:i|after:door_opened_at',
-            'job_id.*' => 'required|exists:jobs,id',
-            'crew_id.*' => 'required|exists:crews,id',
+            'flight_number' => 'required|integer',
+            'aircraft_number' => 'required|integer',
+            'departure_time' => 'required|date_format:H:i',
+            'arrival_time' => 'required|date_format:H:i|after:departure_time',
+            'financial_number' => 'required|array|exists:crews,financial_number',
         ];
     }
 
@@ -47,19 +44,26 @@ class UpdateFlightRequest extends FormRequest
     public function messages()
     {
         return [
-            'origin_airport_id.required' => 'يرجى اختيار مطار المغادرة',
-            'destination_airport_id.required' => 'يرجى اختيار مطار الوصول',
-            'destination_airport_id.different' => 'مطار الوصول يجب أن يكون مختلفاً عن مطار المغادرة',
-            'aircraft_id.required' => 'يرجى اختيار الطائرة',
-            'flight_number.required' => 'يرجى إدخال رقم الرحلة',
-            'flight_date.required' => 'يرجى إدخال تاريخ الرحلة',
-            'door_closed_at.required' => 'يرجى إدخال وقت إغلاق الباب',
-            'departure_time.required' => 'يرجى إدخال وقت الإقلاع',
-            'landing_time.required' => 'يرجى إدخال وقت الهبوط',
-            'door_opened_at.required' => 'يرجى إدخال وقت فتح الباب',
-            'arrival_time.required' => 'يرجى إدخال وقت الوصول',
-            'job_id.*.required' => 'يرجى اختيار وظيفة لكل طاقم',
-            'crew_id.*.required' => 'يرجى اختيار موظف لكل طاقم',
+            'origin_airport_id.required' => 'مطار القيام مطلوب.',
+            'origin_airport_id.exists' => 'مطار القيام هذا غير صالح.',
+            'destination_airport_id.required' => 'مطار الوصول مطلوب.',
+            'destination_airport_id.exists' => 'مطار الوصول هذا غير صالح.',
+            'destination_airport_id.different' => 'قم باختيار مطار وصول مختلف عن مطار القيام.',
+            'flight_date.required' => 'تاريخ الرحلة مطلوب.',
+            'flight_date.date' => 'تاريخ الرحلة يجب أن يكون تاريخًا صحيحًا.',
+            'aircraft_id.required' => 'رقم الطائرة مطلوب.',
+            'aircraft_id.exists' => 'رقم الطائرة هذا غير صالح.',
+            'flight_number.required' => 'رقم الرحلة مطلوب.',
+            'flight_number.integer' => 'رقم الرحلة يجب أن يكون عددًا صحيحًا.',
+            'aircraft_number.required' => 'رقم الطائرة مطلوب.',
+            'aircraft_number.integer' => 'رقم الطائرة يجب أن يكون عددًا صحيحًا.',
+            'departure_time.required' => 'وقت المغادرة مطلوب.',
+            'departure_time.date_format' => 'وقت المغادرة يجب أن يكون بتنسيق HH:mm.',
+            'arrival_time.required' => 'وقت الوصول مطلوب.',
+            'arrival_time.date_format' => 'وقت الوصول يجب أن يكون بتنسيق HH:mm.',
+            'arrival_time.after' => 'وقت الوصول يجب أن يكون بعد وقت المغادرة.',
+            'financial_number.required' => 'الرقم المالي مطلوب.',
+            'financial_number.exists' => 'رقم مالي غير صالح موجود.',
         ];
     }
 }

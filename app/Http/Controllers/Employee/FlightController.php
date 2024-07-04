@@ -67,6 +67,7 @@ class FlightController extends Controller
     public function store(FlightRequest $flightRequest)
     {
         $data = $flightRequest->validated();
+
         try {
             $departureFlight = Flight::create([
                 'flight_number' => $data['departure_flight_number'],
@@ -77,10 +78,10 @@ class FlightController extends Controller
                 'departure_time' => $data['departure_departure_time'],
                 'arrival_time' => $data['departure_arrival_time'],
                 'aircraft_number' => $data['departure_aircraft_number'],
-                'flight_type' => $data['departure_flight_type'],
                 'user_id' => auth()->user()->id,
             ]);
             FlightHour::calcFlightHours($departureFlight);
+
             $returnFlight = Flight::create([
                 'flight_number' => $data['return_flight_number'],
                 'flight_date' => $data['return_flight_date'],
@@ -90,25 +91,32 @@ class FlightController extends Controller
                 'departure_time' => $data['return_departure_time'],
                 'arrival_time' => $data['return_arrival_time'],
                 'aircraft_number' => $data['return_aircraft_number'],
-                'flight_type' => $data['return_flight_type'],
                 'user_id' => auth()->user()->id,
             ]);
             FlightHour::calcFlightHours($returnFlight);
-            $crews = $data['crew_id'];
-            foreach ($crews as $crewId) {
+
+            $financial_numbers = $data['financial_number'];
+            foreach ($financial_numbers as $financial_number) {
+                $crew_id = Crew::where('financial_number', $financial_number)->value('id');
+                if (!$crew_id) {
+                    throw new \Exception('Invalid crew ID for financial number: ' . $financial_number);
+                }
+
                 CrewFlight::create([
                     'flight_id' => $departureFlight->id,
-                    'crew_id' => $crewId,
+                    'crew_id' => $crew_id,
                     'user_id' => auth()->user()->id,
                 ]);
+
                 CrewFlight::create([
                     'flight_id' => $returnFlight->id,
-                    'crew_id' => $crewId,
+                    'crew_id' => $crew_id,
                     'user_id' => auth()->user()->id,
                 ]);
             }
+
             if ($departureFlight && $returnFlight) {
-                return redirect()->route('flight.index')->with('successCreate', 'تم اضافة الرحلتين بنجاح');
+                return redirect()->route('flight.index')->with('successCreate', 'تم اضافة الرحلة بنجاح');
             } else {
                 return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الرحلتين. الرجاء المحاولة مرة أخرى.');
             }
@@ -116,9 +124,9 @@ class FlightController extends Controller
             return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الرحلتين: ' . $e->getMessage());
         }
     }
-
     public function edit(Flight $flight)
     {
+
         $crewFlight = CrewFlight::where('flight_id', $flight->id)->get();
 
         return view('employee.flight.edit', [
@@ -130,21 +138,10 @@ class FlightController extends Controller
             'crewFlights' => $crewFlight,
         ]);
     }
-    public function update(Request $request, Flight $flight)
+    public function update(UpdateFlightRequest $request, Flight $flight)
     {
-        //        dd($flight);
-        $validatedData = $request->validate([
-            'origin_airport_id' => 'required|exists:airports,id',
-            'destination_airport_id' => 'required|exists:airports,id|different:origin_airport_id',
-            'flight_date' => 'required|date',
-            'aircraft_id' => 'required|exists:aircrafts,id',
-            'flight_type' => 'required|string',
-            'flight_number' => 'required|integer',
-            'aircraft_number' => 'required|integer',
-            'departure_time' => 'required|date_format:H:i',
-            'arrival_time' => 'required|date_format:H:i|after:departure_time',
-        ]);
-
+        $validatedData = $request->validated();
+        dd($validatedData);
         $flight->update($validatedData);
         $flight->refresh();
         $departureTime = Carbon::parse($flight->departure_time);
