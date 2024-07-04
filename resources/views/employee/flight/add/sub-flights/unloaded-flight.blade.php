@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    @include('employee/flight/add/sub-flight-layout' , ['title' => 'إضافة رحلة طيران غير محمل' , 'route' => 'flight.store'])
+    @include('employee/flight/add/sub-flight-layout' , ['title' => 'إضافة رحلة طيران غير محمل' , 'route' => 'flight.storeUnloadedFlight'])
 @endsection
 
 @push('script')
