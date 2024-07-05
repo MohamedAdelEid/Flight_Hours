@@ -569,6 +569,6 @@
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @include('employee/flight/add/crew-section/addCrewByJs')
+    @include('employee/flight/add/crew-section/crewFlight' , ['typeFlight' => 'mainFlight'])
     <script src="{{ asset('assets/js/employee/ajax/getCrewByJob.js') }}"></script>
 @endpush
