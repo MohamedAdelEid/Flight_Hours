@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CrewFlight extends Model
+class CrewNormalFlights extends Model
 {
     use HasFactory;
-    protected $table = 'crews_flights';
+    protected $table = 'crew_normal_flights';
     protected $fillable = [
-        'flight_id','crew_id','training_start_at','training_end_at','user_id'
+        'flight_id','crew_id','user_id'
     ];
 
     public function flights(){

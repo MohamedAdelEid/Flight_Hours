@@ -9,6 +9,7 @@ use App\Models\Aircraft;
 use App\Models\Airport;
 use App\Models\Crew;
 use App\Models\CrewFlight;
+use App\Models\CrewNormalFlights;
 use App\Models\Flight;
 use App\Models\FlightHour;
 use App\Models\Job;
@@ -102,13 +103,13 @@ class FlightController extends Controller
                     throw new \Exception('Invalid crew ID for financial number: ' . $financial_number);
                 }
 
-                CrewFlight::create([
+                CrewNormalFlights::create([
                     'flight_id' => $departureFlight->id,
                     'crew_id' => $crew_id,
                     'user_id' => auth()->user()->id,
                 ]);
 
-                CrewFlight::create([
+                CrewNormalFlights::create([
                     'flight_id' => $returnFlight->id,
                     'crew_id' => $crew_id,
                     'user_id' => auth()->user()->id,
@@ -127,7 +128,7 @@ class FlightController extends Controller
     public function edit(Flight $flight)
     {
 
-        $crewFlight = CrewFlight::where('flight_id', $flight->id)->get();
+        $crewFlight = CrewNormalFlights::where('flight_id', $flight->id)->get();
 
         return view('employee.flight.edit', [
             'flight' => $flight,
@@ -141,7 +142,6 @@ class FlightController extends Controller
     public function update(UpdateFlightRequest $request, Flight $flight)
     {
         $validatedData = $request->validated();
-        dd($validatedData);
         $flight->update($validatedData);
         $flight->refresh();
         $departureTime = Carbon::parse($flight->departure_time);
@@ -178,5 +178,6 @@ class FlightController extends Controller
 
         return response()->json($crew);
     }
+
 
 }

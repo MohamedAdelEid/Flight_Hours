@@ -103,8 +103,8 @@
 
                         <div class="w-full lg:me-1">
                             <label class="text-gray-700 dark:text-white block text-lg"> بداية التدريب
-                                <input name="training_start_at[]" type="date"
-                                    value="{{ old('training_start_at') }}"
+                                <input name="training_start_at[]" type="time"
+                                    {{--value="{{ old('training_start_at') }}"--}}
                                     placeholder="ادخل رقم تسجيل الطائرة "
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                             </label>
@@ -119,8 +119,8 @@
                             <div>
                                 <label class="block text-xl">
                                     <span class="text-gray-700 dark:text-white block">نهاية التدريب</span>
-                                    <input name="training_end_at[]" type="date"
-                                        value="{{ old('training_end_at') }}"
+                                    <input name="training_end_at[]" type="time"
+                                        {{--value="{{ old('training_end_at') }}"--}}
                                         placeholder="ادخل رقم تسجيل الطائرة "
                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                 </label>
@@ -133,7 +133,7 @@
                         </div>
 
                     </div>
-                                    
+
                 </div>`;
             }
 
