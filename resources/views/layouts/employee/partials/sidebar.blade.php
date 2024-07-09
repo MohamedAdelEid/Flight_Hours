@@ -1,5 +1,5 @@
 <!-- Desktop sidebar -->
-<aside class="z-20 hidden w-65 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
+<aside class="z-20 sticky top-0 hidden w-65 h-screen overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
     <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="mr-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
             logo

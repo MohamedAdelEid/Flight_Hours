@@ -8,7 +8,7 @@ class UpdateCrewsFlightsTable extends Migration
     public function up()
     {
         Schema::table('crews_flights', function (Blueprint $table) {
-            $table->dropForeign(['flight_id']);
+            $table->dropColumn(['flight_id']);
             $table->foreign('flight_id')->references('id')->on('other_flights')->onDelete('cascade');
         });
     }
