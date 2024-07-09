@@ -27,6 +27,13 @@
                     <div class="relative z-20 h-[250px]">
                         <img src="{{ asset('assets/imgs/employee/airport cover.jpg') }}" alt="profile cover"
                             class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
+
+                        <div class="flex justify-end m-3">
+                            <button @click="openModal($event)" value="mohamed" id="6"
+                                class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-200 bg-blue-600 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                                الاعدادات <i class="fa-solid fa-gear"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5 -mt-24">
                         <div class="relative z-30 mx-auto -mt-22 h-30 w-fit rounded-full  sm:h-44 sm:p-3">
@@ -61,19 +68,30 @@
                                             <div action="#">
                                                 <div class="mb-5 flex flex-col gap-5 sm:flex-row">
                                                     <div class="w-full sm:w-1/2">
-                                                        <x-employee.profile.personal-info name="الأسم" icon="fa-solid fa-user me-2" value="محمد عادل عيد"/>
+                                                        <x-employee.profile.personal-info name="الأسم"
+                                                            icon="fa-solid fa-user me-2" value="محمد عادل عيد" />
                                                     </div>
 
                                                     <div class="w-full sm:w-1/2">
-                                                        <x-employee.profile.personal-info name="رقم الهاتف" icon="fa-solid fa-phone me-2" value="01114979112"/>
+                                                        <x-employee.profile.personal-info name="رقم الهاتف"
+                                                            icon="fa-solid fa-phone me-2" value="01114979112" />
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-5.5">
-                                                    <x-employee.profile.personal-info name="البريد الالكتروني" icon="fa-solid fa-envelope me-2" value="dev.mohamedadell@gmail.com"/>
+                                                    <x-employee.profile.personal-info name="البريد الالكتروني"
+                                                        icon="fa-solid fa-envelope me-2"
+                                                        value="dev.mohamedadell@gmail.com" />
                                                 </div>
 
+                                                <form action="">
 
+                                                    <x-employee.modal title="تعديل البيانات الشخصية">
+                                                        <x-employee.form.input name="name" value="mohamed"
+                                                            label="الأسم" />
+                                                        </x-employee.form.input>
+
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
