@@ -39,3 +39,7 @@
 
     {{-- link livewire style --}}
     @livewireStyles
+
+    {{-- preloader --}}
+    <link rel="stylesheet" type="text/css" href="loader.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:900&display=swap" rel="stylesheet">

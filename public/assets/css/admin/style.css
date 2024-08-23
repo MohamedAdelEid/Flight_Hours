@@ -27,6 +27,40 @@ body {
     cursor: pointer;
 }
 
+/* start preloader */
+
+.preloader{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background-color: #000;
+    z-index: 50000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s;
+}
+
+.loader {
+    direction: ltr;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 30px;
+    animation: l1 1s linear infinite alternate;
+    color: white;
+}
+
+.loader:before {
+    content: "Loading..."
+}
+
+@keyframes l1 {
+    to {
+        opacity: 0
+    }
+}
+
+/* end preloader */
 /* start style nav */
 
 .profile-nav {

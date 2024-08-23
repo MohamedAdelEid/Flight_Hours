@@ -60,7 +60,7 @@
                             {{-- email --}}
                             <div class="mb-3">
                                 <label for="email" class="label">البريد الالكتروني</label>
-                                <input type="email" id="email" name="email" class="input" required>
+                                <input type="email" id="email" value="{{ old("email") }}" name="email" class="input" required>
                                 @error('email')
                                     <div class="alert alert-danger">
                                         <span class="text-danger">{{ $message }}</span>

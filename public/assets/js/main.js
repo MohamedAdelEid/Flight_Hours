@@ -1,3 +1,12 @@
+// preloader
+var preloader = document.querySelector('.preloader');
+
+window.addEventListener('load', function () {
+    preloader.style.opacity = 0;
+    preloader.style.zIndex = '-1';
+})
+
+
 // Encapsulate the slider functionality in a function
 function initializeSlider() {
     let slider = document.querySelector('.slider .list');
@@ -76,5 +85,7 @@ for (let i = 0; i < passwordIcon.length; ++i) {
     });
 }
 
-// end show password 
+// end show password
+
+
 

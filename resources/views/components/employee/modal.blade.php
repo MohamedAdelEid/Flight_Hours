@@ -4,12 +4,12 @@
     'buttonCloseModal' => true,
 ])
 
-<div x-data="modalHandler()">
+<div x-data="modalHandler()" >
 
     <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+        class="fixed inset-0 z-[5000] flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
         <!-- Modal -->
         <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
             x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
@@ -20,7 +20,7 @@
             role="dialog" id="modal">
             <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
             <header class="flex justify-start">
-                <button
+                <button type="button"
                     class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover:text-gray-700"
                     aria-label="close" @click="closeModal">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
@@ -49,7 +49,7 @@
                 @endif
 
                 @if (isset($buttonCloseModal))
-                    <button @click="closeModal"
+                    <button @click="closeModal" type="button"
                         class="w-full ms-1 px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
                         إلغاء
                     </button>

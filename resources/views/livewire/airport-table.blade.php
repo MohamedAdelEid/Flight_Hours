@@ -1,4 +1,4 @@
-<div>
+<div class="w-full overflow-hidden">
 
     <section class="w-full">
         <div class="mx-auto max-w-screen-xl w-full">

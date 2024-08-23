@@ -4,22 +4,6 @@
     <main>
         <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
             <div class="mx-auto max-w-242.5">
-                <!-- Breadcrumb Start -->
-                {{-- <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 class="text-title-md2 font-bold text-black dark:text-white">
-                        Profile
-                    </h2>
-
-                    <nav>
-                        <ol class="flex items-center gap-2">
-                            <li>
-                                <a class="font-medium" href="index.html">Dashboard /</a>
-                            </li>
-                            <li class="text-primary">Profile</li>
-                        </ol>
-                    </nav>
-                </div> --}}
-                <!-- Breadcrumb End -->
 
                 <!-- ====== Profile Section Start -->
                 <div
@@ -29,7 +13,7 @@
                             class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
 
                         <div class="flex justify-end m-3">
-                            <button @click="openModal($event)" value="mohamed" id="6"
+                            <button @click="openModal($event)"
                                 class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-200 bg-blue-600 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                 الاعدادات <i class="fa-solid fa-gear"></i>
                             </button>
@@ -84,14 +68,38 @@
                                                         value="dev.mohamedadell@gmail.com" />
                                                 </div>
 
-                                                <form action="">
+                                                <form action="{{ route('employee.update-profile') }}" method="POST">
 
                                                     <x-employee.modal title="تعديل البيانات الشخصية">
+
+                                                        @csrf
+
                                                         <x-employee.form.input name="name" value="mohamed"
                                                             label="الأسم" />
-                                                        </x-employee.form.input>
+
+                                                        <div class="mt-3">
+                                                            <x-employee.form.input name="name" value="mohamed"
+                                                                label="الرقم" />
+                                                        </div>
+
+                                                        <div class="mt-3">
+                                                            <x-employee.form.input type="password" name="name"
+                                                                value="mohamed" label="كلمة السر القديمة" />
+                                                        </div>
+
+                                                        <div class="mt-3">
+                                                            <x-employee.form.input type="password" name="name"
+                                                                value="mohamed" label="كلمة السر الجديدة" />
+                                                        </div>
+                                                        <div class="mt-3">
+                                                            <x-employee.form.input type="password" name="name"
+                                                                value="mohamed" label="تاكيد كلمة السر الجديدة" />
+                                                        </div>
+
+                                                    </x-employee.modal>
 
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>

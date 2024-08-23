@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         } elseif (Auth::user()->isEmployee()) {
             return redirect()->intended('/employee/index');
         } elseif (Auth::user()->isCaptain()) {
-            return redirect()->intended('/captain/index');
+            return redirect()->intended('/captain/home');
         } else {
             abort(403);
         }
