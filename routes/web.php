@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 //**------------------------------------ Routes Employee ------------------------------------**//
 
 Route::middleware(employee::class)->group(function () {
-
+    Route::get('/profile', [ProfileController::class, 'index'])->name('employee.profile');
+    Route::post('/update-profile', [ProfileController::class, 'update'])->name('employee.update-profile');
     // Home Route
     Route::get('/employee/index', function () {
         return view('employee.index');
@@ -36,8 +37,7 @@ Route::middleware(employee::class)->group(function () {
     Route::resource('flight', FlightController::class)->except(['create']);
     Route::get('/crew-by-financial-number/{job_id}', [FlightController::class, 'getCrewsByFinancialNumber']);
     Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
-    Route::get('/profile', [ProfileController::class, 'index'])->name('employee.profile');
-    Route::post('/update-profile', [ProfileController::class, 'update'])->name('employee.update-profile');
+
 });
 
 
