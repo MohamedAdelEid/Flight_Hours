@@ -1,5 +1,15 @@
 @extends('layouts.employee.main')
-
+@section('alerts')
+    {{-- alert add AirCraft success --}}
+    @if (Session::has('success'))
+        <script>
+            iziToast.success({
+                title: "{{ session('success') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
+@endsection
 @section('content')
     <main>
         <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
@@ -53,48 +63,48 @@
                                                 <div class="mb-5 flex flex-col gap-5 sm:flex-row">
                                                     <div class="w-full sm:w-1/2">
                                                         <x-employee.profile.personal-info name="الأسم"
-                                                            icon="fa-solid fa-user me-2" value="محمد عادل عيد" />
+                                                            icon="fa-solid fa-user me-2" value="{{ $employee->name }}"/>
                                                     </div>
 
                                                     <div class="w-full sm:w-1/2">
                                                         <x-employee.profile.personal-info name="رقم الهاتف"
-                                                            icon="fa-solid fa-phone me-2" value="01114979112" />
+                                                            icon="fa-solid fa-phone me-2" value="{{$employee->phone ?? 'N/A'}}" />
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-5.5">
                                                     <x-employee.profile.personal-info name="البريد الالكتروني"
                                                         icon="fa-solid fa-envelope me-2"
-                                                        value="dev.mohamedadell@gmail.com" />
+                                                        value="{{$employee->email}}" />
                                                 </div>
 
                                                 <form action="{{ route('employee.update-profile') }}" method="POST">
-
+                                                    @csrf
                                                     <x-employee.modal title="تعديل البيانات الشخصية">
 
                                                         @csrf
 
-                                                        <x-employee.form.input name="name" value="mohamed"
+                                                        <x-employee.form.input name="name" value="{{$employee->name}}"
                                                             label="الأسم" />
 
                                                         <div class="mt-3">
-                                                            <x-employee.form.input name="name" value="mohamed"
+                                                            <x-employee.form.input name="phone" value="{{$employee->phone ?? 'N/A'}}"
                                                                 label="الرقم" />
                                                         </div>
 
                                                         <div class="mt-3">
-                                                            <x-employee.form.input type="password" name="name"
-                                                                value="mohamed" label="كلمة السر القديمة" />
+                                                            <x-employee.form.input type="password" name="current_password"
+                                                                 label="كلمة السر القديمة" />
                                                         </div>
 
                                                         <div class="mt-3">
-                                                            <x-employee.form.input type="password" name="name"
-                                                                value="mohamed" label="كلمة السر الجديدة" />
+                                                            <x-employee.form.input type="password" name="new_password"
+                                                                 label="كلمة السر الجديدة" />
                                                         </div>
-                                                        <div class="mt-3">
-                                                            <x-employee.form.input type="password" name="name"
-                                                                value="mohamed" label="تاكيد كلمة السر الجديدة" />
-                                                        </div>
+{{--                                                        <div class="mt-3">--}}
+{{--                                                            <x-employee.form.input type="password" name="confirmed_password"--}}
+{{--                                                                 label="تاكيد كلمة السر الجديدة" />--}}
+{{--                                                        </div>--}}
 
                                                     </x-employee.modal>
 
