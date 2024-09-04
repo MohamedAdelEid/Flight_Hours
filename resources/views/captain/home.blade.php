@@ -378,7 +378,7 @@
                                             <div
                                                 class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
 
-                                                <p>المطار</p>
+                                                <p>الطائرة</p>
                                                 <div class="flex items-center mt-2">
                                                     <div class="relative w-full me-1 lg:me-0 xl:me-0">
                                                         <select id="from-airport-going"
@@ -389,7 +389,7 @@
                                                             [&:not(:placeholder-shown)]:pt-7
                                                             [&:not(:placeholder-shown)]:pb-2
                                                             autofill:pt-6">
-                                                            <option value="" disabled>اختر مطار  ...
+                                                            <option value="" disabled>اختر الططائرة  ...
                                                             </option>
                                                             {{-- @forelse($airports as $airport)
                                                         <option value="{{ $airport->id }}"
@@ -450,12 +450,160 @@
                         {{-- unloaded flight --}}
                         <div class="hidden pt-4" id="unloaded-flight" role="tabpanel"
                             aria-labelledby="unloaded-flight-tab">
-                            mohamed
+                            <div class="p-6 pt-0 space-y-6">
+                                <form action="#">
+                                    <div class="grid grid-cols-1 gap-x-6 gap-y-4">
+                                        <div>
+
+                                            <div
+                                                class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+                                                <p>الطائرة</p>
+                                                <div class="flex items-center mt-2">
+                                                    <div class="relative w-full me-1 lg:me-0 xl:me-0">
+                                                        <select id="from-airport-going"
+                                                            name="departure_origin_airport_id"
+                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
+                                                            focus:pt-7
+                                                            focus:pb-2
+                                                            [&:not(:placeholder-shown)]:pt-7
+                                                            [&:not(:placeholder-shown)]:pb-2
+                                                            autofill:pt-6">
+                                                            <option value="" disabled>اختر الططائرة  ...
+                                                            </option>
+                                                            {{-- @forelse($airports as $airport)
+                                                        <option value="{{ $airport->id }}"
+                                                            {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
+                                                            {{ $airport->airport_name }}</option>
+                                                    @empty
+                                                        <option disabled>لا يوجد مطارات </option>
+                                                    @endforelse --}}
+                                                        </select>
+                                                        <label for="from-airport-going"
+                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                                                            peer-focus:scale-90
+                                                            peer-focus:translate-x-0.5
+                                                            peer-focus:-translate-y-1.5
+                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
+                                                            peer-[:not(:placeholder-shown)]:scale-90
+                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
+                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
+                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
+                                                            <i
+                                                                class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
+                                                        @error('departure_origin_airport_id')
+                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                {{-- date of flight --}}
+                                                <div class="my-3">
+                                                    <label class="block text-xl">
+                                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة
+                                                        </span>
+                                                        <input name="departure_flight_date" type="date"
+                                                            value="{{ old('departure_flight_date') }}"
+                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    @error('departure_flight_date')
+                                                        <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition duration-200"
+                                        type="submit">اضافة</button>
+                                </form>
+
+                            </div>
                         </div>
 
                         {{-- test flight --}}
                         <div class="hidden pt-4" id="plane-test" role="tabpanel" aria-labelledby="plane-test-tab">
-                            mohamed
+                            <div class="p-6 pt-0 space-y-6">
+                                <form action="#">
+                                    <div class="grid grid-cols-1 gap-x-6 gap-y-4">
+                                        <div>
+
+                                            <div
+                                                class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+                                                <p>الطائرة</p>
+                                                <div class="flex items-center mt-2">
+                                                    <div class="relative w-full me-1 lg:me-0 xl:me-0">
+                                                        <select id="from-airport-going"
+                                                            name="departure_origin_airport_id"
+                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
+                                                            focus:pt-7
+                                                            focus:pb-2
+                                                            [&:not(:placeholder-shown)]:pt-7
+                                                            [&:not(:placeholder-shown)]:pb-2
+                                                            autofill:pt-6">
+                                                            <option value="" disabled>اختر الططائرة  ...
+                                                            </option>
+                                                            {{-- @forelse($airports as $airport)
+                                                        <option value="{{ $airport->id }}"
+                                                            {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
+                                                            {{ $airport->airport_name }}</option>
+                                                    @empty
+                                                        <option disabled>لا يوجد مطارات </option>
+                                                    @endforelse --}}
+                                                        </select>
+                                                        <label for="from-airport-going"
+                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                                                            peer-focus:scale-90
+                                                            peer-focus:translate-x-0.5
+                                                            peer-focus:-translate-y-1.5
+                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
+                                                            peer-[:not(:placeholder-shown)]:scale-90
+                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
+                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
+                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
+                                                            <i
+                                                                class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
+                                                        @error('departure_origin_airport_id')
+                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                {{-- date of flight --}}
+                                                <div class="my-3">
+                                                    <label class="block text-xl">
+                                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة
+                                                        </span>
+                                                        <input name="departure_flight_date" type="date"
+                                                            value="{{ old('departure_flight_date') }}"
+                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    @error('departure_flight_date')
+                                                        <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition duration-200"
+                                        type="submit">اضافة</button>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
     'buttonCloseModal' => true,
 ])
 
-<div x-data="modalHandler()" >
+<div x-data="modalHandler()">
 
     <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
@@ -62,7 +62,7 @@
 <script>
     function modalHandler() {
         return {
-            isModalOpen: {{ $errors->any() ? true : false }},
+            isModalOpen: {{ $errors->has('name') || $errors->has('current_password') || $errors->has('phone') || $errors->has('new_password') ? true : false }},
             modalId: '',
             modalValue: '',
             openModal(event) {

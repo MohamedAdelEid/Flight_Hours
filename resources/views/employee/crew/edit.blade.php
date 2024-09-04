@@ -10,6 +10,14 @@
             });
         </script>
     @endif
+    @if (Session::has('successCreate'))
+        <script>
+            iziToast.success({
+                title: "{{ session('successCreate') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
 @endsection
 
 @section('content')
