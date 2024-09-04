@@ -13,6 +13,12 @@
     <!-- custom css link -->
     <link rel="stylesheet" href="{{ asset('assets/css/captain/style.css') }}">
 
+    {{-- flowbit cdn style --}}
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+
+    <!-- link font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
     <!-- google font link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +47,7 @@
                 </div>
 
                 <a href="#" class="logo">
-                    <img src="{{ asset('assets/imgs/main/logo-white.png') }}" >
+                    <img src="{{ asset('assets/imgs/main/logo-white.png') }}">
                 </a>
 
 
@@ -56,7 +62,7 @@
                     <div class="navbar-top">
 
                         <a href="#" class="logo">
-                            <img src="{{ asset('assets/imgs/main/logo-white.png') }}" >
+                            <img src="{{ asset('assets/imgs/main/logo-white.png') }}">
                         </a>
 
                         <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
@@ -76,7 +82,10 @@
                         </li>
 
                         <li>
-                            <a href="#destination" class="navbar-link" data-nav-link>الصفحة الشخصية</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button href="#destination" class="navbar-link" data-nav-link>الصفحة الشخصية</button>
+                            </form>
                         </li>
 
 
@@ -106,6 +115,12 @@
 
     {{-- ionicons link --}}
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+
+    {{-- flowbit cdn script --}}
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    {{-- tailwind cdn --}}
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </body>
 
