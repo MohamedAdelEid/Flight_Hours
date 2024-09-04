@@ -21,6 +21,7 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/employee/index', function () {
         return view('employee.index');
     });
+    Route::post('/change-photo', [ProfileController::class, 'changePhoto'])->name('employee.changePhoto');
     Route::resource('job', JobController::class);
     Route::resource('airport', AirportController::class);
     Route::resource('aircraft', AircraftController::class);

@@ -102,4 +102,13 @@ class ProfileController extends Controller
     {
         //
     }
+    public function changePhoto(Request $request){
+        $request->validate([
+           'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $employee = auth()->user();
+        $employee->image = $request->file('profile')->store('images', 'public');
+        $employee->save();
+        return redirect()->back()->with('success', 'تم تعديل البيانات الشخصية بنجاح');
+    }
 }
