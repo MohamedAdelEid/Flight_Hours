@@ -12,12 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('flights', function (Blueprint $table) {
-            $table->unsignedBigInteger('aircraft_id')->nullable()->change();
             $table->unsignedBigInteger('origin_airport_id')->nullable()->change();
             $table->unsignedBigInteger('destination_airport_id')->nullable()->change();
-            $table->string('aircraft_number')->nullable()->change();
-            $table->time('departure_time')->nullable()->change();
-            $table->time('arrival_time')->nullable()->change();
         });
     }
 

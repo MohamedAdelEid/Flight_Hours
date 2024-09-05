@@ -63,4 +63,73 @@ class CaptainController extends Controller
             return redirect()->route('captain.home')->with('error', 'حدث خطأ أثناء إضافة الرحلتين. الرجاء المحاولة مرة أخرى.');
         }
     }
+    public function addSimulateFlight(Request $request){
+        $validatedData = $request->validate([
+            'aircraft_id' => 'required|exists:aircrafts,id',
+            'flight_date' => 'required|date|after_or_equal:today',
+            'flight_number' => 'required|numeric',
+        ],
+            [
+            'aircraft_id.required' => 'مطلوب اختيار الطائرة.',
+            'aircraft_id.exists' => 'الطائرة المختارة غير موجودة.',
+            'flight_date.required' => 'مطلوب تحديد تاريخ الرحلة.',
+            'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.', 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
+            ]);
+        $validatedData['flight_type'] = 'simulated_flight';
+        Flight::create([
+            'flight_number' => $validatedData['flight_number'],
+            'flight_date' => $validatedData['flight_date'],
+            'aircraft_id' => $validatedData['aircraft_id'],
+            'flight_type' => $validatedData['flight_type'],
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');
+    }
+    public function addUnloadedFlight(Request $request){
+        $validatedData = $request->validate([
+            'aircraft_id' => 'required|exists:aircrafts,id',
+            'flight_date' => 'required|date|after_or_equal:today',
+            'flight_number' => 'required|numeric',
+        ],
+            [
+                'aircraft_id.required' => 'مطلوب اختيار الطائرة.',
+                'aircraft_id.exists' => 'الطائرة المختارة غير موجودة.',
+                'flight_date.required' => 'مطلوب تحديد تاريخ الرحلة.',
+                'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.', 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
+            ]);
+        $validatedData['flight_type'] = 'unloaded_flight';
+        Flight::create([
+            'flight_number' => $validatedData['flight_number'],
+            'flight_date' => $validatedData['flight_date'],
+            'aircraft_id' => $validatedData['aircraft_id'],
+            'flight_type' => $validatedData['flight_type'],
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');
+    }
+    public function addTestFlight(Request $request){
+        $validatedData = $request->validate([
+            'aircraft_id' => 'required|exists:aircrafts,id',
+            'flight_date' => 'required|date|after_or_equal:today',
+            'flight_number' => 'required|numeric',
+        ],
+            [
+                'aircraft_id.required' => 'مطلوب اختيار الطائرة.',
+                'aircraft_id.exists' => 'الطائرة المختارة غير موجودة.',
+                'flight_date.required' => 'مطلوب تحديد تاريخ الرحلة.',
+                'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.', 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
+            ]);
+        $validatedData['flight_type'] = 'airplane_test';
+        Flight::create([
+            'flight_number' => $validatedData['flight_number'],
+            'flight_date' => $validatedData['flight_date'],
+            'aircraft_id' => $validatedData['aircraft_id'],
+            'flight_type' => $validatedData['flight_type'],
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');
+    }
 }
