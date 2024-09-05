@@ -42,8 +42,7 @@
                     </div>
                     <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5 -mt-24">
                         <div class="relative z-30 mx-auto -mt-22 h-30 w-fit rounded-full  sm:h-44 sm:p-3">
-                            <form onchange="submit()" method="post" action="{{ route('employee.changePhoto') }}"
-                                class="relative drop-shadow-2">
+                            <form onchange="submit()" method="post" action="{{ route('employee.changePhoto') }}" enctype="multipart/form-data" class="relative drop-shadow-2">
                                 @csrf
                                 @if ($employee->image)
                                     <img src="{{ asset('storage/' . $employee->image) }}" alt="ProfileImage"
@@ -64,7 +63,7 @@
                                             d="M7.00004 5.83329C6.03354 5.83329 5.25004 6.61679 5.25004 7.58329C5.25004 8.54979 6.03354 9.33329 7.00004 9.33329C7.96654 9.33329 8.75004 8.54979 8.75004 7.58329C8.75004 6.61679 7.96654 5.83329 7.00004 5.83329ZM4.08337 7.58329C4.08337 5.97246 5.38921 4.66663 7.00004 4.66663C8.61087 4.66663 9.91671 5.97246 9.91671 7.58329C9.91671 9.19412 8.61087 10.5 7.00004 10.5C5.38921 10.5 4.08337 9.19412 4.08337 7.58329Z"
                                             fill=""></path>
                                     </svg>
-                                    <input type="file" name="profile" id="profile" class="sr-only">
+                                    <input type="file" accept="image/*" name="profile" id="profile" class="sr-only">
                                 </label>
                             </form>
                         </div>
@@ -111,7 +110,7 @@
                                                         </div>
 
                                                         <div class="mt-3">
-                                                            <x-employee.form.input type="password" name="current_password"
+                                                            <x-employee.form.input  type="password" name="current_password"
                                                                 label="كلمة السر القديمة" />
                                                         </div>
 

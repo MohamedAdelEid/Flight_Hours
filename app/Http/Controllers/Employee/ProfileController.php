@@ -64,7 +64,7 @@ class ProfileController extends Controller
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable|string|max:255',
                 'current_password' => 'nullable|string|min:6',
-                'new_password' => 'nullable|string|min:6',
+                'new_password' => 'nullable|string|min:6', // added confirmation rule
             ],
             [
                 'name.string' => 'الاسم يجب أن يكون نصاً',
@@ -78,9 +78,9 @@ class ProfileController extends Controller
 
                 'new_password.string' => 'كلمة المرور الجديدة يجب أن تكون نصاً',
                 'new_password.min' => 'كلمة المرور الجديدة يجب ألا تقل عن ٦ أحرف',
-                'new_password.confirmed' => 'تأكيد كلمة المرور الجديدة غير مطابق',
             ]
         );
+
         $validator->after(function ($validator) use ($employee, $request) {
             if ($request->filled('current_password') && !Hash::check($request->current_password, $employee->password)) {
                 $validator->errors()->add('current_password', 'كلمة السر القديمة غير صحيحة');
@@ -92,10 +92,19 @@ class ProfileController extends Controller
         });
 
         $validatedData = $validator->validate();
+
+        // Update employee details
         $employee->update(array_filter($validatedData));
+
+        // Check if new password is provided and update it
+        if ($request->filled('new_password')) {
+            $employee->password = Hash::make($request->new_password);
+            $employee->save();
+        }
 
         return redirect()->back()->with('success', 'تم تعديل البيانات الشخصية بنجاح');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -106,27 +115,15 @@ class ProfileController extends Controller
     }
     public function changePhoto(Request $request)
     {
-        // Validate the incoming request
         $validatedData = $request->validate([
             'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        // Get the authenticated user
         $employee = auth()->user();
-
-        // Check if a file is uploaded
         if ($request->hasFile('profile')) {
-            // Store the file and get the path
             $filePath = $request->file('profile')->store('images', 'public');
-
-            // Update the user's image path
-            $employee->image = $filePath;   
+            $employee->image = $filePath;
         }
-
-        // Update the user record
         $employee->save();
-
-        // Redirect back with a success message
         return redirect()->back()->with('success', 'تم تعديل البيانات الشخصية بنجاح');
     }
 

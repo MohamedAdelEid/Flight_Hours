@@ -32,12 +32,12 @@ class UserSeeder extends Seeder
         //     'password' => Hash::make('Captian@123'), // It's a good practice to hash passwords
         //     'role' => 'captain'
         // ]);
-        User::create([
-            'name' => 'Mohamed Adel',
-            'email' => 'employee@gmail.com',
-            'password' => Hash::make('employee@123'), // It's a good practice to hash passwords
-            'role' => 'employee'
-        ]);
+//        User::create([
+//            'name' => 'Mohamed Adel',
+//            'email' => 'employee@gmail.com',
+//            'password' => Hash::make('employee@123'), // It's a good practice to hash passwords
+//            'role' => 'employee'
+//        ]);
 
-    }   
+    }
 }

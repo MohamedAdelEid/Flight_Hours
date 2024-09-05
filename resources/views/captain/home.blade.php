@@ -1,3 +1,36 @@
+@section('alerts')
+    {{-- Alert for adding flights --}}
+    @if (Session::has('successCreate'))
+        <script>
+            iziToast.success({
+                title: "{{ session('successCreate') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
+
+    {{-- Alert for errors --}}
+    @if ($errors->any())
+        <script>
+            iziToast.error({
+                title: 'خطأ في إدخال البيانات',
+                message: '@foreach ($errors->all() as $error) {{ $error }} @endforeach',
+                position: 'topRight',
+            });
+        </script>
+    @endif
+
+    {{-- General error session alert --}}
+    @if (Session::has('error'))
+        <script>
+            iziToast.error({
+                title: "{{ session('error') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
+@endsection
+
 <x-captain-layout>
     <main>
         <article>
@@ -73,7 +106,8 @@
                         {{-- main flight --}}
                         <div class="hidden pt-4" id="main-flight" role="tabpanel" aria-labelledby="main-flight-tab">
                             <div class="p-6 pt-0 space-y-6">
-                                <form action="#">
+                                <form action="{{route('captain.addNormalFlight')}}" method="post">
+                                  @csrf
                                     <div
                                         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-6 gap-y-4">
 
@@ -100,13 +134,13 @@
                                                             autofill:pt-6">
                                                             <option value="" disabled>اختر مطار المغادرة ...
                                                             </option>
-                                                            {{-- @forelse($airports as $airport)
+                                                           @forelse($airports as $airport)
                                                         <option value="{{ $airport->id }}"
                                                             {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
                                                             {{ $airport->airport_name }}</option>
                                                     @empty
                                                         <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse --}}
+                                                    @endforelse
                                                         </select>
                                                         <label for="from-airport-going"
                                                             class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
@@ -144,13 +178,13 @@
                                                             autofill:pt-6">
                                                             <option value="" disabled>اختر مطار الوصول ...
                                                             </option>
-                                                            {{-- @forelse($airports as $airport)
+                                                             @forelse($airports as $airport)
                                                         <option value="{{ $airport->id }}"
                                                             {{ old('departure_destination_airport_id') == $airport->id ? 'selected' : '' }}>
                                                             {{ $airport->airport_name }}</option>
                                                     @empty
                                                         <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse --}}
+                                                    @endforelse
                                                         </select>
                                                         <label for="to-airport-going"
                                                             class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
@@ -240,13 +274,13 @@
                                                             autofill:pt-6">
                                                             <option value="" disabled>اختر مطار المغادرة ...
                                                             </option>
-                                                            {{-- @forelse($airports as $airport)
+                                                             @forelse($airports as $airport)
                                                         <option value="{{ $airport->id }}"
                                                             {{ old('return_origin_airport_id') == $airport->id ? 'selected' : '' }}>
                                                             {{ $airport->airport_name }}</option>
                                                     @empty
                                                         <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse --}}
+                                                    @endforelse
                                                         </select>
                                                         <label for="from-airport-back"
                                                             class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
@@ -284,13 +318,13 @@
                                                             autofill:pt-6">
                                                             <option value="" disabled>اختر مطار الوصول ...
                                                             </option>
-                                                            {{-- @forelse($airports as $airport)
+                                                             @forelse($airports as $airport)
                                                         <option value="{{ $airport->id }}"
                                                             {{ old('return_destination_airport_id') == $airport->id ? 'selected' : '' }}>
                                                             {{ $airport->airport_name }}</option>
                                                     @empty
                                                         <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse --}}
+                                                    @endforelse
                                                         </select>
                                                         <label for="to-airport-back"
                                                             class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
@@ -461,36 +495,18 @@
                                                 <p>الطائرة</p>
                                                 <div class="flex items-center mt-2">
                                                     <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                                        <select id="from-airport-going"
-                                                            name="departure_origin_airport_id"
-                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
-                                                            focus:pt-7
-                                                            focus:pb-2
-                                                            [&:not(:placeholder-shown)]:pt-7
-                                                            [&:not(:placeholder-shown)]:pb-2
-                                                            autofill:pt-6">
-                                                            <option value="" disabled>اختر الططائرة  ...
-                                                            </option>
-                                                            {{-- @forelse($airports as $airport)
-                                                        <option value="{{ $airport->id }}"
-                                                            {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
-                                                            {{ $airport->airport_name }}</option>
-                                                    @empty
-                                                        <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse --}}
+                                                        <select name="departure_aircraft_id"
+                                                                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                                                            <option disabled> اختر طائرة</option>
+{{--                                                            @forelse($aircrafts as $aircraft)--}}
+{{--                                                                <option value="{{ $aircraft->id }}"--}}
+{{--                                                                    {{ old('departure_aircraft_id') == $aircraft->id ? 'selected' : '' }}>--}}
+{{--                                                                    {{ $aircraft->aircraft_name }}--}}
+{{--                                                                </option>--}}
+{{--                                                            @empty--}}
+{{--                                                                <option disabled>لا يوجد طائرات </option>--}}
+{{--                                                            @endforelse--}}
                                                         </select>
-                                                        <label for="from-airport-going"
-                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
-                                                            peer-focus:scale-90
-                                                            peer-focus:translate-x-0.5
-                                                            peer-focus:-translate-y-1.5
-                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
-                                                            peer-[:not(:placeholder-shown)]:scale-90
-                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
-                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
-                                                            <i
-                                                                class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
                                                         @error('departure_origin_airport_id')
                                                             <span class="text-xs text-red-600 dark:text-red-400 ms-3">
                                                                 {{ $message }}

@@ -55,9 +55,7 @@ Route::middleware(admin::class)->group(function () {
 });
 
 
-Route::get('/captain/home', function () {
-    return view('captain.home');
-})->middleware('auth');
+
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -66,5 +64,5 @@ Route::get('/captain/home', function () {
 // });
 
 require __DIR__ . '/auth.php';
-
+require __DIR__ . '/captain.php';
 
