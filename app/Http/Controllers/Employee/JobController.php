@@ -29,6 +29,7 @@ class JobController extends Controller
             'job_name' => ['required', 'string', 'max:255'],
             'type_id' => ['required', 'exists:job_types,id'],
             'status' => ['required', 'in:active,inactive'],
+            'hourly_calculation' => ['nullable', 'boolean'],
         ], [
             'job_name.required' => 'حقل اسم الوظيفة مطلوب.',
             'job_name.string' => 'يجب أن يكون اسم الوظيفة نصًا.',
@@ -37,14 +38,16 @@ class JobController extends Controller
             'type_id.exists' => 'النوع المحدد للوظيفة غير موجود.',
             'status.required' => 'حقل حالة الوظيفة مطلوب',
             'status.in' => 'يجب أن تكون الحالة إما "نشطة" أو "غير نشطة".',
+            'hourly_calculation.boolean' => 'يجب أن تكون الحالة إما "نشطة" أو "غير نشطة".',
+            'hourly_calculation' => 'يجب أن تكون الحالة إما "نشطة" أو "غير نشطة".',
         ]);
-
 
         Job::create([
             'job_name' => $request->job_name,
             'type_id' => $request->type_id,
             'status' => $request->status,
             'user_id' => Auth::guard('web')->id(),
+            'hourly_calculation' => $request->hourly_calculation ?? 0,
         ]);
 
         return redirect()->route('job.index')->with('successCreate', 'تم إضافة وظيفة بنجاح');
@@ -67,23 +70,28 @@ class JobController extends Controller
     {
         $validatedData = $request->validate([
             'job_name' => ['required', 'string', 'max:255'],
-            'type_id' => ['required','exists:job_types,id'],
+            'type_id' => ['required', 'exists:job_types,id'],
             'status' => ['required', 'in:active,inactive'],
+            'hourly_calculation' => ['nullable', 'boolean'],
         ], [
             'job_name.required' => 'The job name field is required.',
             'job_name.string' => 'The job name must be a string.',
             'job_name.max' => 'The job name may not be greater than 255 characters.',
             'status.required' => 'The job status field is required.',
             'status.in' => 'Invalid job status.',
+            'hourly_calculation.boolean' => 'يجب أن تكون الحالة إما "نشطة" أو "غير نشطة".',
+            'hourly_calculation' => 'يجب أن تكون الحالة إما "نشطة" أو "غير نشطة".',
         ]);
 
         $job->update([
             'job_name' => $validatedData['job_name'],
             'type_id' => $validatedData['type_id'],
             'status' => $validatedData['status'],
+            'hourly_calculation' => $validatedData['hourly_calculation'] ?? 0,
         ]);
 
-        return redirect()->route('job.index')
+        return redirect()
+            ->route('job.index')
             ->with('successUpdate', 'تم تعديل الوظيفة بنجاح');
     }
 
@@ -92,6 +100,4 @@ class JobController extends Controller
         $job->delete();
         return redirect()->route('job.index')->with('success', 'تم حذف الوظيفة بنجاح');
     }
-
-
 }

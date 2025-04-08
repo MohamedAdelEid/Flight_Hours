@@ -42,6 +42,7 @@
                                 <th scope="col" class="px-4 py-3">الاسم</th>
                                 <th scope="col" class="px-4 py-3">نوع الوظيفة</th>
                                 <th scope="col" class="px-4 py-3">حالة الوظيفة</th>
+                                <th scope="col" class="px-4 py-3">تحسب بالساعة</th>
                                 <th scope="col" class="px-4 py-3">الموظف</th>
                                 <th scope="col" class="px-4 py-3">وقت الإضافة</th>
                                 <th scope="col" class="px-4 py-3">
@@ -61,6 +62,9 @@
                                             class="px-4 py-1 font-semibold leading-tight rounded-full {{ $job->status == 'active' ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100' : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100' }}">
                                             {{ $job->status }}
                                         </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-bold">
+                                        {{ $job->hourly_calculation ? 'نعم' : 'لا' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm font-bold">
                                         {{ $job->user->name }}

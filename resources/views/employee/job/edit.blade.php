@@ -84,7 +84,18 @@
                                 </span>
                             @enderror
                         </div>
-
+                        <div>
+                            <label class="inline-flex items-center mt-8 text-xl">
+                                <input type="checkbox" name="hourly_calculation"  value="1" {{ $job->hourly_calculation ? 'checked' : '' }}
+                                    class="form-checkbox text-blue-600 dark:text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="ml-2 text-gray-700 dark:text-white mr-2">تحسب بالساعة   </span>
+                            </label>
+                            @error('hourly_calculation')
+                                <span class="text-xs text-red-600 dark:text-red-400">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
                     </div>
 
                     <button

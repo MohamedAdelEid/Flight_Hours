@@ -16,7 +16,7 @@
         <ul class="flex items-center flex-shrink-0 space-x-6">
 
             <!-- Theme toggler -->
-            <li class="flex me-4">
+            <!-- <li class="flex me-4">
                 <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"
                     aria-label="Toggle color mode">
                     <template x-if="!dark">
@@ -32,7 +32,7 @@
                         </svg>
                     </template>
                 </button>
-            </li>
+            </li> -->
 
             <!-- Profile menu -->
             <li class="relative">

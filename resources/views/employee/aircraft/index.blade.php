@@ -2,6 +2,8 @@
 
 @section('alerts')
     {{-- alert add job success --}}
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
     @if (Session::has('successCreate'))
         <script>
             iziToast.success({

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Employee\AircraftController;
 use App\Http\Controllers\Employee\AirportController;
 use App\Http\Controllers\Employee\CrewController;
@@ -8,19 +7,18 @@ use App\Http\Controllers\Employee\FlightController;
 use App\Http\Controllers\Employee\JobController;
 use App\Http\Controllers\Employee\OtherFlightsController;
 use App\Http\Controllers\Employee\ProfileController;
-use App\Http\Middleware\EmployeeMiddleware as employee;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminMiddleware as admin;
+use App\Http\Middleware\EmployeeMiddleware as employee;
 use Illuminate\Support\Facades\Route;
-
-//**------------------------------------ Routes Employee ------------------------------------**//
+use App\Http\Controllers\Employee\EmployeeController;
+// **------------------------------------ Routes Employee ------------------------------------**//
 
 Route::middleware(employee::class)->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('employee.profile');
     Route::post('/update-profile', [ProfileController::class, 'update'])->name('employee.update-profile');
     // Home Route
-    Route::get('/employee/index', function () {
-        return view('employee.index');
-    });
+    Route::get('/employee/index', [EmployeeController::class, 'index'])->name('employee.index');
     Route::post('/change-photo', [ProfileController::class, 'changePhoto'])->name('employee.changePhoto');
     Route::resource('job', JobController::class);
     Route::resource('airport', AirportController::class);
@@ -38,9 +36,7 @@ Route::middleware(employee::class)->group(function () {
     Route::resource('flight', FlightController::class)->except(['create']);
     Route::get('/crew-by-financial-number/{job_id}', [FlightController::class, 'getCrewsByFinancialNumber']);
     Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
-
 });
-
 
 // Admin Routes
 Route::middleware(admin::class)->group(function () {
@@ -54,9 +50,6 @@ Route::middleware(admin::class)->group(function () {
     Route::post('admin/delete-user', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 });
 
-
-
-
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -65,4 +58,3 @@ Route::middleware(admin::class)->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/captain.php';
-

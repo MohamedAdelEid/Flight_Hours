@@ -10,7 +10,7 @@
             <li class="relative px-6">
                 <span class="absolute inset-y-0 right-0 w-1 bg-blue-600 rounded-tl-lg rounded-bl-lg"
                     aria-hidden="true"></span>
-                <a href="index.php"
+                <a href="{{ route('employee.index') }}"
                     class="block py-2.5 px-4 flex items-center space-x-2 bg-gray-800 text-white hover:bg-gray-800 transition duration-200 transform hover:text-white rounded">
                     <svg class="w-6 h-6 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">

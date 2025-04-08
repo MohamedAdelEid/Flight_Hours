@@ -1,6 +1,8 @@
 @extends('layouts.employee.main')
 
 @section('alerts')
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
     {{-- alert add job success --}}
     @if (Session::has('successCreate'))
         <script>
