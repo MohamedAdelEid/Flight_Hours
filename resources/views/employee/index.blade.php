@@ -584,4 +584,155 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Aircraft Utilization Chart
+    var aircraftUtilizationCtx = document.getElementById('aircraftUtilizationChart').getContext('2d');
+    
+    // Check if we have the canvas element
+    if (!aircraftUtilizationCtx) {
+        console.error('Could not find aircraft utilization chart canvas');
+        return;
+    }
+    
+    // Debug data
+    console.log('Aircraft Utilization Data:', @json($aircraftUtilization));
+    
+    var aircraftLabels = [];
+    var aircraftData = [];
+    
+    @foreach($aircraftUtilization as $aircraft)
+        aircraftLabels.push("{{ $aircraft->aircraft_name }}");
+        aircraftData.push({{ $aircraft->total_hours }});
+    @endforeach
+    
+    var aircraftUtilizationChart = new Chart(aircraftUtilizationCtx, {
+        type: 'bar',
+        data: {
+            labels: aircraftLabels,
+            datasets: [{
+                label: 'ساعات الاستخدام',
+                data: aircraftData,
+                backgroundColor: '#1cc88a',
+                hoverBackgroundColor: '#17a673',
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+<script>
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Flight Hours by Month Chart
+    var flightHoursCtx = document.getElementById('flightHoursChart').getContext('2d');
+    
+    // Ensure we have data or provide defaults
+    var monthlyData = {
+        @for($i = 1; $i <= 12; $i++)
+            {{ $i }}: {{ $monthlyHoursData[$i] ?? 0 }}{{ $i < 12 ? ',' : '' }}
+        @endfor
+    };
+    
+    var flightHoursChart = new Chart(flightHoursCtx, {
+        type: 'line',
+        data: {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+            datasets: [{
+                label: 'ساعات الطيران',
+                data: [
+                    monthlyData[1], monthlyData[2], monthlyData[3], 
+                    monthlyData[4], monthlyData[5], monthlyData[6], 
+                    monthlyData[7], monthlyData[8], monthlyData[9], 
+                    monthlyData[10], monthlyData[11], monthlyData[12]
+                ],
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                pointBorderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var flightTypesCtx = document.getElementById('flightTypesChart').getContext('2d');
+    var flightTypesChart = new Chart(flightTypesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['رحلات عادية', 'طيران تشبيهي', 'طيران غير محمل', 'اختبار طائرة'],
+            datasets: [{
+                data: [
+                    {{ $flightTypes['normal_flight'] ?? 0 }}, 
+                    {{ $flightTypes['simulated_flight'] ?? 0 }}, 
+                    {{ $flightTypes['unloaded_flight'] ?? 0 }}, 
+                    {{ $flightTypes['airplane_test'] ?? 0 }}
+                ],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a'],
+                hoverBorderColor: 'rgba(234, 236, 244, 1)',
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            cutout: '70%'
+        }
+    });
+});
+</script>
 @endpush
