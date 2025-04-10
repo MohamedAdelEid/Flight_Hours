@@ -5,17 +5,7 @@
     <!-- Dashboard Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">لوحة تحكم ساعات الطيران</h1>
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-calendar me-2"></i> تصفية حسب
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">اليوم</a></li>
-                <li><a class="dropdown-item" href="#">هذا الأسبوع</a></li>
-                <li><a class="dropdown-item" href="#">هذا الشهر</a></li>
-                <li><a class="dropdown-item" href="#">هذا العام</a></li>
-            </ul>
-        </div>
+       
     </div>
 
     <!-- Stats Cards Row -->

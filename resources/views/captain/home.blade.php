@@ -1,34 +1,56 @@
 @section('alerts')
-    {{-- Alert for adding flights --}}
-    @if (Session::has('successCreate'))
-        <script>
-            iziToast.success({
-                title: "{{ session('successCreate') }}",
-                position: 'topRight',
-            });
-        </script>
-    @endif
 
-    {{-- Alert for errors --}}
-    @if ($errors->any())
-        <script>
-            iziToast.error({
-                title: 'خطأ في إدخال البيانات',
-                message: '@foreach ($errors->all() as $error) {{ $error }} @endforeach',
-                position: 'topRight',
-            });
-        </script>
-    @endif
+@if (session('successCreate') || session('success'))
+    <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <span class="block sm:inline">{{ session('successCreate') ?? session('success') }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+@endif
 
-    {{-- General error session alert --}}
-    @if (Session::has('error'))
-        <script>
-            iziToast.error({
-                title: "{{ session('error') }}",
-                position: 'topRight',
-            });
-        </script>
-    @endif
+@if (session('error'))
+    <div id="error-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <span class="block sm:inline">{{ session('error') }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div id="validation-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+@endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle alert close buttons
+    const closeButtons = document.querySelectorAll('[role="button"]');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('div[id$="-alert"]').style.display = 'none';
+        });
+    });
+    
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('[id$="-alert"]');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.display = 'none';
+        }, 5000);
+    });
+});
+</script>
+
 @endsection
 
 <x-captain-layout>
@@ -44,8 +66,8 @@
                         <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal"
                             class="btn btn-primary">اضافة رحلة</button>
 
-                        <button class="btn btn-secondary">عرض الرحلات</button>
-                    </div>
+                            <button class="btn btn-secondary" data-modal-target="flightsModal" data-modal-toggle="flightsModal">عرض الرحلات</button>
+                            </div>
 
                 </div>
             </section>
@@ -105,301 +127,189 @@
 
                         {{-- main flight --}}
                         <div class="hidden pt-4" id="main-flight" role="tabpanel" aria-labelledby="main-flight-tab">
-                            <div class="p-6 pt-0 space-y-6">
-                                <form action="{{route('captain.addNormalFlight')}}" method="post">
-                                  @csrf
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-6 gap-y-4">
+    <div class="p-6 pt-0 space-y-6">
+        <form action="{{route('captain.addNormalFlight')}}" method="post">
+            @csrf
+            <div class="grid grid-cols-1 gap-x-6 gap-y-4">
+                {{-- departure flight --}}
+                <div>
+                    <div c  lass="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="text-gray-700 dark:text-white block mb-5">
+                            <p class="text-center text-xl font-bold">ذهاب</p>
+                        </div>
 
-                                        {{-- departure flight --}}
-                                        <div>
+                        <div class="flex items-center mt-2">
+                            <div class="relative w-full me-1 lg:me-0 xl:me-0">
+                                <select id="from-airport-going" name="departure_origin_airport_id"
+                                    class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
+                                    focus:pt-7
+                                    focus:pb-2
+                                    [&:not(:placeholder-shown)]:pt-7
+                                    [&:not(:placeholder-shown)]:pb-2
+                                    autofill:pt-6">
+                                    <option value="" disabled>اختر مطار المغادرة ...</option>
+                                    @forelse($airports as $airport)
+                                        <option value="{{ $airport->id }}"
+                                            {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
+                                            {{ $airport->airport_name }}</option>
+                                    @empty
+                                        <option disabled>لا يوجد مطارات </option>
+                                    @endforelse
+                                </select>
+                                <label for="from-airport-going"
+                                    class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                                    peer-focus:scale-90
+                                    peer-focus:translate-x-0.5
+                                    peer-focus:-translate-y-1.5
+                                    peer-focus:text-blue-500 dark:peer-focus:text-blue-500
+                                    peer-[:not(:placeholder-shown)]:scale-90
+                                    peer-[:not(:placeholder-shown)]:translate-x-0.5
+                                    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+                                    dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
+                                    <i class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
+                                @error('departure_origin_airport_id')
+                                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
 
-                                            <div
-                                                class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <div class="lg:flex items-center justify-center lg:w-3/4 xl:w-1/2 hidden">
+                                <i class="fa-solid fa-plane transform -scale-x-100 text-xl text-blue-500 mx-1"></i>
+                            </div>
 
-                                                <div class="text-gray-700 dark:text-white block mb-5">
-                                                    <p class="text-center text-xl font-bold">ذهاب</p>
-                                                </div>
-
-                                                <div class="flex items-center mt-2">
-
-                                                    <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                                        <select id="from-airport-going"
-                                                            name="departure_origin_airport_id"
-                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
-                                                            focus:pt-7
-                                                            focus:pb-2
-                                                            [&:not(:placeholder-shown)]:pt-7
-                                                            [&:not(:placeholder-shown)]:pb-2
-                                                            autofill:pt-6">
-                                                            <option value="" disabled>اختر مطار المغادرة ...
-                                                            </option>
-                                                           @forelse($airports as $airport)
-                                                        <option value="{{ $airport->id }}"
-                                                            {{ old('departure_origin_airport_id') == $airport->id ? 'selected' : '' }}>
-                                                            {{ $airport->airport_name }}</option>
-                                                    @empty
-                                                        <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse
-                                                        </select>
-                                                        <label for="from-airport-going"
-                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
-                                                            peer-focus:scale-90
-                                                            peer-focus:translate-x-0.5
-                                                            peer-focus:-translate-y-1.5
-                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
-                                                            peer-[:not(:placeholder-shown)]:scale-90
-                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
-                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
-                                                            <i
-                                                                class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
-                                                        @error('departure_origin_airport_id')
-                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div
-                                                        class="lg:flex items-center justify-center lg:w-3/4 xl:w-1/2 hidden">
-                                                        <i
-                                                            class="fa-solid fa-plane transform -scale-x-100 text-xl text-blue-500 mx-1"></i>
-                                                    </div>
-
-                                                    <div class="relative w-full ms-1 lg:ms-0 xl:ms-0">
-                                                        <select id="to-airport-going"
-                                                            name="departure_destination_airport_id"
-                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
-                                                            focus:pt-7
-                                                            focus:pb-2
-                                                            [&:not(:placeholder-shown)]:pt-7
-                                                            [&:not(:placeholder-shown)]:pb-2
-                                                            autofill:pt-6">
-                                                            <option value="" disabled>اختر مطار الوصول ...
-                                                            </option>
-                                                             @forelse($airports as $airport)
-                                                        <option value="{{ $airport->id }}"
-                                                            {{ old('departure_destination_airport_id') == $airport->id ? 'selected' : '' }}>
-                                                            {{ $airport->airport_name }}</option>
-                                                    @empty
-                                                        <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse
-                                                        </select>
-                                                        <label for="to-airport-going"
-                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
-                                                            peer-focus:scale-90
-                                                            peer-focus:translate-x-0.5
-                                                            peer-focus:-translate-y-1.5
-                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
-                                                            peer-[:not(:placeholder-shown)]:scale-90
-                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
-                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">الي
-                                                            <i
-                                                                class="fa-solid fa-plane-arrival text-blue-500 ms-2 transform -scale-x-100"></i>
-                                                        </label>
-                                                        @error('departure_destination_airport_id')
-                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="pt-6 bg-white rounded-lg dark:bg-gray-800">
-
-                                                {{-- date of flight --}}
-                                                <div class="mb-3">
-                                                    <label class="block text-xl">
-                                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة
-                                                        </span>
-                                                        <input name="departure_flight_date" type="date"
-                                                            value="{{ old('departure_flight_date') }}"
-                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                    </label>
-                                                    @error('departure_flight_date')
-                                                        <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="lg:flex xl:flex md:block items-center mb-3">
-
-                                                    {{-- flight number --}}
-                                                    <div class="w-full lg:me-1">
-                                                        <div>
-                                                            <label class="block text-xl">
-                                                                <span class="text-gray-700 dark:text-white block">رقم
-                                                                    الرحلة
-                                                                </span>
-                                                                <input name="departure_flight_number" type="number"
-                                                                    value="{{ old('departure_flight_number') }}"
-                                                                    placeholder="ادخل رقم الرحلة "
-                                                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-                                                            @error('departure_flight_number')
-                                                                <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        {{-- return flight --}}
-                                        <div>
-                                            <div
-                                                class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                                                <div class="text-gray-700 dark:text-white block mb-5">
-                                                    <p class="text-center text-xl font-bold">عودة</p>
-                                                </div>
-                                                <div class="flex items-center mt-2">
-
-                                                    <div class="relative w-full me-1 lg:me-0 xl:me-0">
-                                                        <select id="from-airport-back" name="return_origin_airport_id"
-                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
-                                                            focus:pt-7
-                                                            focus:pb-2
-                                                            [&:not(:placeholder-shown)]:pt-7
-                                                            [&:not(:placeholder-shown)]:pb-2
-                                                            autofill:pt-6">
-                                                            <option value="" disabled>اختر مطار المغادرة ...
-                                                            </option>
-                                                             @forelse($airports as $airport)
-                                                        <option value="{{ $airport->id }}"
-                                                            {{ old('return_origin_airport_id') == $airport->id ? 'selected' : '' }}>
-                                                            {{ $airport->airport_name }}</option>
-                                                    @empty
-                                                        <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse
-                                                        </select>
-                                                        <label for="from-airport-back"
-                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
-                                                            peer-focus:scale-90
-                                                            peer-focus:translate-x-0.5
-                                                            peer-focus:-translate-y-1.5
-                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
-                                                            peer-[:not(:placeholder-shown)]:scale-90
-                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
-                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">من
-                                                            <i
-                                                                class="fa-solid fa-plane-departure text-blue-500 ms-2 transform -scale-x-100"></i></label>
-                                                        @error('return_origin_airport_id')
-                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div
-                                                        class="lg:flex items-center justify-center lg:w-3/4 xl:w-1/2 hidden">
-                                                        <i
-                                                            class="fa-solid fa-plane transform -scale-x-100 text-xl text-blue-500 mx-1"></i>
-                                                    </div>
-
-                                                    <div class="relative w-full ms-1 lg:ms-0 xl:ms-0">
-                                                        <select id="to-airport-back"
-                                                            name="return_destination_airport_id"
-                                                            class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
-                                                            focus:pt-7
-                                                            focus:pb-2
-                                                            [&:not(:placeholder-shown)]:pt-7
-                                                            [&:not(:placeholder-shown)]:pb-2
-                                                            autofill:pt-6">
-                                                            <option value="" disabled>اختر مطار الوصول ...
-                                                            </option>
-                                                             @forelse($airports as $airport)
-                                                        <option value="{{ $airport->id }}"
-                                                            {{ old('return_destination_airport_id') == $airport->id ? 'selected' : '' }}>
-                                                            {{ $airport->airport_name }}</option>
-                                                    @empty
-                                                        <option disabled>لا يوجد مطارات </option>
-                                                    @endforelse
-                                                        </select>
-                                                        <label for="to-airport-back"
-                                                            class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
-                                                            peer-focus:scale-90
-                                                            peer-focus:translate-x-0.5
-                                                            peer-focus:-translate-y-1.5
-                                                            peer-focus:text-blue-500 dark:peer-focus:text-blue-500
-                                                            peer-[:not(:placeholder-shown)]:scale-90
-                                                            peer-[:not(:placeholder-shown)]:translate-x-0.5
-                                                            peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                                                            dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">الي
-                                                            <i
-                                                                class="fa-solid fa-plane-arrival text-blue-500 ms-2 transform -scale-x-100"></i>
-                                                        </label>
-                                                        @error('return_destination_airport_id')
-                                                            <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="pt-6 bg-white rounded-lg dark:bg-gray-800">
-
-                                                {{-- date of flight --}}
-                                                <div class="mb-3">
-                                                    <label class="block text-xl">
-                                                        <span class="text-gray-700 dark:text-white block">تاريخ الرحلة
-                                                        </span>
-                                                        <input name="return_flight_date" type="date"
-                                                            value="{{ old('return_flight_date') }}"
-                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                    </label>
-                                                    @error('return_flight_date')
-                                                        <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="lg:flex xl:flex md:block items-center mb-3">
-
-                                                    {{-- number flight --}}
-                                                    <div class="w-full lg:me-1">
-                                                        <div>
-                                                            <label class="block text-xl">
-                                                                <span class="text-gray-700 dark:text-white block">رقم
-                                                                    الرحلة
-                                                                </span>
-                                                                <input name="return_flight_number" type="number"
-                                                                    value="{{ old('return_flight_number') }}"
-                                                                    placeholder="ادخل رقم الرحلة "
-                                                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-                                                            @error('return_flight_number')
-                                                                <span class="text-xs text-red-600 dark:text-red-400 ms-3">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button
-                                        class="mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition duration-200"
-                                        type="submit">اضافة</button>
-                                </form>
-
+                            <div class="relative w-full ms-1 lg:ms-0 xl:ms-0">
+                                <select id="to-airport-going" name="departure_destination_airport_id"
+                                    class="peer p-4 block w-full rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 bg-gray-200 dark:border-blue-700 dark:text-white dark:focus:ring-blue-600
+                                    focus:pt-7
+                                    focus:pb-2
+                                    [&:not(:placeholder-shown)]:pt-7
+                                    [&:not(:placeholder-shown)]:pb-2
+                                    autofill:pt-6">
+                                    <option value="" disabled>اختر مطار الوصول ...</option>
+                                    @forelse($airports as $airport)
+                                        <option value="{{ $airport->id }}"
+                                            {{ old('departure_destination_airport_id') == $airport->id ? 'selected' : '' }}>
+                                            {{ $airport->airport_name }}</option>
+                                    @empty
+                                        <option disabled>لا يوجد مطارات </option>
+                                    @endforelse
+                                </select>
+                                <label for="to-airport-going"
+                                    class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-200 border border-transparent origin-[0_0] dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                                    peer-focus:scale-90
+                                    peer-focus:translate-x-0.5
+                                    peer-focus:-translate-y-1.5
+                                    peer-focus:text-blue-500 dark:peer-focus:text-blue-500
+                                    peer-[:not(:placeholder-shown)]:scale-90
+                                    peer-[:not(:placeholder-shown)]:translate-x-0.5
+                                    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+                                    dark:peer-[:not(:placeholder-shown)]:text-neutral-500 font-semibold">الي
+                                    <i class="fa-solid fa-plane-arrival text-blue-500 ms-2 transform -scale-x-100"></i>
+                                </label>
+                                @error('departure_destination_airport_id')
+                                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="pt-6 bg-white rounded-lg dark:bg-gray-800">
+                        {{-- date of flight --}}
+                        <div class="mb-3">
+                            <label class="block text-xl">
+                                <span class="text-gray-700 dark:text-white block">تاريخ الرحلة</span>
+                                <input name="departure_flight_date" type="date" value="{{ old('departure_flight_date') }}"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                            </label>
+                            @error('departure_flight_date')
+                                <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            {{-- flight number --}}
+                            <div>
+                                <label class="block text-xl">
+                                    <span class="text-gray-700 dark:text-white block">رقم الرحلة</span>
+                                    <input name="departure_flight_number" type="number" value="{{ old('departure_flight_number') }}"
+                                        placeholder="ادخل رقم الرحلة"
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                </label>
+                                @error('departure_flight_number')
+                                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            {{-- departure time --}}
+                            <div>
+                                <label class="block text-xl">
+                                    <span class="text-gray-700 dark:text-white block">وقت المغادرة</span>
+                                    <input name="departure_time" type="time" value="{{ old('departure_time') }}"
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                </label>
+                                @error('departure_time')
+                                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+
+                            {{-- arrival time --}}
+                            <div>
+                                <label class="block text-xl">
+                                    <span class="text-gray-700 dark:text-white block">وقت الوصول</span>
+                                    <input name="arrival_time" type="time" value="{{ old('arrival_time') }}"
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                </label>
+                                @error('arrival_time')
+                                    <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- aircraft dropdown --}}
+                        <div class="mb-3">
+                            <label class="block text-xl">
+                                <span class="text-gray-700 dark:text-white block">نوع الطائرة</span>
+                                <select name="aircraft_id"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-select">
+                                    <option value="" disabled selected>اختر نوع الطائرة ...</option>
+                                    @forelse($aircrafts as $aircraft)
+                                        <option value="{{ $aircraft->id }}"
+                                            {{ old('aircraft_id') == $aircraft->id ? 'selected' : '' }}>
+                                            {{ $aircraft->aircraft_name }}</option>
+                                    @empty
+                                        <option disabled>لا يوجد طائرات </option>
+                                    @endforelse
+                                </select>
+                            </label>
+                            @error('aircraft_id')
+                                <span class="text-xs text-red-600 dark:text-red-400 ms-3">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition duration-200"
+                type="submit">اضافة</button>
+        </form>
+    </div>
+</div>
 
                         {{-- simulate flight --}}
                         <div class="hidden pt-4" id="simulate-flight" role="tabpanel"
