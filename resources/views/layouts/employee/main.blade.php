@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en" dir="rtl">
+<html lang="en" dir="rtl">
 
 <head>
 
@@ -19,7 +19,7 @@
     <!-- ===== Preloader End ===== -->
 
     <!-- ===== Page Wrapper Start ===== -->
-    <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+    <div class="flex min-h-screen bg-[#0f1117]" :class="{ 'overflow-hidden': isSideMenuOpen }">
 
         <!-- ===== Sidebar Start ===== -->
         @include('layouts.employee.partials.sidebar')

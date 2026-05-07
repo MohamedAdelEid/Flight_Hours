@@ -19,6 +19,8 @@ Route::middleware(employee::class)->group(function () {
     Route::post('/update-profile', [ProfileController::class, 'update'])->name('employee.update-profile');
     // Home Route
     Route::get('/employee/index', [EmployeeController::class, 'index'])->name('employee.index');
+    Route::get('/employee/reports/pilot-hours', [EmployeeController::class, 'pilotHoursReport'])->name('employee.pilotHoursReport');
+    Route::get('/employee/reports/aircraft-hours', [EmployeeController::class, 'aircraftHoursReport'])->name('employee.aircraftHoursReport');
     Route::post('/change-photo', [ProfileController::class, 'changePhoto'])->name('employee.changePhoto');
     Route::resource('job', JobController::class);
     Route::resource('airport', AirportController::class);
