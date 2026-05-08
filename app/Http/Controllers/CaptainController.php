@@ -15,7 +15,28 @@ class CaptainController extends Controller
         $airports = Airport::all();
         $aircrafts = Aircraft::all();
         $flights = Flight::where('user_id', auth()->user()->id)->get();
-        return view('captain.home', compact('airports', 'aircrafts', 'flights'));
+        $captainStats = [
+            'total_hours' => round(
+                FlightHour::whereHas('flight', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })->sum('hours'),
+                1
+            ),
+            'total_flights' => Flight::where('user_id', auth()->id())->count(),
+            'this_month' => round(
+                FlightHour::whereHas('flight', function ($query) {
+                    $query->where('user_id', auth()->id())
+                        ->whereMonth('flight_date', now()->month)
+                        ->whereYear('flight_date', now()->year);
+                })->sum('hours'),
+                1
+            ),
+            'last_flight' => Flight::where('user_id', auth()->id())
+                ->latest('flight_date')
+                ->value('flight_date'),
+        ];
+
+        return view('captain.home', compact('airports', 'aircrafts', 'flights', 'captainStats'));
     }
 
     public function addNormalFlight(Request $request)

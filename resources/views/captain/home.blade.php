@@ -53,6 +53,83 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @endsection
 
+<style>
+    .captain-stats-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        padding: 20px 40px;
+        margin-top: 36px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cstat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 0 36px;
+        text-align: center;
+    }
+
+    .cstat i {
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 2px;
+    }
+
+    .cstat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #fff;
+        font-family: 'Tajawal', sans-serif;
+        line-height: 1;
+    }
+
+    .cstat-unit {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-right: 4px;
+    }
+
+    .cstat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        white-space: nowrap;
+    }
+
+    .cstat-divider {
+        width: 1px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.12);
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+        .captain-stats-bar {
+            flex-wrap: wrap;
+            padding: 16px 20px;
+            gap: 16px;
+        }
+
+        .cstat {
+            padding: 0 16px
+        }
+
+        .cstat-divider {
+            display: none
+        }
+    }
+</style>
+
 <x-captain-layout>
     <main>
         <article>
@@ -67,6 +144,52 @@ document.addEventListener('DOMContentLoaded', function() {
                             class="btn btn-primary">اضافة رحلة</button>
 
                             <button class="btn btn-secondary" data-modal-target="flightsModal" data-modal-toggle="flightsModal">عرض الرحلات</button>
+                            </div>
+                            <div class="captain-stats-bar">
+                                <div class="cstat">
+                                    <i class="ti ti-clock" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="cstat-value">{{ $captainStats['total_hours'] }}</span>
+                                        <span class="cstat-unit">ساعة</span>
+                                    </div>
+                                    <span class="cstat-label">إجمالي ساعات طيراني</span>
+                                </div>
+
+                                <div class="cstat-divider"></div>
+
+                                <div class="cstat">
+                                    <i class="ti ti-plane-departure" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="cstat-value">{{ $captainStats['total_flights'] }}</span>
+                                        <span class="cstat-unit">رحلة</span>
+                                    </div>
+                                    <span class="cstat-label">إجمالي رحلاتي</span>
+                                </div>
+
+                                <div class="cstat-divider"></div>
+
+                                <div class="cstat">
+                                    <i class="ti ti-calendar-stats" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="cstat-value">{{ $captainStats['this_month'] }}</span>
+                                        <span class="cstat-unit">ساعة</span>
+                                    </div>
+                                    <span class="cstat-label">ساعات هذا الشهر</span>
+                                </div>
+
+                                <div class="cstat-divider"></div>
+
+                                <div class="cstat">
+                                    <i class="ti ti-calendar-check" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="cstat-value">
+                                            {{ $captainStats['last_flight']
+                                                ? \Carbon\Carbon::parse($captainStats['last_flight'])->format('d/m/Y')
+                                                : '—' }}
+                                        </span>
+                                    </div>
+                                    <span class="cstat-label">آخر رحلة</span>
+                                </div>
                             </div>
 
                 </div>
