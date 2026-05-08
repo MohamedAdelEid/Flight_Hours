@@ -12,6 +12,7 @@ use App\Http\Middleware\AdminMiddleware as admin;
 use App\Http\Middleware\EmployeeMiddleware as employee;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\Admin\AdminAccountController;
 // **------------------------------------ Routes Employee ------------------------------------**//
 
 Route::middleware(employee::class)->group(function () {
@@ -41,15 +42,21 @@ Route::middleware(employee::class)->group(function () {
 });
 
 // Admin Routes
-Route::middleware(admin::class)->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    });
+Route::middleware(['auth', admin::class])->group(function () {
+    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('admin/create-user', [AdminController::class, 'createUser'])->name('admin.createUser');
     Route::post('admin/store-user', [AdminController::class, 'storeUser'])->name('admin.storeUser');
     Route::get('admin/edit-user', [AdminController::class, 'editUser'])->name('admin.editUser');
     Route::post('admin/update-user', [AdminController::class, 'updateUser'])->name('admin.updateUser');
     Route::post('admin/delete-user', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+
+    Route::get('admin/accounts', [AdminAccountController::class, 'index'])->name('admin.accounts.index');
+    Route::post('admin/accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store');
+    Route::get('admin/accounts/{user}', [AdminAccountController::class, 'show'])->name('admin.accounts.show');
+    Route::put('admin/accounts/{user}', [AdminAccountController::class, 'update'])->name('admin.accounts.update');
+    Route::delete('admin/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy');
+    Route::patch('admin/accounts/{user}/toggle', [AdminAccountController::class, 'toggleStatus'])->name('admin.accounts.toggle');
+    Route::patch('admin/accounts/{user}/reset-password', [AdminAccountController::class, 'resetPassword'])->name('admin.accounts.reset-password');
 });
 
 // Route::middleware('auth')->group(function () {
