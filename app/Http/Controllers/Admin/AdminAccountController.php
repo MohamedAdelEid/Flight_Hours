@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AccountCredentials;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class AdminAccountController extends Controller
@@ -47,11 +49,14 @@ class AdminAccountController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+        $plainPassword = $data['password'];
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
 
-        return back()->with('success', "تم إنشاء حساب {$user->name} بنجاح");
+        Mail::to($user->email)->send(new AccountCredentials($user, $plainPassword));
+
+        return back()->with('success', "تم إنشاء حساب {$user->name} بنجاح وإرسال بيانات الدخول إلى بريده الإلكتروني");
     }
 
     public function update(Request $request, User $user)
@@ -84,6 +89,9 @@ class AdminAccountController extends Controller
     {
         $newPassword = Str::random(10);
         $user->update(['password' => Hash::make($newPassword)]);
-        return back()->with('success', "تم إعادة تعيين كلمة المرور: {$newPassword}");
+        
+        Mail::to($user->email)->send(new AccountCredentials($user, $newPassword));
+        
+        return back()->with('success', "تم إعادة تعيين كلمة المرور وإرسالها إلى بريد {$user->name}");
     }
 }
