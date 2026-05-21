@@ -224,12 +224,11 @@
             <i class="fas fa-id-badge" style="color:#06b6d4"></i>
             <span>حسابات الموظفين</span>
         </a>
-        <a href="{{ route('admin.accounts.index') }}?status=inactive" class="quick-card">
+        <a href="{{ route('admin.accounts.index') }}?is_active=0" class="quick-card">
             <i class="fas fa-ban" style="color:#ef4444"></i>
             <span>الحسابات المعطلة</span>
         </a>
-        <a href="{{ route('admin.accounts.index') }}" class="quick-card"
-           onclick="event.preventDefault(); document.getElementById('createModal').style.display='flex'">
+        <a href="{{ route('admin.accounts.index') }}" class="quick-card">
             <i class="fas fa-user-plus" style="color:#8b5cf6"></i>
             <span>إضافة حساب جديد</span>
         </a>

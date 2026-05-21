@@ -13,6 +13,7 @@ use App\Http\Middleware\EmployeeMiddleware as employee;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\Admin\AdminAccountController;
+use App\Http\Controllers\Admin\AdminProfileController;
 // **------------------------------------ Routes Employee ------------------------------------**//
 
 Route::middleware(employee::class)->group(function () {
@@ -57,6 +58,10 @@ Route::middleware(['auth', admin::class])->group(function () {
     Route::delete('admin/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy');
     Route::patch('admin/accounts/{user}/toggle', [AdminAccountController::class, 'toggleStatus'])->name('admin.accounts.toggle');
     Route::patch('admin/accounts/{user}/reset-password', [AdminAccountController::class, 'resetPassword'])->name('admin.accounts.reset-password');
+
+    Route::get('/admin/profile', [AdminProfileController::class, 'index'])->name('admin.profile');
+    Route::post('/admin/update-profile', [AdminProfileController::class, 'update'])->name('admin.update-profile');
+    Route::post('/admin/change-photo', [AdminProfileController::class, 'changePhoto'])->name('admin.changePhoto');
 });
 
 // Route::middleware('auth')->group(function () {

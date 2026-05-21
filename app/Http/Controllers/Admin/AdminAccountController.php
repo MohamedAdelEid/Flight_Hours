@@ -20,6 +20,10 @@ class AdminAccountController extends Controller
             $query->where('role', $request->role);
         }
 
+        if ($request->filled('is_active')) {
+            $query->where('is_active', $request->is_active);
+        }
+
         if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
@@ -44,7 +48,7 @@ class AdminAccountController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:employee,captain',
+            'role' => 'required|in:employee,captain,admin',
             'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8',
         ]);
@@ -64,7 +68,7 @@ class AdminAccountController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:100',
             'email' => "required|email|unique:users,email,{$user->id}",
-            'role' => 'required|in:employee,captain',
+            'role' => 'required|in:employee,captain,admin',
             'phone' => 'nullable|string|max:20',
         ]);
 

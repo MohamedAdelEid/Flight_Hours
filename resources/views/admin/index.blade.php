@@ -84,6 +84,16 @@
                 <option value="">الكل</option>
                 <option value="employee" {{ request('role')=='employee'?'selected':'' }}>موظف</option>
                 <option value="captain" {{ request('role')=='captain'?'selected':'' }}>كابتن</option>
+                <option value="admin" {{ request('role')=='admin'?'selected':'' }}>مدير</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>الحالة</label>
+            <select name="is_active">
+                <option value="">الكل</option>
+                <option value="1" {{ request('is_active')=='1'?'selected':'' }}>نشط</option>
+                <option value="0" {{ request('is_active')=='0'?'selected':'' }}>معطل</option>
             </select>
         </div>
 
@@ -108,6 +118,7 @@
                     <th>المستخدم</th>
                     <th>نوع الحساب</th>
                     <th>رقم الهاتف</th>
+                    <th>الحالة</th>
                     <th>تاريخ الإنشاء</th>
                     <th>الإجراءات</th>
                 </tr>
@@ -119,7 +130,7 @@
 
                     <td>
                         <div class="user-cell">
-                            <div class="avatar" style="background: {{ $user->role === 'captain' ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.2)' }}; color: {{ $user->role === 'captain' ? '#10b981' : '#a5b4fc' }}">
+                            <div class="avatar" style="background: {{ $user->role === 'captain' ? 'rgba(16,185,129,0.2)' : ($user->role === 'admin' ? 'rgba(139,92,246,0.2)' : 'rgba(99,102,241,0.2)') }}; color: {{ $user->role === 'captain' ? '#10b981' : ($user->role === 'admin' ? '#c4b5fd' : '#a5b4fc') }}">
                                 {{ mb_substr($user->name, 0, 1) }}
                             </div>
                             <div>
@@ -149,6 +160,14 @@
                         {{ $user->phone ?? '—' }}
                     </td>
 
+                    <td>
+                        @if($user->is_active)
+                            <span class="badge badge-success">نشط</span>
+                        @else
+                            <span class="badge badge-danger">معطل</span>
+                        @endif
+                    </td>
+
                     <td style="font-size:12px; color:rgba(255,255,255,0.4)">
                         {{ $user->created_at->format('Y/m/d') }}
                     </td>
@@ -161,34 +180,25 @@
                             </button>
 
                             <!-- Toggle active/inactive -->
-                            <form method="POST" action="{{ route('admin.accounts.toggle', $user) }}" style="display:inline">
-                                @csrf @method('PATCH')
-                                <button type="submit" class="action-btn" title="{{ $user->is_active ? 'تعطيل' : 'تفعيل' }}">
-                                    <i class="fas fa-toggle-{{ $user->is_active ? 'on' : 'off' }}" style="color:{{ $user->is_active ? '#10b981' : 'rgba(255,255,255,0.3)' }}"></i>
-                                </button>
-                            </form>
+                            <button onclick="openToggleModal({{ $user->id }}, '{{ $user->name }}', {{ $user->is_active ? 'true' : 'false' }})" class="action-btn" title="{{ $user->is_active ? 'تعطيل' : 'تفعيل' }}">
+                                <i class="fas fa-toggle-{{ $user->is_active ? 'on' : 'off' }}" style="color:{{ $user->is_active ? '#10b981' : 'rgba(255,255,255,0.3)' }}"></i>
+                            </button>
 
                             <!-- Reset password -->
-                            <form method="POST" action="{{ route('admin.accounts.reset-password', $user) }}" style="display:inline" onsubmit="return confirm('إعادة تعيين كلمة المرور لـ {{ $user->name }}؟')">
-                                @csrf @method('PATCH')
-                                <button type="submit" class="action-btn" title="إعادة تعيين كلمة المرور">
-                                    <i class="fas fa-key" style="color:#f59e0b"></i>
-                                </button>
-                            </form>
+                            <button onclick="openResetModal({{ $user->id }}, '{{ $user->name }}')" class="action-btn" title="إعادة تعيين كلمة المرور">
+                                <i class="fas fa-key" style="color:#f59e0b"></i>
+                            </button>
 
                             <!-- Delete -->
-                            <form method="POST" action="{{ route('admin.accounts.destroy', $user) }}" style="display:inline" onsubmit="return confirm('هل أنت متأكد من حذف حساب {{ $user->name }}؟')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="action-btn" title="حذف">
-                                    <i class="fas fa-trash" style="color:#ef4444"></i>
-                                </button>
-                            </form>
+                            <button onclick="openDeleteModal({{ $user->id }}, '{{ $user->name }}')" class="action-btn" title="حذف">
+                                <i class="fas fa-trash" style="color:#ef4444"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="empty-row">
+                    <td colspan="7" class="empty-row">
                         <i class="fas fa-users-slash" style="font-size:32px; display:block; margin-bottom:8px; opacity:0.3"></i>
                         لا توجد حسابات مطابقة للبحث
                     </td>
@@ -237,6 +247,7 @@
                         <option value="">اختر نوع الحساب</option>
                         <option value="employee" {{ old('role')=='employee'?'selected':'' }}>موظف</option>
                         <option value="captain" {{ old('role')=='captain'?'selected':'' }}>كابتن</option>
+                        <option value="admin" {{ old('role')=='admin'?'selected':'' }}>مدير</option>
                     </select>
                     @error('role')<span class="field-error">{{ $message }}</span>@enderror
                 </div>
@@ -300,6 +311,7 @@
                     <select name="role" id="editRole" required>
                         <option value="employee">موظف</option>
                         <option value="captain">كابتن</option>
+                        <option value="admin">مدير</option>
                     </select>
                 </div>
 
@@ -318,6 +330,21 @@
                 </button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal-overlay" style="display:none">
+    <div class="confirm-box">
+        <div class="confirm-icon" id="confirmIcon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 id="confirmTitle">تأكيد الإجراء</h3>
+        <p id="confirmMessage">هل أنت متأكد؟</p>
+        <div class="confirm-actions">
+            <button onclick="closeModal('confirmModal')" class="btn-reset">إلغاء</button>
+            <button id="confirmBtn" class="btn-confirm">تأكيد</button>
+        </div>
     </div>
 </div>
 @endsection
@@ -778,6 +805,95 @@
         font-size: 14px;
     }
 
+    /* Confirmation Modal */
+    .confirm-box {
+        background: #1a1d2e;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 400px;
+        padding: 32px 24px 24px;
+        text-align: center;
+    }
+
+    .confirm-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 28px;
+    }
+
+    .confirm-icon.danger {
+        background: rgba(239,68,68,0.15);
+        color: #ef4444;
+    }
+
+    .confirm-icon.warning {
+        background: rgba(245,158,11,0.15);
+        color: #f59e0b;
+    }
+
+    .confirm-icon.info {
+        background: rgba(99,102,241,0.15);
+        color: #6366f1;
+    }
+
+    .confirm-box h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 8px;
+    }
+
+    .confirm-box p {
+        font-size: 14px;
+        color: rgba(255,255,255,0.5);
+        margin: 0 0 24px;
+        line-height: 1.6;
+    }
+
+    .confirm-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .btn-confirm {
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-confirm:hover {
+        background: #dc2626;
+    }
+
+    .btn-confirm.warning {
+        background: #f59e0b;
+    }
+
+    .btn-confirm.warning:hover {
+        background: #d97706;
+    }
+
+    .btn-confirm.info {
+        background: #6366f1;
+    }
+
+    .btn-confirm.info:hover {
+        background: #4f46e5;
+    }
+
     @media (max-width: 768px) {
         .form-grid {
             grid-template-columns: 1fr;
@@ -788,6 +904,8 @@
 
 @push('script')
 <script>
+let confirmAction = null;
+
 function openModal(id) {
     document.getElementById(id).style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -808,6 +926,7 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         document.querySelectorAll('.modal-overlay').forEach(m => {
             m.style.display = 'none';
+            document.body.style.overflow = '';
         });
     }
 });
@@ -821,8 +940,112 @@ function openEditModal(user) {
     openModal('editModal');
 }
 
+function openToggleModal(userId, userName, isActive) {
+    const action = isActive ? 'تعطيل' : 'تفعيل';
+    const icon = isActive ? 'warning' : 'info';
+    const iconClass = isActive ? 'fa-toggle-off' : 'fa-toggle-on';
+    const btnClass = isActive ? 'warning' : 'info';
+    
+    document.getElementById('confirmIcon').className = 'confirm-icon ' + icon;
+    document.getElementById('confirmIcon').innerHTML = '<i class="fas ' + iconClass + '"></i>';
+    document.getElementById('confirmTitle').textContent = 'تأكيد ' + action + ' الحساب';
+    document.getElementById('confirmMessage').textContent = 'هل تريد ' + action + ' حساب ' + userName + '؟';
+    
+    const btn = document.getElementById('confirmBtn');
+    btn.className = 'btn-confirm ' + btnClass;
+    btn.textContent = action;
+    
+    confirmAction = function() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/accounts/' + userId + '/toggle';
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+        form.appendChild(csrfInput);
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PATCH';
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+    };
+    
+    openModal('confirmModal');
+}
+
+function openResetModal(userId, userName) {
+    document.getElementById('confirmIcon').className = 'confirm-icon warning';
+    document.getElementById('confirmIcon').innerHTML = '<i class="fas fa-key"></i>';
+    document.getElementById('confirmTitle').textContent = 'إعادة تعيين كلمة المرور';
+    document.getElementById('confirmMessage').textContent = 'هل تريد إعادة تعيين كلمة المرور لـ ' + userName + '؟ سيتم إرسال كلمة المرور الجديدة إلى بريده الإلكتروني.';
+    
+    const btn = document.getElementById('confirmBtn');
+    btn.className = 'btn-confirm warning';
+    btn.textContent = 'إعادة تعيين';
+    
+    confirmAction = function() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/accounts/' + userId + '/reset-password';
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+        form.appendChild(csrfInput);
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PATCH';
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+    };
+    
+    openModal('confirmModal');
+}
+
+function openDeleteModal(userId, userName) {
+    document.getElementById('confirmIcon').className = 'confirm-icon danger';
+    document.getElementById('confirmIcon').innerHTML = '<i class="fas fa-trash"></i>';
+    document.getElementById('confirmTitle').textContent = 'حذف الحساب';
+    document.getElementById('confirmMessage').textContent = 'هل أنت متأكد من حذف حساب ' + userName + '؟ هذا الإجراء لا يمكن التراجع عنه.';
+    
+    const btn = document.getElementById('confirmBtn');
+    btn.className = 'btn-confirm';
+    btn.textContent = 'حذف';
+    
+    confirmAction = function() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/accounts/' + userId;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+        form.appendChild(csrfInput);
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'DELETE';
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+    };
+    
+    openModal('confirmModal');
+}
+
+document.getElementById('confirmBtn').addEventListener('click', function() {
+    if (confirmAction) {
+        confirmAction();
+        confirmAction = null;
+    }
+});
+
 function toggleLicenseField(prefix) {
-    // Not needed for now, kept for future use
 }
 
 function togglePassword(id) {

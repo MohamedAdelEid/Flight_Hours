@@ -120,7 +120,7 @@
         <div class="section-label">الحساب</div>
         <ul class="px-2">
             <li>
-                <a href="{{ route('employee.profile') }}" class="nav-item">
+                <a href="{{ auth()->user()->role === 'admin' ? route('admin.profile') : route('employee.profile') }}" class="nav-item">
                     <i class="fa-solid fa-user icon-fa"></i>
                     <span>الصفحة الشخصية</span>
                 </a>
