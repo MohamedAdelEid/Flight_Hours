@@ -1210,6 +1210,382 @@ html:not(.dark):not(.theme-dark) .theme-toggle__icon--moon {
     padding: 0 20px 20px;
 }
 
+/* employee reports (pilot hours, aircraft hours) */
+
+.report-page .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.report-page .report-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--theme-text);
+    margin: 0;
+}
+
+.report-page .report-header .subtitle {
+    font-size: 13px;
+    color: var(--theme-text-muted);
+    margin: 4px 0 0;
+}
+
+.report-page .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+}
+
+.report-page .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.report-page .filter-group label {
+    font-size: 12px;
+    color: var(--theme-text-muted);
+}
+
+.report-page .filter-bar input,
+.report-page .filter-bar select,
+.report-page .table-header input {
+    background: var(--theme-bg-input);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--theme-text);
+    font-size: 13px;
+    min-width: 150px;
+    font-family: inherit;
+}
+
+.report-page .table-header input {
+    min-width: auto;
+    width: min(100%, 260px);
+    padding: 7px 12px;
+}
+
+.report-page input[type="date"],
+.report-page select {
+    color-scheme: light;
+}
+
+html.dark .report-page input[type="date"],
+html.dark .report-page select,
+html.theme-dark .report-page input[type="date"],
+html.theme-dark .report-page select {
+    color-scheme: dark;
+}
+
+.report-page .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.report-page .stats-grid--aircraft {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.report-page .stat-card {
+    display: block;
+    background: var(--theme-bg-card);
+    border-radius: 12px;
+    padding: 20px 24px;
+    border: 1px solid var(--theme-border);
+}
+
+.report-page .stat-card .stat-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.report-page .stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--theme-text);
+    line-height: 1;
+}
+
+.report-page .stats-grid--aircraft .stat-card .stat-value {
+    font-size: 26px;
+}
+
+.report-page .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--theme-text-muted);
+    margin-top: 6px;
+}
+
+.report-page .charts-row {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.report-page .charts-row--aircraft {
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+@media (max-width: 1024px) {
+    .report-page .charts-row,
+    .report-page .charts-row--aircraft {
+        grid-template-columns: 1fr;
+    }
+
+    .report-page .charts-row--aircraft .chart-card:first-child {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .report-page .charts-row--aircraft {
+        grid-template-columns: 1fr;
+    }
+}
+
+.report-page .chart-card,
+.report-page .table-card {
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border);
+    border-radius: 12px;
+}
+
+.report-page .chart-card {
+    padding: 20px 24px;
+}
+
+.report-page .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--theme-text);
+    margin: 0 0 16px;
+}
+
+.report-page .chart-container {
+    position: relative;
+    min-height: 200px;
+}
+
+.report-page .chart-container.chart-pie {
+    min-height: 180px;
+}
+
+.report-page .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--theme-text-muted);
+}
+
+.report-page .chart-legend i {
+    margin-left: 4px;
+}
+
+.report-page .table-card {
+    overflow: hidden;
+}
+
+.report-page .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--theme-border);
+}
+
+.report-page .table-header span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--theme-text);
+}
+
+.report-page .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.report-page .data-table thead th {
+    background: var(--theme-table-head);
+    color: var(--theme-text-muted);
+    font-weight: 500;
+    padding: 11px 16px;
+    text-align: right;
+    border-bottom: 1px solid var(--theme-border);
+}
+
+.report-page .data-table tbody td {
+    padding: 12px 16px;
+    color: var(--theme-text-secondary);
+    border-bottom: 1px solid var(--theme-border-subtle);
+}
+
+.report-page .data-table tbody tr:hover {
+    background: var(--theme-table-hover);
+}
+
+.report-page .pilot-cell,
+.report-page .aircraft-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.report-page .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.report-page .plane-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.report-page .cell-subtitle {
+    font-size: 11px;
+    color: var(--theme-text-muted);
+}
+
+.report-page .cell-meta {
+    font-size: 12px;
+    color: var(--theme-text-muted);
+}
+
+.report-page .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+}
+
+.report-page .progress-bar {
+    height: 6px;
+    background: #6366f1;
+    border-radius: 3px;
+    min-width: 2px;
+    transition: width 0.3s;
+}
+
+.report-page .progress-wrap span {
+    font-size: 11px;
+    color: var(--theme-text-muted);
+    white-space: nowrap;
+}
+
+.report-page .badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.report-page .badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.report-page .badge-info {
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+}
+
+html.dark .report-page .badge-info,
+html.theme-dark .report-page .badge-info {
+    color: #a5b4fc;
+}
+
+.report-page .badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.report-page .badge-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.report-page .badge-neutral {
+    background: var(--theme-table-head);
+    color: var(--theme-text-muted);
+}
+
+.report-page .btn-primary {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    text-decoration: none;
+}
+
+.report-page .btn-primary:hover {
+    background: #4f46e5;
+}
+
+.report-page .btn-reset {
+    background: transparent;
+    color: var(--theme-text-muted);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+}
+
+.report-page .btn-reset:hover {
+    color: var(--theme-text);
+    border-color: var(--theme-text-muted);
+}
+
+.report-page .empty-row {
+    text-align: center;
+    padding: 40px;
+    color: var(--theme-text-muted);
+    font-size: 14px;
+}
+
 @media (max-width:768px) {
     .input {
         padding: 10px 18px;

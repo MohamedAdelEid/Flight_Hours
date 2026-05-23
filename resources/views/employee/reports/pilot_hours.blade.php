@@ -1,7 +1,7 @@
 @extends('layouts.employee.main')
 
 @section('content')
-<div class="dashboard-content">
+<div class="dashboard-content report-page">
     <!-- Page Header -->
     <div class="report-header">
         <div>
@@ -154,385 +154,100 @@
 </div>
 @endsection
 
-@push('style')
-<style>
-    .report-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 24px;
-    }
-
-    .report-header h1 {
-        font-size: 22px;
-        font-weight: 700;
-        color: #fff;
-        margin: 0;
-    }
-
-    .report-header .subtitle {
-        font-size: 13px;
-        color: rgba(255,255,255,0.4);
-        margin: 4px 0 0;
-    }
-
-    .filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: flex-end;
-        background: #1a1d2e;
-        border-radius: 12px;
-        padding: 16px 20px;
-        margin-bottom: 20px;
-    }
-
-    .filter-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .filter-group label {
-        font-size: 12px;
-        color: rgba(255,255,255,0.5);
-    }
-
-    .filter-bar input {
-        background: var(--theme-bg);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 8px 12px;
-        color: #fff;
-        font-size: 13px;
-        min-width: 150px;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-        margin-bottom: 20px;
-    }
-
-    .stat-card {
-        background: #1a1d2e;
-        border-radius: 12px;
-        padding: 20px 24px;
-        border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .stat-card .stat-icon {
-        font-size: 28px;
-        margin-bottom: 12px;
-    }
-
-    .stat-card .stat-value {
-        font-size: 28px;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1;
-    }
-
-    .stat-card .stat-label {
-        font-size: 12px;
-        color: rgba(255,255,255,0.45);
-        margin-top: 6px;
-    }
-
-    .charts-row {
-        display: grid;
-        grid-template-columns: 3fr 2fr;
-        gap: 16px;
-        margin-bottom: 20px;
-    }
-
-    @media (max-width: 1024px) {
-        .charts-row {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .chart-card {
-        background: #1a1d2e;
-        border-radius: 12px;
-        padding: 20px 24px;
-    }
-
-    .chart-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #fff;
-        margin: 0 0 16px;
-    }
-
-    .chart-container {
-        position: relative;
-        min-height: 200px;
-    }
-
-    .chart-container.chart-pie {
-        min-height: 180px;
-    }
-
-    .chart-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 16px;
-        font-size: 12px;
-        color: rgba(255,255,255,0.6);
-    }
-
-    .chart-legend i {
-        margin-left: 4px;
-    }
-
-    .table-card {
-        background: #1a1d2e;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    .table-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .table-header span {
-        font-size: 15px;
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .table-header input {
-        background: var(--theme-bg);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 7px 12px;
-        color: #fff;
-        font-size: 13px;
-        width: 220px;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-    }
-
-    .data-table thead th {
-        background: rgba(255,255,255,0.03);
-        color: rgba(255,255,255,0.45);
-        font-weight: 500;
-        padding: 11px 16px;
-        text-align: right;
-    }
-
-    .data-table tbody td {
-        padding: 12px 16px;
-        color: #e2e8f0;
-        border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .data-table tbody tr:hover {
-        background: rgba(255,255,255,0.03);
-    }
-
-    .pilot-cell {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: #6366f1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: 600;
-        color: #fff;
-        flex-shrink: 0;
-    }
-
-    .progress-wrap {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 120px;
-    }
-
-    .progress-bar {
-        height: 6px;
-        background: #6366f1;
-        border-radius: 3px;
-        transition: width .3s;
-    }
-
-    .progress-wrap span {
-        font-size: 11px;
-        color: rgba(255,255,255,0.4);
-        white-space: nowrap;
-    }
-
-    .badge {
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
-    }
-
-    .badge-success {
-        background: rgba(16,185,129,0.15);
-        color: #10b981;
-    }
-
-    .badge-info {
-        background: rgba(99,102,241,0.15);
-        color: #a5b4fc;
-    }
-
-    .badge-warning {
-        background: rgba(245,158,11,0.15);
-        color: #f59e0b;
-    }
-
-    .badge-neutral {
-        background: rgba(255,255,255,0.08);
-        color: rgba(255,255,255,0.5);
-    }
-
-    .btn-primary {
-        background: #6366f1;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 9px 18px;
-        font-size: 13px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .btn-primary:hover {
-        background: #4f46e5;
-    }
-
-    .btn-reset {
-        background: transparent;
-        color: rgba(255,255,255,0.5);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 9px 18px;
-        font-size: 13px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .btn-reset:hover {
-        color: #fff;
-        border-color: rgba(255,255,255,0.3);
-    }
-
-    .empty-row {
-        text-align: center;
-        padding: 40px;
-        color: rgba(255,255,255,0.3);
-        font-size: 14px;
-    }
-</style>
-@endpush
-
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Monthly Bar Chart
-    var monthlyCtx = document.getElementById('monthlyChart');
-    if (monthlyCtx) {
-        new Chart(monthlyCtx, {
-            type: 'bar',
-            data: {
-                labels: @json($monthlyLabels),
-                datasets: [{
-                    label: 'ساعات الطيران',
-                    data: @json($monthlyHours),
-                    backgroundColor: 'rgba(99,102,241,0.7)',
-                    borderColor: '#6366f1',
-                    borderWidth: 1,
-                    borderRadius: 4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    x: {
-                        ticks: { color: 'rgba(255,255,255,0.4)', font: {size: 11} },
-                        grid: { color: 'rgba(255,255,255,0.05)' }
-                    },
-                    y: {
-                        ticks: { color: 'rgba(255,255,255,0.4)', font: {size: 11} },
-                        grid: { color: 'rgba(255,255,255,0.05)' }
-                    }
-                }
-            }
-        });
+    function chartTheme() {
+        return window.FlightHoursTheme ? window.FlightHoursTheme.chartColors() : {
+            grid: 'rgba(0,0,0,0.06)',
+            tick: 'rgba(0,0,0,0.45)',
+            legend: '#6b7280',
+        };
     }
 
-    // Distribution Doughnut Chart
-    var distributionCtx = document.getElementById('distributionChart');
-    if (distributionCtx) {
-        new Chart(distributionCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['أقل من 50', '50–100', '100–200', 'أكثر من 200'],
-                datasets: [{
-                    data: @json($distribution),
-                    backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b'],
-                    borderWidth: 0,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: 'rgba(255,255,255,0.5)',
-                            font: {size: 11},
-                            padding: 12
+    var colors = chartTheme();
+    var monthlyChart = null;
+    var distributionChart = null;
+
+    function buildCharts() {
+        colors = chartTheme();
+
+        var monthlyCtx = document.getElementById('monthlyChart');
+        if (monthlyCtx) {
+            if (monthlyChart) monthlyChart.destroy();
+            monthlyChart = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: @json($monthlyLabels),
+                    datasets: [{
+                        label: 'ساعات الطيران',
+                        data: @json($monthlyHours),
+                        backgroundColor: 'rgba(99,102,241,0.7)',
+                        borderColor: '#6366f1',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            ticks: { color: colors.tick, font: { size: 11 } },
+                            grid: { color: colors.grid }
+                        },
+                        y: {
+                            ticks: { color: colors.tick, font: { size: 11 } },
+                            grid: { color: colors.grid }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        var distributionCtx = document.getElementById('distributionChart');
+        if (distributionCtx) {
+            if (distributionChart) distributionChart.destroy();
+            distributionChart = new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['أقل من 50', '50–100', '100–200', 'أكثر من 200'],
+                    datasets: [{
+                        data: @json($distribution),
+                        backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b'],
+                        borderWidth: 0,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: colors.legend,
+                                font: { size: 11 },
+                                padding: 12
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
-    // Live table search
+    buildCharts();
+    window.addEventListener('theme-changed', buildCharts);
+
     var searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', function() {
             var q = this.value.toLowerCase();
-            var rows = document.querySelectorAll('#pilotsTable tbody tr');
-            rows.forEach(function(row) {
+            document.querySelectorAll('#pilotsTable tbody tr').forEach(function(row) {
                 row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
             });
         });

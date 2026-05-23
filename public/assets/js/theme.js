@@ -44,11 +44,21 @@
 
     applyTheme(isDark());
 
+    function chartColors() {
+        var root = getComputedStyle(document.documentElement);
+        return {
+            grid: root.getPropertyValue('--theme-chart-grid').trim() || 'rgba(0,0,0,0.06)',
+            tick: root.getPropertyValue('--theme-chart-tick').trim() || 'rgba(0,0,0,0.45)',
+            legend: root.getPropertyValue('--theme-text-muted').trim() || '#6b7280',
+        };
+    }
+
     window.FlightHoursTheme = {
         isDark: isDark,
         set: setTheme,
         toggle: function () {
             setTheme(!document.documentElement.classList.contains('dark'));
         },
+        chartColors: chartColors,
     };
 })();
