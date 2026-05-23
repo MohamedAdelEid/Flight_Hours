@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Aircraft;
 use App\Models\Flight;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,19 +11,32 @@ class FlightTable extends Component
     use WithPagination;
 
     public $search = '';
+
     public $perPage = 5;
-    public $status = '';
-    public function delete(Flight $flight)
+
+    public function updatingSearch(): void
     {
-        $deleteFlight = $flight->delete();
-        if ($deleteFlight) {
-            $this->dispatch('deleted');
-        }
+        $this->resetPage();
     }
+
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    public function delete(int $id): void
+    {
+        Flight::findOrFail($id)->delete();
+        $this->dispatch('deleted');
+    }
+
     public function render()
     {
         return view('livewire.flight-table', [
-            'flights' => Flight::search($this->search)->paginate($this->perPage)
+            'flights' => Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
+                ->search($this->search)
+                ->latest()
+                ->paginate($this->perPage),
         ]);
     }
 }

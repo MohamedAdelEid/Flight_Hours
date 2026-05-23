@@ -145,18 +145,19 @@ class EmployeeController extends Controller
         // Recent flights
         $recentFlights = DB::table('flights')
             ->join('aircrafts', 'flights.aircraft_id', '=', 'aircrafts.id')
-            ->join('airports as origin', 'flights.origin_airport_id', '=', 'origin.id')
-            ->join('airports as destination', 'flights.destination_airport_id', '=', 'destination.id')
-            ->join('flight_hours', 'flights.id', '=', 'flight_hours.flight_id')
+            ->leftJoin('airports as origin', 'flights.origin_airport_id', '=', 'origin.id')
+            ->leftJoin('airports as destination', 'flights.destination_airport_id', '=', 'destination.id')
+            ->leftJoin('flight_hours', 'flights.id', '=', 'flight_hours.flight_id')
             ->select(
                 'flights.flight_number',
                 'flights.flight_type',
                 'aircrafts.aircraft_name',
-                'origin.airport_name as origin',
-                'destination.airport_name as destination',
+                DB::raw('COALESCE(origin.airport_name, \'—\') as origin'),
+                DB::raw('COALESCE(destination.airport_name, \'—\') as destination'),
                 'flights.flight_date',
-                'flight_hours.hours',
-                'flights.status'
+                DB::raw('COALESCE(flight_hours.hours, 0) as hours'),
+                'flights.status',
+                'flights.image'
             )
             ->orderBy('flights.flight_date', 'desc')
             ->limit(5)
@@ -269,13 +270,17 @@ class EmployeeController extends Controller
         }
 
         // Distribution buckets
-        $distribution = [0, 0, 0, 0]; // <50, 50-100, 100-200, >200
+        $distribution = [0, 0, 0, 0];  // <50, 50-100, 100-200, >200
         foreach ($pilotsData as $pilot) {
             $h = $pilot['total_hours'];
-            if ($h < 50) $distribution[0]++;
-            elseif ($h < 100) $distribution[1]++;
-            elseif ($h < 200) $distribution[2]++;
-            else $distribution[3]++;
+            if ($h < 50)
+                $distribution[0]++;
+            elseif ($h < 100)
+                $distribution[1]++;
+            elseif ($h < 200)
+                $distribution[2]++;
+            else
+                $distribution[3]++;
         }
 
         return view('employee.reports.pilot_hours', compact(
@@ -425,13 +430,17 @@ class EmployeeController extends Controller
         usort($typeBreakdown, fn($a, $b) => $b['hours'] <=> $a['hours']);
 
         // Distribution buckets
-        $utilization = [0, 0, 0, 0]; // <100, 100-300, 300-600, >600
+        $utilization = [0, 0, 0, 0];  // <100, 100-300, 300-600, >600
         foreach ($aircraftData as $ac) {
             $h = $ac['total_hours'];
-            if ($h < 100) $utilization[0]++;
-            elseif ($h < 300) $utilization[1]++;
-            elseif ($h < 600) $utilization[2]++;
-            else $utilization[3]++;
+            if ($h < 100)
+                $utilization[0]++;
+            elseif ($h < 300)
+                $utilization[1]++;
+            elseif ($h < 600)
+                $utilization[2]++;
+            else
+                $utilization[3]++;
         }
 
         return view('employee.reports.aircraft_hours', compact(

@@ -146,6 +146,7 @@
                         <th>تاريخ الرحلة</th>
                         <th>ساعات الطيران</th>
                         <th>الحالة</th>
+                        <th>الصورة</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,6 +176,15 @@
                                 <span class="badge badge-warning">قيد التنفيذ</span>
                             @elseif($flight->status == 'cancelled')
                                 <span class="badge badge-danger">ملغية</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($flight->image)
+                            <a href="{{ asset('storage/' . $flight->image) }}" download target="_blank" class="btn-download-image" title="تحميل الصورة">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            @else
+                            <span class="text-muted">—</span>
                             @endif
                         </td>
                     </tr>

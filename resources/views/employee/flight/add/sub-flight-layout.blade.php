@@ -1,13 +1,4 @@
-<main class="h-full pb-16 overflow-y-auto scrollbar-hide">
-    <div class="container px-6 mx-auto grid">
-
-        <h2 class="mt-10 px-7 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {{ $title }}
-        </h2>
-
-        <div class="px-7 pt-8 pb-10 mb-8 ">
-
-
+<x-employee.form-page :title="$title" full :card="false">
             <form action="{{ route($route) }}" method="POST" id="flight">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-x-6 gap-y-4">
@@ -15,11 +6,9 @@
                     {{-- departure flight --}}
                     <div>
 
-                        <div class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="emp-section-card">
 
-                            <div class="text-gray-700 dark:text-white block mb-5">
-                                <p class="text-xl font-bold">مكان التدريب</p>
-                            </div>
+                            <p class="emp-section-title">مكان التدريب</p>
 
                             <div class="flex items-center mt-2 mb-5">
 
@@ -121,8 +110,7 @@
 
                             </div>
 
-                            <button id="submit_flight_crew"
-                                class="px-9 py-3 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
+                            <button id="submit_flight_crew" type="submit" class="emp-btn-primary mt-4">
                                 إضافة
                             </button>
 
@@ -131,7 +119,7 @@
                     </div>
 
                     <div>
-                        <div class="px-7 pt-4 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="emp-section-card">
 
                             {{-- number of craw --}}
                             <div class="me-1 mb-5">
@@ -157,6 +145,4 @@
                 </div>
 
             </form>
-        </div>
-    </div>
-</main>
+</x-employee.form-page>

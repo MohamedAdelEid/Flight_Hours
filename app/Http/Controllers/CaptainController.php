@@ -7,9 +7,17 @@ use App\Models\Airport;
 use App\Models\Flight;
 use App\Models\FlightHour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CaptainController extends Controller
 {
+    private function uploadImage(Request $request): ?string
+    {
+        if ($request->hasFile('image')) {
+            return $request->file('image')->store('flights', 'public');
+        }
+        return null;
+    }
     public function index()
     {
         $airports = Airport::all();
@@ -77,6 +85,7 @@ class CaptainController extends Controller
             'aircraft_id' => $validatedData['aircraft_id'],
             'flight_type' => 'normal_flight',
             'status' => 'completed',
+            'image' => $this->uploadImage($request),
         ]);
         FlightHour::calcFlightHours($departureFlight);
         return redirect()->route('captain.home')->with('successCreate', 'تم اضافة الرحلة بنجاح');
@@ -103,6 +112,7 @@ class CaptainController extends Controller
             'aircraft_id' => $validatedData['aircraft_id'],
             'flight_type' => $validatedData['flight_type'],
             'user_id' => auth()->user()->id,
+            'image' => $this->uploadImage($request),
         ]);
 
         return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');
@@ -129,6 +139,7 @@ class CaptainController extends Controller
             'aircraft_id' => $validatedData['aircraft_id'],
             'flight_type' => $validatedData['flight_type'],
             'user_id' => auth()->user()->id,
+            'image' => $this->uploadImage($request),
         ]);
 
         return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');
@@ -155,6 +166,7 @@ class CaptainController extends Controller
             'aircraft_id' => $validatedData['aircraft_id'],
             'flight_type' => $validatedData['flight_type'],
             'user_id' => auth()->user()->id,
+            'image' => $this->uploadImage($request),
         ]);
 
         return redirect()->back()->with('successCreate', 'تم إضافة الرحلة  بنجاح.');

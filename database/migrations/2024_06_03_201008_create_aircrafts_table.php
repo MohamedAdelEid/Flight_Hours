@@ -11,7 +11,7 @@ class CreateAircraftsTable extends Migration
         Schema::create('aircrafts', function (Blueprint $table) {
             $table->id();
             $table->string('aircraft_name');
-            $table->string('aircraft_code')->unique();
+            $table->string('aircraft_code');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

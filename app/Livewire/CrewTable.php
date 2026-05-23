@@ -3,28 +3,40 @@
 namespace App\Livewire;
 
 use App\Models\Crew;
-use App\Models\Job;
-use App\Models\JobType;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class CrewTable extends Component
 {
     use WithPagination;
+
     public $search = '';
+
     public $perPage = 5;
 
-    public function delete(Crew $crew)
+    public function updatingSearch(): void
     {
-        $deleteCrew = $crew->delete();
-        if ($deleteCrew) {
-            $this->dispatch('deleted');
-        }
+        $this->resetPage();
     }
+
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    public function delete(int $id): void
+    {
+        Crew::findOrFail($id)->delete();
+        $this->dispatch('deleted');
+    }
+
     public function render()
     {
         return view('livewire.crew-table', [
-            'crews' => Crew::search($this->search)->paginate($this->perPage)
+            'crews' => Crew::with('job')
+                ->search($this->search)
+                ->latest()
+                ->paginate($this->perPage),
         ]);
     }
 }

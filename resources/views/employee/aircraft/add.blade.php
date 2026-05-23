@@ -1,7 +1,6 @@
 @extends('layouts.employee.main')
 
 @section('alerts')
-    {{-- alert add AirCraft success --}}
     @if (Session::has('successCreate'))
         <script>
             iziToast.success({
@@ -13,113 +12,22 @@
 @endsection
 
 @section('content')
-    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
-        <div class="container px-6 mx-auto grid">
-
-            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                اضافة طائرة
-            </h2>
-
-            <div class="px-7 pt-8 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <form action="{{ route('aircraft.store') }}" method="POST">
-
-                    @csrf
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-6 gap-y-4">
-
-                        {{-- aircraft_name --}}
-                        <div>
-                            <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">اسم الطائرة</span>
-                                <input name="aircraft_name" value="{{ old('aircraft_name') }}"
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                            </label>
-                            @error('aircraft_name')
-                                <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                        <div>
-                            <div>
-                                <label class="block text-xl">
-                                    <span class="text-gray-700 dark:text-white block mb-2">طراز الطائرة</span>
-                                    <input name="aircraft_code" value="{{ old('aircraft_code') }}"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                </label>
-                                @error('aircraft_code')
-                                    <span class="text-xs text-red-600 dark:text-red-400">
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
-
-                        </div>
-                        <div>
-                            <label class="block text-xl">
-                                <span class="text-gray-700 dark:text-white block mb-2">اسم الصانع </span>
-                                <input name="manufacturer" value="{{ old('manufacturer') }}"
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                            </label>
-                            @error('manufacturer')
-                                <span class="text-xs text-red-600 dark:text-red-400">
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                        <div>
-                            <div>
-                                <label class="block text-xl">
-                                    <span class="text-gray-700 dark:text-white block mb-2"> رقم التسجيل </span>
-                                    <input name="registration_number" value="{{ old('registration_number') }}"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                </label>
-                                @error('registration_number')
-                                    <span class="text-xs text-red-600 dark:text-red-400">
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
-
-                        </div>
-                        <div>
-                            <div>
-                                <label class="block text-xl">
-                                    <span class="text-gray-700 dark:text-white block mb-2">
-                                        حالة الطائرة
-                                    </span>
-                                    <select id="job-status" name="status"
-                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                                        <option disabled {{ old('status') ? '' : 'selected' }}>اختر الحالة</option>
-                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>نشطة
-                                        </option>
-                                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير
-                                            نشطة</option>
-                                        <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>
-                                            داخل الصيانة </option>
-                                    </select>
-                                </label>
-                                @error('status')
-                                    <span class="text-xs text-red-600 dark:text-red-400">
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                    <button
-                        class="px-9 py-3 mt-6 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
-                        إضافة
-                    </button>
-                </form>
-
+    <x-employee.form-page title="إضافة طائرة">
+        <form action="{{ route('aircraft.store') }}" method="POST" class="space-y-6">
+            @csrf
+            <div class="emp-form-grid">
+                <x-employee.form.input name="aircraft_name" label="اسم الطائرة" />
+                <x-employee.form.input name="aircraft_code" label="طراز الطائرة" />
+                <x-employee.form.input name="manufacturer" label="اسم الصانع" />
+                <x-employee.form.input name="registration_number" label="رقم التسجيل" />
+                <x-employee.form.select name="status" label="حالة الطائرة" class="sm:col-span-2 sm:max-w-xs">
+                    <option value="" disabled {{ old('status') ? '' : 'selected' }}>اختر الحالة</option>
+                    <option value="active" @selected(old('status') == 'active')>نشطة</option>
+                    <option value="inactive" @selected(old('status') == 'inactive')>غير نشطة</option>
+                    <option value="maintenance" @selected(old('status') == 'maintenance')>داخل الصيانة</option>
+                </x-employee.form.select>
             </div>
-    </main>
+            <x-employee.form.submit label="إضافة" />
+        </form>
+    </x-employee.form-page>
 @endsection
-@push('script')
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-@endpush

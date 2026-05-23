@@ -28,7 +28,7 @@ class AircraftRequest extends FormRequest
 
         return [
             'aircraft_name' => ['required', 'string', 'max:255'],
-            'aircraft_code' => ['required', 'string', 'max:255', 'unique:aircrafts,aircraft_code'],
+            'aircraft_code' => ['required', 'string', 'max:255'],
             'manufacturer' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:active,inactive,maintenance'],
             'registration_number' => [
@@ -48,7 +48,6 @@ class AircraftRequest extends FormRequest
             'aircraft_code.required' => 'حقل رمز الطائرة مطلوب.',
             'aircraft_code.string' => 'يجب أن يكون رمز الطائرة نصًا.',
             'aircraft_code.max' => 'قد لا يكون رمز الطائرة أكبر من 255 حرفًا.',
-            'aircraft_code.unique' => 'كود الطائرة موجود بالفعل',
             'manufacturer.required' => 'حقل اسم الصانع مطلوب.',
             'manufacturer.string' => 'يجب أن يكون اسم الصانع نصًا.',
             'manufacturer.max' => 'قد لا يكون اسم الصانع أكبر من 255 حرفًا.',

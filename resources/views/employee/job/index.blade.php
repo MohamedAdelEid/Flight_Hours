@@ -1,7 +1,6 @@
 @extends('layouts.employee.main')
 
 @section('alerts')
-    {{-- alert add job success --}}
     @if (Session::has('successCreate'))
         <script>
             iziToast.success({
@@ -10,8 +9,6 @@
             });
         </script>
     @endif
-    
-    {{-- alert update job success --}}
     @if (Session::has('successUpdate'))
         <script>
             iziToast.success({
@@ -20,19 +17,10 @@
             });
         </script>
     @endif
-
 @endsection
 
 @section('content')
-    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
-        <div class="container grid px-6 mx-auto">
-
-            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                الوظائف
-            </h2>
-
-            @livewire('job-table')
-
-        </div>
-    </main>
+    <x-employee.list-page title="الوظائف">
+        @livewire('job-table')
+    </x-employee.list-page>
 @endsection

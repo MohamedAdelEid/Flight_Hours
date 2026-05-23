@@ -5,135 +5,125 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
 <html dir="rtl">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tourly - Travel agancy</title>
+    <title>Flight Hours - كابتن</title>
 
-    <!-- favicon -->
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
-    <!-- custom css link -->
     <link rel="stylesheet" href="{{ asset('assets/css/captain/style.css') }}">
 
-    {{-- flowbit cdn style --}}
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
 
-    <!-- link font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
-    <!-- google font link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 
     @stack('style')
 </head>
 
 <body id="top">
 
-    <!--#HEADER -->
-
     <header class="header" data-header>
-
         <div class="overlay" data-overlay></div>
-
         <div class="header-top">
             <div class="container">
-
                 <div class="header-btn-group">
-
                     <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
                         <ion-icon name="menu-outline"></ion-icon>
                     </button>
-
                 </div>
-
                 <a href="#" class="logo">
                     <img src="{{ asset('assets/imgs/main/logo-white.png') }}">
                 </a>
-
-
             </div>
         </div>
-
         <div class="header-bottom">
             <div class="container">
-
                 <nav class="navbar" data-navbar>
-
                     <div class="navbar-top">
-
                         <a href="#" class="logo">
                             <img src="{{ asset('assets/imgs/main/logo-white.png') }}">
                         </a>
-
                         <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
                             <ion-icon name="close-outline"></ion-icon>
                         </button>
-
                     </div>
-
                     <ul class="navbar-list">
-
                         <li>
                             <a href="{{ route('captain.home') }}" class="navbar-link" data-nav-link>الصفحة الرئيسية</a>
                         </li>
-
                         <li>
-                        <a href="#" class="navbar-link" data-nav-link data-modal-target="flightsModal" data-modal-toggle="flightsModal">الرحلات</a>
+                            <a href="#" class="navbar-link" data-nav-link data-modal-target="flightsModal" data-modal-toggle="flightsModal">الرحلات</a>
                         </li>
-                        <!-- <li>
-                            <a href="#"  class="navbar-link" data-nav-link>الصفحة الشخصية</a>
-                        </li> -->
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
-                                <button href="#destination" class="navbar-link" data-nav-link>تسجيل الخروج</button>
+                                <button class="navbar-link" data-nav-link>تسجيل الخروج</button>
                             </form>
                         </li>
-
-
                     </ul>
-
                 </nav>
-
             </div>
         </div>
-
-
     </header>
 
-    {{ $slot }}
+    @if (session('successCreate') || session('success'))
+    <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 mx-4 mt-4">
+        <span class="block sm:inline">{{ session('successCreate') ?? session('success') }}</span>
+        <span class="absolute top-0 bottom-0 left-0 px-4 py-3 cursor-pointer" onclick="this.closest('div').style.display='none'">
+            <svg class="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+    @endif
 
-    </article>
+    @if ($errors->any())
+    <div id="validation-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 mx-4 mt-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <span class="absolute top-0 bottom-0 left-0 px-4 py-3 cursor-pointer" onclick="this.closest('div').style.display='none'">
+            <svg class="fill-current h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+    @endif
+
+    <main>
+        <article>
+            {{ $slot }}
+        </article>
     </main>
 
-
-    <!-- #GO TO TOP -->
     <a href="#top" class="go-top" data-go-top>
         <ion-icon name="chevron-up-outline"></ion-icon>
     </a>
 
-
-    <!-- custom js link -->
     <script src="{{ asset('assets/js/captain/script.js') }}"></script>
 
-    {{-- ionicons link --}}
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 
-    {{-- flowbit cdn script --}}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
-    {{-- tailwind cdn --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+    <script>
+    setTimeout(() => {
+        document.querySelectorAll('[id$="-alert"]').forEach(a => a.style.display = 'none');
+    }, 5000);
+    </script>
+
+    @stack('scripts')
+
 <!-- Flights Modal -->
 <div id="flightsModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-4xl max-h-full">
-        <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-right">
                     رحلات الكابتن {{ auth()->user()->name }}
@@ -145,8 +135,7 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                     <span class="sr-only">إغلاق</span>
                 </button>
             </div>
-            
-            <!-- Modal body -->
+
             <div class="max-h-[500px] overflow-y-auto">
                 <ul class="border-b text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400"
                     id="flightsTab" data-tabs-toggle="#flightsTabContent" role="tablist">
@@ -172,9 +161,7 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                     </li>
                 </ul>
 
-                <!-- Tab content -->
                 <div id="flightsTabContent">
-                    <!-- Regular Flights Tab -->
                     <div class="hidden pt-4 px-4" id="regular-flights" role="tabpanel" aria-labelledby="regular-flights-tab">
                         @if($flights->where('flight_type', 'normal_flight')->count() > 0)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -189,6 +176,7 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                         <th scope="col" class="px-6 py-3">وقت الوصول</th>
                                         <th scope="col" class="px-6 py-3">الطائرة</th>
                                         <th scope="col" class="px-6 py-3">الحالة</th>
+                                        <th scope="col" class="px-6 py-3">صورة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -196,18 +184,25 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4">{{ $flight->flight_number }}</td>
                                         <td class="px-6 py-4">{{ $flight->flight_date }}</td>
-                                        <td class="px-6 py-4">{{ $flight->originAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ $flight->destinationAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->departure_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? 'Unknown' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->originAirport->airport_name ?? '—' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->destinationAirport->airport_name ?? '—' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->departure_time ? \Carbon\Carbon::parse($flight->departure_time)->format('h:i A') : '—' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->arrival_time ? \Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') : '—' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? '—' }}</td>
                                         <td class="px-6 py-4">
-                                            @if($flight->status == 'pending')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
-                                            @elseif($flight->status == 'completed')
+                                            @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
                                             @elseif($flight->status == 'cancelled')
                                             <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @else
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($flight->image)
+                                            <img src="{{ asset('storage/' . $flight->image) }}" alt="صورة الرحلة" class="w-12 h-12 object-cover rounded cursor-pointer" onclick="window.open('{{ asset("storage/" . $flight->image) }}', '_blank')">
+                                            @else
+                                            <span class="text-gray-400">—</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -222,7 +217,6 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                         @endif
                     </div>
 
-                    <!-- Simulation Flights Tab -->
                     <div class="hidden pt-4 px-4" id="simulation-flights" role="tabpanel" aria-labelledby="simulation-flights-tab">
                         @if($flights->where('flight_type', 'simulated_flight')->count() > 0)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -231,12 +225,9 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr>
                                         <th scope="col" class="px-6 py-3">رقم الرحلة</th>
                                         <th scope="col" class="px-6 py-3">تاريخ الرحلة</th>
-                                        <th scope="col" class="px-6 py-3">مطار المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">مطار الوصول</th>
-                                        <th scope="col" class="px-6 py-3">وقت المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">وقت الوصول</th>
                                         <th scope="col" class="px-6 py-3">الطائرة</th>
                                         <th scope="col" class="px-6 py-3">الحالة</th>
+                                        <th scope="col" class="px-6 py-3">صورة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -244,18 +235,21 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4">{{ $flight->flight_number }}</td>
                                         <td class="px-6 py-4">{{ $flight->flight_date }}</td>
-                                        <td class="px-6 py-4">{{ $flight->originAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ $flight->destinationAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->departure_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? 'Unknown' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? '—' }}</td>
                                         <td class="px-6 py-4">
-                                            @if($flight->status == 'pending')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
-                                            @elseif($flight->status == 'completed')
+                                            @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
                                             @elseif($flight->status == 'cancelled')
                                             <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @else
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($flight->image)
+                                            <img src="{{ asset('storage/' . $flight->image) }}" alt="صورة الرحلة" class="w-12 h-12 object-cover rounded cursor-pointer" onclick="window.open('{{ asset("storage/" . $flight->image) }}', '_blank')">
+                                            @else
+                                            <span class="text-gray-400">—</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -270,7 +264,6 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                         @endif
                     </div>
 
-                    <!-- Unloaded Flights Tab -->
                     <div class="hidden pt-4 px-4" id="unloaded-flights" role="tabpanel" aria-labelledby="unloaded-flights-tab">
                         @if($flights->where('flight_type', 'unloaded_flight')->count() > 0)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -279,12 +272,9 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr>
                                         <th scope="col" class="px-6 py-3">رقم الرحلة</th>
                                         <th scope="col" class="px-6 py-3">تاريخ الرحلة</th>
-                                        <th scope="col" class="px-6 py-3">مطار المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">مطار الوصول</th>
-                                        <th scope="col" class="px-6 py-3">وقت المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">وقت الوصول</th>
                                         <th scope="col" class="px-6 py-3">الطائرة</th>
                                         <th scope="col" class="px-6 py-3">الحالة</th>
+                                        <th scope="col" class="px-6 py-3">صورة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -292,18 +282,21 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4">{{ $flight->flight_number }}</td>
                                         <td class="px-6 py-4">{{ $flight->flight_date }}</td>
-                                        <td class="px-6 py-4">{{ $flight->originAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ $flight->destinationAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->departure_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? 'Unknown' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? '—' }}</td>
                                         <td class="px-6 py-4">
-                                            @if($flight->status == 'pending')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
-                                            @elseif($flight->status == 'completed')
+                                            @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
                                             @elseif($flight->status == 'cancelled')
                                             <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @else
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($flight->image)
+                                            <img src="{{ asset('storage/' . $flight->image) }}" alt="صورة الرحلة" class="w-12 h-12 object-cover rounded cursor-pointer" onclick="window.open('{{ asset("storage/" . $flight->image) }}', '_blank')">
+                                            @else
+                                            <span class="text-gray-400">—</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -318,7 +311,6 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                         @endif
                     </div>
 
-                    <!-- Test Flights Tab -->
                     <div class="hidden pt-4 px-4" id="test-flights" role="tabpanel" aria-labelledby="test-flights-tab">
                         @if($flights->where('flight_type', 'airplane_test')->count() > 0)
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -327,12 +319,9 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr>
                                         <th scope="col" class="px-6 py-3">رقم الرحلة</th>
                                         <th scope="col" class="px-6 py-3">تاريخ الرحلة</th>
-                                        <th scope="col" class="px-6 py-3">مطار المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">مطار الوصول</th>
-                                        <th scope="col" class="px-6 py-3">وقت المغادرة</th>
-                                        <th scope="col" class="px-6 py-3">وقت الوصول</th>
                                         <th scope="col" class="px-6 py-3">الطائرة</th>
                                         <th scope="col" class="px-6 py-3">الحالة</th>
+                                        <th scope="col" class="px-6 py-3">صورة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -340,18 +329,21 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4">{{ $flight->flight_number }}</td>
                                         <td class="px-6 py-4">{{ $flight->flight_date }}</td>
-                                        <td class="px-6 py-4">{{ $flight->originAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ $flight->destinationAirport->airport_name ?? 'Unknown' }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->departure_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') }}</td>
-                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? 'Unknown' }}</td>
+                                        <td class="px-6 py-4">{{ $flight->aircraft->aircraft_name ?? '—' }}</td>
                                         <td class="px-6 py-4">
-                                            @if($flight->status == 'pending')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
-                                            @elseif($flight->status == 'completed')
+                                            @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
                                             @elseif($flight->status == 'cancelled')
                                             <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @else
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($flight->image)
+                                            <img src="{{ asset('storage/' . $flight->image) }}" alt="صورة الرحلة" class="w-12 h-12 object-cover rounded cursor-pointer" onclick="window.open('{{ asset("storage/" . $flight->image) }}', '_blank')">
+                                            @else
+                                            <span class="text-gray-400">—</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -368,7 +360,6 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                 </div>
             </div>
 
-            <!-- Modal footer -->
             <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <button data-modal-hide="flightsModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">إغلاق</button>
             </div>

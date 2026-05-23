@@ -13,16 +13,7 @@
 @endsection
 
 @section('content')
-    <main class="h-full pb-16 overflow-y-auto scrollbar-hide">
-        <div class="container px-6 mx-auto grid">
-
-            <h2 class="mt-10 px-7 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                تعديل رحلة طيران
-            </h2>
-
-            <div class="px-7 pt-8 pb-10 mb-8 ">
-
-
+    <x-employee.form-page title="تعديل رحلة طيران" full :card="false">
                 <form action="{{ route('flight.update', $flight->id) }}" method="POST" id="flight">
                     @method('PUT')
                     @csrf
@@ -31,12 +22,11 @@
 
                         <div>
 
-                            <div class="px-7 pt-6 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <div class="emp-section-card">
 
-                                <div class="text-gray-700 dark:text-white block mb-5">
-                                    <p class="text-center text-xl font-bold">رحلة <span
-                                            class="text-blue-500">"{{ $flight->flight_number }}"</span></p>
-                                </div>
+                                <p class="emp-section-title">
+                                    رحلة <span class="text-sky-400">"{{ $flight->flight_number }}"</span>
+                                </p>
 
                                 <div class="flex items-center mt-2">
 
@@ -127,7 +117,7 @@
 
                             </div>
 
-                            <div class="px-7 pt-6 pb-10 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <div class="emp-section-card">
 
                                 {{-- date flight --}}
                                 <div class="mb-3">
@@ -289,7 +279,7 @@
                     </div>
 
 
-                    <div class="px-7 pt-4 pb-10 mb-7 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                    <div class="emp-section-card">
 
                         {{-- number of craw --}}
                         <div class="me-1 mb-5">
@@ -310,14 +300,11 @@
                         </div>
 
 
-                        <button id="submit_flight_crew"
-                            class="px-9 py-3 font-medium leading-5 text-white transition duration-200 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue">
+                        <button id="submit_flight_crew" type="submit" class="emp-btn-primary mt-4">
                             تعديل
                         </button>
                 </form>
-            </div>
-        </div>
-    </main>
+    </x-employee.form-page>
 @endsection
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
