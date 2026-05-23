@@ -464,7 +464,7 @@
 
     .filter-bar input,
     .filter-bar select {
-        background: #0f1117;
+        background: var(--theme-bg);
         border: 1px solid rgba(255,255,255,0.1);
         border-radius: 8px;
         padding: 8px 12px;
@@ -696,7 +696,7 @@
 
     .form-group input,
     .form-group select {
-        background: #0f1117;
+        background: var(--theme-bg);
         border: 1px solid rgba(255,255,255,0.1);
         border-radius: 8px;
         padding: 9px 12px;

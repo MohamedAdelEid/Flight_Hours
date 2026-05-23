@@ -5,6 +5,7 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
 <html dir="rtl">
 
 <head>
+    @include('components.theme-init')
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +33,14 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
         <div class="header-top">
             <div class="container">
                 <div class="header-btn-group">
+                    <button type="button" class="theme-toggle theme-toggle--captain" id="captain-theme-toggle" aria-label="تبديل الوضع">
+                        <svg class="theme-toggle__icon theme-toggle__icon--sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg class="theme-toggle__icon theme-toggle__icon--moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
                     <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
                         <ion-icon name="menu-outline"></ion-icon>
                     </button>
@@ -104,18 +113,40 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
     </a>
 
     <script src="{{ asset('assets/js/captain/script.js') }}"></script>
+    <script src="{{ asset('assets/js/theme.js') }}"></script>
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
 
     <script>
     setTimeout(() => {
         document.querySelectorAll('[id$="-alert"]').forEach(a => a.style.display = 'none');
     }, 5000);
+
+    (function () {
+        var btn = document.getElementById('captain-theme-toggle');
+        if (!btn || !window.FlightHoursTheme) return;
+
+        function syncIcons() {
+            var dark = document.documentElement.classList.contains('dark');
+            btn.querySelector('.theme-toggle__icon--sun').style.display = dark ? 'block' : 'none';
+            btn.querySelector('.theme-toggle__icon--moon').style.display = dark ? 'none' : 'block';
+        }
+
+        syncIcons();
+        btn.addEventListener('click', function () {
+            window.FlightHoursTheme.toggle();
+            syncIcons();
+        });
+        window.addEventListener('theme-changed', syncIcons);
+    })();
     </script>
 
     @stack('scripts')

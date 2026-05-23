@@ -12,6 +12,10 @@
 
         <ul class="flex items-center flex-shrink-0 space-x-6">
 
+            <li>
+                <x-theme-toggle />
+            </li>
+
             <!-- Profile menu -->
             <li class="relative">
                 <button class="profile-btn"
@@ -56,85 +60,3 @@
         </ul>
     </div>
 </header>
-
-<style>
-.navbar-header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    background: #0f1117;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.navbar-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    padding: 0 24px;
-}
-
-.hamburger {
-    padding: 4px;
-    margin-left: 20px;
-    border-radius: 4px;
-    color: rgba(255,255,255,0.6);
-    cursor: pointer;
-}
-
-.hamburger:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.05);
-}
-
-.profile-btn {
-    display: flex;
-    align-items: center;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.profile-img {
-    width: 32px;
-    height: 32px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.1);
-}
-
-.profile-menu {
-    position: absolute;
-    left: 0;
-    width: 180px;
-    padding: 8px;
-    margin-top: 8px;
-    background: #1a1d2e;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    z-index: 50;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 8px 12px;
-    color: rgba(255,255,255,0.7);
-    font-size: 14px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.menu-item:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.08);
-}
-
-.menu-item button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-</style>

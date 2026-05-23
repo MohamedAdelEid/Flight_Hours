@@ -260,266 +260,21 @@
 </div>
 @endsection
 
-@push('style')
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap');
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .dashboard-content {
-        background: #0f1117;
-        min-height: 100vh;
-        padding: 24px;
-        font-family: 'Tajawal', sans-serif;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .dashboard-header {
-        margin-bottom: 24px;
-    }
-
-    .dashboard-header h1 {
-        font-size: 22px;
-        font-weight: 600;
-        color: #fff;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    .stat-card {
-        background: #1a1d2e;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        padding: 20px 24px;
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-    }
-
-    .stat-card-indigo::before { background: #6366f1; }
-    .stat-card-cyan::before { background: #06b6d4; }
-    .stat-card-green::before { background: #10b981; }
-    .stat-card-amber::before { background: #f59e0b; }
-    .stat-card-purple::before { background: #8b5cf6; }
-    .stat-card-pink::before { background: #ec4899; }
-
-    .stat-icon {
-        font-size: 32px;
-        line-height: 1;
-    }
-
-    .stat-card-indigo .stat-icon { color: #6366f1; }
-    .stat-card-cyan .stat-icon { color: #06b6d4; }
-    .stat-card-green .stat-icon { color: #10b981; }
-    .stat-card-amber .stat-icon { color: #f59e0b; }
-    .stat-card-purple .stat-icon { color: #8b5cf6; }
-    .stat-card-pink .stat-icon { color: #ec4899; }
-
-    .stat-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .stat-label {
-        font-size: 13px;
-        color: rgba(255,255,255,0.5);
-        margin-bottom: 4px;
-    }
-
-    .stat-value {
-        font-size: 32px;
-        font-weight: 700;
-        color: #fff;
-    }
-
-    /* Charts Grid */
-    .charts-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    @media (max-width: 1024px) {
-        .charts-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .chart-card, .section-card {
-        background: #1a1d2e;
-        border-radius: 12px;
-        padding: 24px;
-    }
-
-    .chart-title, .section-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #fff;
-        margin-bottom: 16px;
-    }
-
-    .chart-container {
-        position: relative;
-        min-height: 200px;
-    }
-
-    .chart-container.chart-pie {
-        min-height: 180px;
-        max-height: 200px;
-    }
-
-    .chart-container.chart-bar {
-        min-height: 200px;
-    }
-
-    .chart-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 16px;
-        font-size: 12px;
-        color: rgba(255,255,255,0.6);
-    }
-
-    .chart-legend i {
-        margin-left: 4px;
-    }
-
-    .empty-chart {
-        color: rgba(255,255,255,0.3);
-        font-size: 14px;
-        padding: 60px 0;
-        text-align: center;
-    }
-
-    /* Two Columns */
-    .two-columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    @media (max-width: 768px) {
-        .two-columns {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* Table Styles */
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-    }
-
-    .data-table thead th {
-        background: rgba(255,255,255,0.04);
-        color: rgba(255,255,255,0.5);
-        font-weight: 500;
-        padding: 10px 16px;
-        text-align: right;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .data-table tbody td {
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        padding: 12px 16px;
-        color: #e2e8f0;
-    }
-
-    .data-table tbody tr:nth-child(even) {
-        background: rgba(255,255,255,0.02);
-    }
-
-    .data-table tbody tr:hover {
-        background: rgba(255,255,255,0.04);
-    }
-
-    /* Badges */
-    .badge {
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
-    }
-
-    .badge-success {
-        background: rgba(16,185,129,0.15);
-        color: #10b981;
-    }
-
-    .badge-warning {
-        background: rgba(245,158,11,0.15);
-        color: #f59e0b;
-    }
-
-    .badge-danger {
-        background: rgba(239,68,68,0.15);
-        color: #ef4444;
-    }
-
-    .empty-table {
-        color: rgba(255,255,255,0.3);
-        font-size: 14px;
-        padding: 40px 0;
-        text-align: center;
-    }
-
-    /* Section spacing */
-    .section-card {
-        background: #1a1d2e;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-bottom: 16px;
-    }
-
-    .section-card .section-title {
-        padding: 16px 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        margin-bottom: 0;
-    }
-
-    .section-card .table-responsive,
-    .section-card .chart-container {
-        padding: 0 20px 20px;
-    }
-</style>
-@endpush
-
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    function chartThemeColors() {
+        var root = getComputedStyle(document.documentElement);
+        return {
+            grid: root.getPropertyValue('--theme-chart-grid').trim() || 'rgba(0,0,0,0.06)',
+            tick: root.getPropertyValue('--theme-chart-tick').trim() || 'rgba(0,0,0,0.45)',
+            pointBorder: root.getPropertyValue('--theme-bg-card').trim() || '#ffffff',
+        };
+    }
+
+    var colors = chartThemeColors();
     // Flight Hours by Month Chart
     var flightHoursCanvas = document.getElementById('flightHoursChart');
     if (flightHoursCanvas) {
@@ -544,8 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     borderColor: '#6366f1',
                     backgroundColor: 'rgba(99, 102, 241, 0.1)',
                     pointBackgroundColor: '#6366f1',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
+                    pointBorderColor: colors.pointBorder,
+                    pointHoverBackgroundColor: colors.pointBorder,
                     pointHoverBorderColor: '#6366f1',
                     pointBorderWidth: 2,
                     pointRadius: 4,
@@ -562,12 +317,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: 'rgba(255,255,255,0.5)' }
+                        grid: { color: colors.grid },
+                        ticks: { color: colors.tick }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: 'rgba(255,255,255,0.5)' }
+                        ticks: { color: colors.tick }
                     }
                 }
             }
@@ -632,12 +387,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: 'rgba(255,255,255,0.5)' }
+                        grid: { color: colors.grid },
+                        ticks: { color: colors.tick }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: 'rgba(255,255,255,0.5)' }
+                        ticks: { color: colors.tick }
                     }
                 }
             }

@@ -244,7 +244,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     .dashboard-content {
-        background: #0f1117;
+        background: var(--theme-bg);
         min-height: 100vh;
         padding: 24px;
         font-family: 'Tajawal', sans-serif;
@@ -259,13 +259,13 @@
         align-items: flex-start;
         margin-bottom: 28px;
     }
-    .dash-greeting { font-size: 13px; color: rgba(255,255,255,0.45); margin: 0 0 4px; }
-    .dashboard-header h1 { font-size: 24px; font-weight: 700; color: #fff; margin: 0 0 4px; }
-    .dash-date { font-size: 12px; color: rgba(255,255,255,0.3); margin: 0; }
+    .dash-greeting { font-size: 13px; color: var(--theme-text-muted); margin: 0 0 4px; }
+    .dashboard-header h1 { font-size: 24px; font-weight: 700; color: var(--theme-text); margin: 0 0 4px; }
+    .dash-date { font-size: 12px; color: var(--theme-text-muted); margin: 0; }
 
     .btn-primary {
         background: #6366f1;
-        color: #fff;
+        color: var(--theme-text);
         border-radius: 8px;
         padding: 9px 18px;
         font-size: 13px;
@@ -282,7 +282,7 @@
     .section-label {
         font-size: 11px;
         font-weight: 600;
-        color: rgba(255,255,255,0.35);
+        color: var(--theme-section-label);
         text-transform: uppercase;
         letter-spacing: .08em;
         margin: 24px 0 12px;
@@ -298,8 +298,8 @@
     .stats-grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
     .stat-card {
-        background: #1a1d2e;
-        border: 1px solid rgba(255,255,255,0.06);
+        background: var(--theme-bg-card);
+        border: 1px solid var(--theme-border);
         border-radius: 12px;
         padding: 20px;
         display: flex;
@@ -330,8 +330,8 @@
     .stat-card-red    .stat-icon { color: #ef4444; }
 
     .stat-info { display: flex; flex-direction: column; }
-    .stat-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
-    .stat-value { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.1; }
+    .stat-label { font-size: 12px; color: var(--theme-text-muted); margin-bottom: 4px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--theme-text); line-height: 1.1; }
 
     /* ── Charts ── */
     .charts-grid {
@@ -341,14 +341,14 @@
         margin: 20px 0 24px;
     }
     .chart-card {
-        background: #1a1d2e;
+        background: var(--theme-bg-card);
         border-radius: 12px;
         padding: 20px;
     }
     .chart-title {
         font-size: 13px;
         font-weight: 600;
-        color: #fff;
+        color: var(--theme-text);
         margin-bottom: 16px;
     }
     .chart-container { position: relative; min-height: 200px; }
@@ -364,7 +364,7 @@
 
     /* ── Section card ── */
     .section-card {
-        background: #1a1d2e;
+        background: var(--theme-bg-card);
         border-radius: 12px;
         overflow: hidden;
     }
@@ -373,12 +373,12 @@
         justify-content: space-between;
         align-items: center;
         padding: 16px 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid var(--theme-border);
     }
     .section-title {
         font-size: 14px;
         font-weight: 600;
-        color: #fff;
+        color: var(--theme-text);
         margin: 0;
     }
     .view-all {
@@ -389,27 +389,27 @@
         align-items: center;
         gap: 4px;
     }
-    .view-all:hover { color: #fff; }
+    .view-all:hover { color: var(--theme-text); }
 
     /* ── Table ── */
     .table-responsive { overflow-x: auto; }
     .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .data-table thead th {
-        background: rgba(255,255,255,0.03);
-        color: rgba(255,255,255,0.4);
+        background: var(--theme-table-head);
+        color: var(--theme-text-muted);
         font-weight: 500;
         padding: 10px 16px;
         text-align: right;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid var(--theme-border);
     }
     .data-table tbody td {
         padding: 11px 16px;
-        color: #e2e8f0;
-        border-bottom: 1px solid rgba(255,255,255,0.04);
+        color: var(--theme-text-secondary);
+        border-bottom: 1px solid var(--theme-border-subtle);
         vertical-align: middle;
     }
     .data-table tbody tr:last-child td { border-bottom: none; }
-    .data-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .data-table tbody tr:hover { background: var(--theme-table-hover); }
 
     .user-cell { display: flex; align-items: center; gap: 10px; }
     .avatar {
@@ -418,10 +418,10 @@
         display: flex; align-items: center; justify-content: center;
         font-size: 12px; font-weight: 600; flex-shrink: 0;
     }
-    .user-name { font-weight: 500; color: #fff; font-size: 13px; }
-    .user-email { font-size: 11px; color: rgba(255,255,255,0.35); }
-    .muted-text { font-size: 12px; color: rgba(255,255,255,0.4); }
-    .empty-table { text-align: center; padding: 32px; color: rgba(255,255,255,0.3); font-size: 13px; }
+    .user-name { font-weight: 500; color: var(--theme-text); font-size: 13px; }
+    .user-email { font-size: 11px; color: var(--theme-text-muted); }
+    .muted-text { font-size: 12px; color: var(--theme-text-muted); }
+    .empty-table { text-align: center; padding: 32px; color: var(--theme-text-muted); font-size: 13px; }
 
     /* ── Captains list ── */
     .captain-list { padding: 8px 0; }
@@ -430,7 +430,7 @@
         align-items: center;
         gap: 12px;
         padding: 10px 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.04);
+        border-bottom: 1px solid var(--theme-border-subtle);
     }
     .captain-row:last-child { border-bottom: none; }
 
@@ -443,11 +443,11 @@
     .rank-1 { background: rgba(251,191,36,0.2);  color: #fbbf24; }
     .rank-2 { background: rgba(148,163,184,0.2); color: #94a3b8; }
     .rank-3 { background: rgba(180,83,9,0.2);    color: #b45309; }
-    .rank-4, .rank-5 { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+    .rank-4, .rank-5 { background: var(--theme-table-head); color: var(--theme-text-muted); }
 
     .captain-hours { text-align: left; }
     .hours-value { font-size: 14px; font-weight: 700; color: #10b981; }
-    .hours-label { font-size: 10px; color: rgba(255,255,255,0.3); }
+    .hours-label { font-size: 10px; color: var(--theme-text-muted); }
 
     /* ── Badges ── */
     .badge { padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
@@ -465,8 +465,8 @@
         margin-bottom: 24px;
     }
     .quick-card {
-        background: #1a1d2e;
-        border: 1px solid rgba(255,255,255,0.06);
+        background: var(--theme-bg-card);
+        border: 1px solid var(--theme-border);
         border-radius: 12px;
         padding: 20px 16px;
         text-decoration: none;
@@ -478,7 +478,7 @@
     }
     .quick-card:hover { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.3); }
     .quick-card i { font-size: 26px; }
-    .quick-card span { font-size: 13px; color: rgba(255,255,255,0.7); text-align: center; }
+    .quick-card span { font-size: 13px; color: var(--theme-text-secondary); text-align: center; }
 
     /* ── Responsive ── */
     @media (max-width: 1100px) {

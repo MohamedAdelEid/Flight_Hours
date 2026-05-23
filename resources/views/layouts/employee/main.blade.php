@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="ar" dir="rtl">
 
 <head>
+    @include('components.theme-init')
 
     <!-- ===== Header Start ===== -->
     @include('layouts.employee.partials.header')
@@ -10,7 +11,7 @@
 
 </head>
 
-<body>
+<body x-data="data()" x-init="init()">
 
     <!-- ===== Preloader Start ===== -->
     <div class="preloader">
@@ -19,7 +20,7 @@
     <!-- ===== Preloader End ===== -->
 
     <!-- ===== Page Wrapper Start ===== -->
-    <div class="flex min-h-screen bg-[#0f1117]" :class="{ 'overflow-hidden': isSideMenuOpen }">
+    <div class="flex min-h-screen app-shell" :class="{ 'overflow-hidden': isSideMenuOpen }">
 
         <!-- ===== Sidebar Start ===== -->
         @include('layouts.employee.partials.sidebar')

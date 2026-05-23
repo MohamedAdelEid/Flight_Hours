@@ -1532,3 +1532,94 @@ address {
   }
 
 }
+
+/*-----------------------------------*\
+ * #DARK THEME (captain area)
+\*-----------------------------------*/
+
+html.dark .theme-toggle__icon--sun,
+html.theme-dark .theme-toggle__icon--sun {
+  display: block;
+}
+
+html.dark .theme-toggle__icon--moon,
+html.theme-dark .theme-toggle__icon--moon,
+html:not(.dark):not(.theme-dark) .theme-toggle__icon--sun {
+  display: none;
+}
+
+html:not(.dark):not(.theme-dark) .theme-toggle__icon--moon {
+  display: block;
+}
+
+.theme-toggle--captain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-left: 8px;
+  border-radius: 50%;
+  border: 1px solid hsla(0, 0%, 100%, 0.25);
+  background: hsla(0, 0%, 100%, 0.12);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.theme-toggle--captain .theme-toggle__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle--captain:hover {
+  background: hsla(0, 0%, 100%, 0.22);
+}
+
+html.dark body,
+html.theme-dark body {
+  background: #0f172a;
+  color: var(--gainsboro);
+}
+
+html.dark .h2,
+html.dark .h3,
+html.theme-dark .h2,
+html.theme-dark .h3 {
+  color: var(--gainsboro);
+}
+
+html.dark .section-text,
+html.dark .card-text,
+html.theme-dark .section-text,
+html.theme-dark .card-text {
+  color: var(--spanish-gray);
+}
+
+html.dark .header .navbar,
+html.theme-dark .header .navbar {
+  background: #1e293b;
+}
+
+html.dark .package-card,
+html.dark .tour-card,
+html.theme-dark .package-card,
+html.theme-dark .tour-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html.dark .popular-card,
+html.theme-dark .popular-card {
+  background: #1e293b;
+}
+
+html.dark .footer,
+html.theme-dark .footer {
+  background: #0f172a;
+}
+
+html.dark .go-top,
+html.theme-dark .go-top {
+  background: var(--bright-navy-blue);
+}
