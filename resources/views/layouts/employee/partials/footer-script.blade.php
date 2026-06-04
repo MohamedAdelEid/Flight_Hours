@@ -1,7 +1,6 @@
 {{-- include script init  --}}
 <script src="{{ asset('assets/js/theme.js') }}"></script>
 <script src="{{ asset('assets/js/admin/init-alpine.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
 
 {{-- include script main  --}}
 <script src="{{ asset('assets/js/main.js') }}"></script>

@@ -1,4 +1,6 @@
 @push('style')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
 <style>
     .captain-stats-bar {
         display: flex;
@@ -254,7 +256,7 @@
                                                         <div>
                                                             <label class="block text-xl">
                                                                 <span class="text-gray-700 dark:text-white block">وقت المغادرة</span>
-                                                                <input name="departure_time" type="time" value="{{ old('departure_time') }}"
+                                                                <input name="departure_time" id="departure_time" type="time" value="{{ old('departure_time') }}"
                                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                             </label>
                                                             @error('departure_time')
@@ -264,7 +266,7 @@
                                                         <div>
                                                             <label class="block text-xl">
                                                                 <span class="text-gray-700 dark:text-white block">وقت الوصول</span>
-                                                                <input name="arrival_time" type="time" value="{{ old('arrival_time') }}"
+                                                                <input name="arrival_time" id="arrival_time" type="time" value="{{ old('arrival_time') }}"
                                                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                             </label>
                                                             @error('arrival_time')
@@ -503,3 +505,22 @@
         </div>
     </main>
 </x-captain-layout>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#departure_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+        flatpickr("#arrival_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+    });
+</script>
+@endpush

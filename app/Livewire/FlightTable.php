@@ -14,6 +14,8 @@ class FlightTable extends Component
 
     public $perPage = 5;
 
+    public $flightType = '';
+
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -21,6 +23,12 @@ class FlightTable extends Component
 
     public function updatedPerPage(): void
     {
+        $this->resetPage();
+    }
+
+    public function filterByType(string $type): void
+    {
+        $this->flightType = $type;
         $this->resetPage();
     }
 
@@ -32,11 +40,15 @@ class FlightTable extends Component
 
     public function render()
     {
+        $query = Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
+            ->search($this->search);
+
+        if ($this->flightType) {
+            $query->where('flight_type', $this->flightType);
+        }
+
         return view('livewire.flight-table', [
-            'flights' => Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
-                ->search($this->search)
-                ->latest()
-                ->paginate($this->perPage),
+            'flights' => $query->latest()->paginate($this->perPage),
         ]);
     }
 }

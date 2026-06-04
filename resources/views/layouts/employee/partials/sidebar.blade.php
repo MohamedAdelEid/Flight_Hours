@@ -98,6 +98,17 @@
             </ul>
 
             <div class="divider"></div>
+            <div class="section-label">الرحلات</div>
+            <ul class="px-2">
+                <li>
+                    <a href="{{ route('flight.index') }}" class="nav-item nav-sub">
+                        <i class="fa-solid fa-list icon-fa"></i>
+                        <span>عرض الرحلات</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="divider"></div>
             <div class="section-label">التقارير</div>
             <ul class="px-2">
                 <li>
