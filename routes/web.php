@@ -38,6 +38,8 @@ Route::middleware(employee::class)->group(function () {
     Route::post('/flight/store-test-flight', [OtherFlightsController::class, 'storeFlyingTest'])->name('flight.storeFlyingTest');
 
     Route::resource('flight', FlightController::class)->except(['create']);
+    Route::patch('/flight/{flight}/approve', [FlightController::class, 'approve'])->name('flight.approve');
+    Route::patch('/flight/{flight}/reject', [FlightController::class, 'reject'])->name('flight.reject');
     Route::get('/crew-by-financial-number/{job_id}', [FlightController::class, 'getCrewsByFinancialNumber']);
     Route::get('/jobs-by-type/{type_id}', [CrewController::class, 'getJobsByType']);
 });

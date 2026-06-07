@@ -223,10 +223,10 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                         <td class="px-6 py-4">
                                             @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
-                                            @elseif($flight->status == 'cancelled')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @elseif($flight->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">مرفوضة</span>
                                             @else
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">قيد المراجعة</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4">
@@ -270,10 +270,10 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                         <td class="px-6 py-4">
                                             @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
-                                            @elseif($flight->status == 'cancelled')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @elseif($flight->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">مرفوضة</span>
                                             @else
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">قيد المراجعة</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4">
@@ -317,10 +317,10 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                         <td class="px-6 py-4">
                                             @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
-                                            @elseif($flight->status == 'cancelled')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @elseif($flight->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">مرفوضة</span>
                                             @else
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">قيد المراجعة</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4">
@@ -364,10 +364,10 @@ $flights = \App\Models\Flight::with('originAirport', 'destinationAirport', 'airc
                                         <td class="px-6 py-4">
                                             @if($flight->status == 'completed')
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">مكتملة</span>
-                                            @elseif($flight->status == 'cancelled')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ملغاة</span>
+                                            @elseif($flight->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">مرفوضة</span>
                                             @else
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">قيد التنفيذ</span>
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">قيد المراجعة</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4">

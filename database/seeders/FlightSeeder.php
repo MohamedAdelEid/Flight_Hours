@@ -79,7 +79,7 @@ class FlightSeeder extends Seeder
                     'departure_time' => '2025-03-10 16:00:00',
                     'arrival_time' => '2025-03-10 17:30:00',
                     'flight_type' => 'normal_flight',
-                    'status' => 'pending',
+                    'status' => 'pending_review',
                     'user_id' => $user->id,
                     'created_at' => now(),
                     'updated_at' => now()
@@ -96,7 +96,7 @@ class FlightSeeder extends Seeder
                     'departure_time' => '2025-04-05 18:00:00',
                     'arrival_time' => '2025-04-05 19:30:00',
                     'flight_type' => 'normal_flight',
-                    'status' => 'pending',
+                    'status' => 'pending_review',
                     'user_id' => $user->id,
                     'created_at' => now(),
                     'updated_at' => now()

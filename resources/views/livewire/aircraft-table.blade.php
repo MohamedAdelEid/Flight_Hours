@@ -1,5 +1,5 @@
 <div>
-    <x-employee.data-table :paginator="$aircrafts" per-page-id="aircraft-per-page">
+    <x-employee.data-table :paginator="$aircrafts" per-page-id="aircraft-per-page" class="responsive-card-table">
         <x-slot:head>
             <tr>
                 <th scope="col">اسم الطائرة</th>
@@ -15,16 +15,16 @@
 
         @forelse ($aircrafts as $aircraft)
             <tr wire:key="aircraft-{{ $aircraft->id }}">
-                <td class="font-medium">{{ $aircraft->aircraft_name }}</td>
-                <td>{{ $aircraft->aircraft_code }}</td>
-                <td>{{ $aircraft->manufacturer }}</td>
-                <td>
+                <td data-label="اسم الطائرة" class="font-medium">{{ $aircraft->aircraft_name }}</td>
+                <td data-label="طراز الطائرة">{{ $aircraft->aircraft_code }}</td>
+                <td data-label="الصانع">{{ $aircraft->manufacturer }}</td>
+                <td data-label="الحالة">
                     <x-employee.table.status-badge :status="$aircraft->status" active-label="نشطة" inactive-label="غير نشطة" maintenance-label="صيانة" />
                 </td>
-                <td>{{ $aircraft->registration_number }}</td>
-                <td>{{ $aircraft->user->name }}</td>
-                <td>{{ $aircraft->created_at?->format('Y-m-d') ?? 'N/A' }}</td>
-                <td>
+                <td data-label="رقم التسجيل">{{ $aircraft->registration_number }}</td>
+                <td data-label="اسم الموظف">{{ $aircraft->user->name }}</td>
+                <td data-label="وقت الإضافة">{{ $aircraft->created_at?->format('Y-m-d') ?? 'N/A' }}</td>
+                <td data-label="إجراءات">
                     <div class="emp-actions">
                         <x-employee.table.edit-link :href="route('aircraft.edit', $aircraft->id)" />
                         <x-employee.table.delete-button :id="$aircraft->id" :name="$aircraft->aircraft_name" />

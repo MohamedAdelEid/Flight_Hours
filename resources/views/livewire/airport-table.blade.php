@@ -1,5 +1,5 @@
 <div>
-    <x-employee.data-table :paginator="$airports" per-page-id="airport-per-page">
+    <x-employee.data-table :paginator="$airports" per-page-id="airport-per-page" class="responsive-card-table">
         <x-slot:head>
             <tr>
                 <th scope="col">اسم المطار</th>
@@ -12,11 +12,11 @@
 
         @forelse ($airports as $airport)
             <tr wire:key="airport-{{ $airport->id }}">
-                <td class="font-medium">{{ $airport->airport_name }}</td>
-                <td>{{ $airport->airport_code }}</td>
-                <td>{{ $airport->user->name }}</td>
-                <td>{{ $airport->created_at?->format('Y-m-d') ?? 'N/A' }}</td>
-                <td>
+                <td data-label="اسم المطار" class="font-medium">{{ $airport->airport_name }}</td>
+                <td data-label="كود المطار">{{ $airport->airport_code }}</td>
+                <td data-label="الموظف">{{ $airport->user->name }}</td>
+                <td data-label="وقت الإضافة">{{ $airport->created_at?->format('Y-m-d') ?? 'N/A' }}</td>
+                <td data-label="إجراءات">
                     <div class="emp-actions">
                         <x-employee.table.edit-link :href="route('airport.edit', $airport->id)" />
                         <x-employee.table.delete-button :id="$airport->id" :name="$airport->airport_name" />

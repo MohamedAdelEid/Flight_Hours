@@ -19,6 +19,14 @@
             localStorage.removeItem('numOfCrew');
         </script>
     @endif
+    @if (Session::has('success'))
+        <script>
+            iziToast.success({
+                title: "{{ session('success') }}",
+                position: 'topRight',
+            });
+        </script>
+    @endif
 @endsection
 
 @section('content')

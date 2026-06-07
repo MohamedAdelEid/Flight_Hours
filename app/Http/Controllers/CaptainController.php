@@ -49,7 +49,6 @@ class CaptainController extends Controller
 
     public function addNormalFlight(Request $request)
     {
-        // dd($request->all());
         $validatedData = $request->validate([
             'departure_origin_airport_id' => 'required|exists:airports,id',
             'departure_destination_airport_id' => 'required|exists:airports,id|different:departure_origin_airport_id',
@@ -84,7 +83,7 @@ class CaptainController extends Controller
             'user_id' => auth()->user()->id,
             'aircraft_id' => $validatedData['aircraft_id'],
             'flight_type' => 'normal_flight',
-            'status' => 'completed',
+            'status' => Flight::STATUS_PENDING_REVIEW,
             'image' => $this->uploadImage($request),
         ]);
         FlightHour::calcFlightHours($departureFlight);
@@ -105,12 +104,12 @@ class CaptainController extends Controller
                 'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.',
                 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
             ]);
-        $validatedData['flight_type'] = 'simulated_flight';
         Flight::create([
             'flight_number' => $validatedData['flight_number'],
             'flight_date' => $validatedData['flight_date'],
             'aircraft_id' => $validatedData['aircraft_id'],
-            'flight_type' => $validatedData['flight_type'],
+            'flight_type' => 'simulated_flight',
+            'status' => Flight::STATUS_PENDING_REVIEW,
             'user_id' => auth()->user()->id,
             'image' => $this->uploadImage($request),
         ]);
@@ -132,12 +131,12 @@ class CaptainController extends Controller
                 'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.',
                 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
             ]);
-        $validatedData['flight_type'] = 'unloaded_flight';
         Flight::create([
             'flight_number' => $validatedData['flight_number'],
             'flight_date' => $validatedData['flight_date'],
             'aircraft_id' => $validatedData['aircraft_id'],
-            'flight_type' => $validatedData['flight_type'],
+            'flight_type' => 'unloaded_flight',
+            'status' => Flight::STATUS_PENDING_REVIEW,
             'user_id' => auth()->user()->id,
             'image' => $this->uploadImage($request),
         ]);
@@ -159,12 +158,12 @@ class CaptainController extends Controller
                 'flight_date.after_or_equal' => 'يجب أن يكون تاريخ الرحلة في اليوم الحالي أو في المستقبل.',
                 'flight_number.required' => 'مطلوب إدخال رقم الرحلة.',
             ]);
-        $validatedData['flight_type'] = 'airplane_test';
         Flight::create([
             'flight_number' => $validatedData['flight_number'],
             'flight_date' => $validatedData['flight_date'],
             'aircraft_id' => $validatedData['aircraft_id'],
-            'flight_type' => $validatedData['flight_type'],
+            'flight_type' => 'airplane_test',
+            'status' => Flight::STATUS_PENDING_REVIEW,
             'user_id' => auth()->user()->id,
             'image' => $this->uploadImage($request),
         ]);

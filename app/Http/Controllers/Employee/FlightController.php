@@ -168,6 +168,31 @@ class FlightController extends Controller
         return redirect()->route('flight.index')->with('success', 'تم تعديل الرحلة بنجاح');
     }
 
+    public function approve(Flight $flight)
+    {
+        $flight->update([
+            'status' => Flight::STATUS_COMPLETED,
+            'reviewed_by' => auth()->id(),
+            'reviewed_at' => now(),
+            'rejection_reason' => null,
+        ]);
+        return redirect()->route('flight.index')->with('success', 'تم اعتماد الرحلة بنجاح');
+    }
+
+    public function reject(Request $request, Flight $flight)
+    {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+        $flight->update([
+            'status' => Flight::STATUS_REJECTED,
+            'reviewed_by' => auth()->id(),
+            'reviewed_at' => now(),
+            'rejection_reason' => $request->rejection_reason,
+        ]);
+        return redirect()->route('flight.index')->with('success', 'تم رفض الرحلة');
+    }
+
     public function destroy(Flight $flight)
     {
         $flight->delete();
