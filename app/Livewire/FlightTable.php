@@ -3,6 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Flight;
+use App\Models\OtherFlights;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,6 +18,8 @@ class FlightTable extends Component
     public $perPage = 5;
 
     public $flightType = '';
+
+    protected $paginationTheme = 'tailwind';
 
     public function updatingSearch(): void
     {
@@ -32,23 +37,68 @@ class FlightTable extends Component
         $this->resetPage();
     }
 
-    public function delete(int $id): void
+    public function delete(int $id, string $source = 'flights'): void
     {
-        Flight::findOrFail($id)->delete();
+        if ($source === 'other_flights') {
+            OtherFlights::findOrFail($id)->delete();
+        } else {
+            Flight::findOrFail($id)->delete();
+        }
         $this->dispatch('deleted');
     }
 
     public function render()
     {
-        $query = Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
-            ->search($this->search);
+        $showNormal = !$this->flightType || $this->flightType === 'normal_flight';
+        $showOther = !$this->flightType || in_array($this->flightType, ['simulated_flight', 'unloaded_flight', 'airplane_test']);
 
-        if ($this->flightType) {
-            $query->where('flight_type', $this->flightType);
+        $flights = collect();
+        if ($showNormal) {
+            $query = Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
+                ->search($this->search);
+            if ($this->flightType) {
+                $query->where('flight_type', $this->flightType);
+            }
+            $flights = $query->latest()->get()->map(function ($f) {
+                $f->flight_source = 'flights';
+                return $f;
+            });
         }
 
+        $otherFlights = collect();
+        if ($showOther) {
+            $query = OtherFlights::with(['aircraft', 'airport']);
+            if ($this->search) {
+                $query->where(function ($q) {
+                    $q->where('flight_number', 'like', "%{$this->search}%")
+                      ->orWhere('flight_date', 'like', "%{$this->search}%");
+                });
+            }
+            if ($this->flightType) {
+                $query->where('flight_type', $this->flightType);
+            }
+            $otherFlights = $query->latest()->get()->map(function ($of) {
+                $of->flight_source = 'other_flights';
+                return $of;
+            });
+        }
+
+        $combined = $flights->concat($otherFlights)->sortByDesc('created_at');
+        $total = $combined->count();
+
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $items = $combined->forPage($page, $this->perPage)->values();
+
+        $paginator = new LengthAwarePaginator(
+            $items,
+            $total,
+            $this->perPage,
+            $page,
+            ['path' => Paginator::resolveCurrentPath()]
+        );
+
         return view('livewire.flight-table', [
-            'flights' => $query->latest()->paginate($this->perPage),
+            'flights' => $paginator,
         ]);
     }
 }

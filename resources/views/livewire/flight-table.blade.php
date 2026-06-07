@@ -48,25 +48,60 @@
         </x-slot:head>
 
         @forelse ($flights as $flight)
-            <tr wire:key="flight-{{ $flight->id }}">
-                <td class="font-medium">{{ $flight->aircraft->aircraft_name ?? '—' }}</td>
+            @php $isNormal = $flight->flight_type === 'normal_flight'; @endphp
+            <tr wire:key="flight-{{ $flight->flight_source }}-{{ $flight->id }}">
+                <td class="font-medium">{{ $flight->aircraft?->aircraft_name ?? '—' }}</td>
                 <td>{{ $flight->flight_number }}</td>
                 <td>{{ $flight->flight_date }}</td>
-                <td>{{ $flight->originAirport->airport_name ?? '—' }}</td>
-                <td>{{ $flight->destinationAirport->airport_name ?? '—' }}</td>
-                <td>{{ $flight->flight_type }}</td>
+                <td>{{ optional($flight->originAirport ?? $flight->airport)->airport_name ?? '—' }}</td>
+                <td>{{ $isNormal ? ($flight->destinationAirport->airport_name ?? '—') : '—' }}</td>
                 <td>
-                    @if ($flight->flightHours->isNotEmpty())
+                    @if ($flight->flight_type === 'normal_flight')
+                        رحلة عادية
+                    @elseif ($flight->flight_type === 'simulated_flight')
+                        طيران تشبيهي
+                    @elseif ($flight->flight_type === 'unloaded_flight')
+                        طيران غير محمل
+                    @elseif ($flight->flight_type === 'airplane_test')
+                        اختبار طائرة
+                    @else
+                        {{ $flight->flight_type }}
+                    @endif
+                </td>
+                <td>
+                    @if ($isNormal && $flight->flightHours?->isNotEmpty())
                         {{ $flight->flightHours->first()->hours }}
                     @else
                         N/A
                     @endif
                 </td>
-                <td>{{ $flight->aircraft_number ?? '—' }}</td>
+                <td>{{ $isNormal ? ($flight->aircraft_number ?? '—') : '—' }}</td>
                 <td>
                     <div class="emp-actions">
-                        <x-employee.table.edit-link :href="route('flight.edit', $flight->id)" />
-                        <x-employee.table.delete-button :id="$flight->id" :name="'رحلة ' . $flight->flight_number" />
+                        @if ($isNormal && $flight->flight_source === 'flights')
+                            <x-employee.table.edit-link :href="route('flight.edit', $flight->id)" />
+                        @endif
+                        <button type="button" class="emp-action emp-action--delete" aria-label="حذف"
+                            @click="
+                                Swal.fire({
+                                    title: 'هل أنت متأكد؟',
+                                    html: 'أنت تريد حذف <strong>' + @js($flight->flight_number) + '</strong>',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    cancelButtonText: 'إلغاء',
+                                    confirmButtonText: 'نعم، احذفه!',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                }).then((result) => {
+                                    if (result.isConfirmed) $wire.delete({{ $flight->id }}, '{{ $flight->flight_source }}');
+                                });
+                            ">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
                     </div>
                 </td>
             </tr>

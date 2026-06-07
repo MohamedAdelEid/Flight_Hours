@@ -106,6 +106,30 @@
                         <span>عرض الرحلات</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('flight.createNormalFlight') }}" class="nav-item nav-sub">
+                        <i class="fa-solid fa-plus icon-fa"></i>
+                        <span>إضافة رحلة عادية</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('flight.createSimulatedFlight') }}" class="nav-item nav-sub">
+                        <i class="fa-solid fa-plus icon-fa"></i>
+                        <span>إضافة طيران تشبيهي</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('flight.createUnloadedFlight') }}" class="nav-item nav-sub">
+                        <i class="fa-solid fa-plus icon-fa"></i>
+                        <span>إضافة طيران غير محمل</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('flight.createFlyingTest') }}" class="nav-item nav-sub">
+                        <i class="fa-solid fa-plus icon-fa"></i>
+                        <span>إضافة اختبار طائرة</span>
+                    </a>
+                </li>
             </ul>
 
             <div class="divider"></div>
