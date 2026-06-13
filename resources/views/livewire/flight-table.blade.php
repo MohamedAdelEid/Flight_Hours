@@ -27,6 +27,23 @@
         </button>
     </div>
 
+    @php
+        function flightCrew($flight) {
+            if ($flight->flight_source === 'flights') {
+                return $flight->crewNormalFlights->map(fn($cnf) => [
+                    'name' => ($cnf->crew->first_name ?? '') . ' ' . ($cnf->crew->last_name ?? ''),
+                    'financial_number' => $cnf->crew->financial_number ?? '',
+                    'job' => $cnf->job?->job_name ?? ($cnf->crew->job->job_name ?? '—'),
+                ]);
+            }
+            return $flight->crewFlights->map(fn($cf) => [
+                'name' => ($cf->crew->first_name ?? '') . ' ' . ($cf->crew->last_name ?? ''),
+                'financial_number' => $cf->crew->financial_number ?? '',
+                'job' => $cf->job?->job_name ?? ($cf->crew->job->job_name ?? '—'),
+            ]);
+        }
+    @endphp
+
     <x-employee.data-table :paginator="$flights" per-page-id="flight-per-page" class="responsive-card-table">
         <x-slot:head>
             <tr>
@@ -36,6 +53,7 @@
                 <th scope="col">مطار القيام</th>
                 <th scope="col">مطار الوصول</th>
                 <th scope="col">نوع الرحلة</th>
+                <th scope="col">طاقم الرحلة</th>
                 <th scope="col">ساعات الرحلة</th>
                 <th scope="col">رقم تسجيل الطائرة</th>
                 <th scope="col">الحالة</th>
@@ -44,7 +62,11 @@
         </x-slot:head>
 
         @forelse ($flights as $flight)
-            @php $isNormal = $flight->flight_type === 'normal_flight'; @endphp
+            @php
+                $isNormal = $flight->flight_type === 'normal_flight';
+                $crewMembers = flightCrew($flight);
+                $crewCount = $crewMembers->count();
+            @endphp
             <tr wire:key="flight-{{ $flight->flight_source }}-{{ $flight->id }}">
                 <td data-label="اسم الطائرة" class="font-medium">{{ $flight->aircraft?->aircraft_name ?? '—' }}</td>
                 <td data-label="رقم الرحلة">{{ $flight->flight_number }}</td>
@@ -62,6 +84,39 @@
                         اختبار طائرة
                     @else
                         {{ $flight->flight_type }}
+                    @endif
+                </td>
+                <td data-label="طاقم الرحلة">
+                    @if ($crewCount > 0)
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" @click.outside="open = false"
+                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20 transition cursor-pointer">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                {{ $crewCount }} فرد
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                                class="absolute z-20 mt-2 w-72 rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5 dark:ring-white/10 p-2 right-0"
+                                @click.outside="open = false">
+                                <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 py-1.5 border-b border-gray-100 dark:border-gray-700 mb-1">طاقم الرحلة</div>
+                                @foreach ($crewMembers as $member)
+                                    <div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ mb_substr($member['name'], 0, 1) }}
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $member['name'] }}</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                                <span dir="ltr" class="text-gray-400 dark:text-gray-500">{{ $member['financial_number'] }}</span>
+                                                <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">{{ $member['job'] }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <span class="text-gray-400 dark:text-gray-500 text-sm">—</span>
                     @endif
                 </td>
                 <td data-label="ساعات الرحلة">
@@ -137,7 +192,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="10" class="emp-data-table__empty">لا يوجد رحلات</td>
+                <td colspan="11" class="emp-data-table__empty">لا يوجد رحلات</td>
             </tr>
         @endforelse
     </x-employee.data-table>

@@ -19,5 +19,8 @@ class CrewNormalFlights extends Model
     public function crew(){
         return $this->belongsTo(Crew::class);
     }
+    public function job(){
+        return $this->belongsTo(Job::class);
+    }
 
 }

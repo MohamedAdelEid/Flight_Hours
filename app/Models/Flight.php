@@ -54,6 +54,10 @@ class Flight extends Model
     {
         return $this->belongsToMany(Crew::class, 'crews_flights');
     }
+    public function crewNormalFlights()
+    {
+        return $this->hasMany(CrewNormalFlights::class, 'flight_id');
+    }
     public function scopeSearch($query, $value)
     {
         return $query->where('flight_number', 'like', "%{$value}%")

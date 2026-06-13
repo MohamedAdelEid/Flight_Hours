@@ -54,7 +54,7 @@ class FlightTable extends Component
 
         $flights = collect();
         if ($showNormal) {
-            $query = Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours'])
+            $query = Flight::with(['aircraft', 'originAirport', 'destinationAirport', 'flightHours', 'crewNormalFlights.crew.job', 'crewNormalFlights.job'])
                 ->search($this->search);
             if ($this->flightType) {
                 $query->where('flight_type', $this->flightType);
@@ -67,7 +67,7 @@ class FlightTable extends Component
 
         $otherFlights = collect();
         if ($showOther) {
-            $query = OtherFlights::with(['aircraft', 'airport']);
+            $query = OtherFlights::with(['aircraft', 'airport', 'crewFlights.crew.job', 'crewFlights.job']);
             if ($this->search) {
                 $query->where(function ($q) {
                     $q->where('flight_number', 'like', "%{$this->search}%")
