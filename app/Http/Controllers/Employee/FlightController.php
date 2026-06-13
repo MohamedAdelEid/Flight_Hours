@@ -101,21 +101,26 @@ class FlightController extends Controller
             FlightHour::calcFlightHours($returnFlight);
 
             $financial_numbers = $data['financial_number'];
-            foreach ($financial_numbers as $financial_number) {
+            $job_ids = $data['job_id'];
+            foreach ($financial_numbers as $index => $financial_number) {
                 $crew_id = Crew::where('financial_number', $financial_number)->value('id');
                 if (!$crew_id) {
                     throw new \Exception('Invalid crew ID for financial number: ' . $financial_number);
                 }
 
+                $job_id = $job_ids[$index] ?? null;
+
                 CrewNormalFlights::create([
                     'flight_id' => $departureFlight->id,
                     'crew_id' => $crew_id,
+                    'job_id' => $job_id,
                     'user_id' => auth()->user()->id,
                 ]);
 
                 CrewNormalFlights::create([
                     'flight_id' => $returnFlight->id,
                     'crew_id' => $crew_id,
+                    'job_id' => $job_id,
                     'user_id' => auth()->user()->id,
                 ]);
             }

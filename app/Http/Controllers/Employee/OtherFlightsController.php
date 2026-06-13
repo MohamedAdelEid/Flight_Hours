@@ -31,6 +31,7 @@ class OtherFlightsController extends Controller
         ]);
 
         $financial_numbers = $data['financial_number'];
+        $job_ids = $data['job_id'] ?? [];
         $training_start_at = $data['training_start_at'];
         $training_end_at = $data['training_end_at'];
 
@@ -42,6 +43,7 @@ class OtherFlightsController extends Controller
             CrewFlight::create([
                 'flight_id' => $flight->id,
                 'crew_id' => $crew_id,
+                'job_id' => $job_ids[$index] ?? null,
                 'user_id' => auth()->user()->id,
                 'training_start_at' => $training_start_at[$index],
                 'training_end_at' => $training_end_at[$index]

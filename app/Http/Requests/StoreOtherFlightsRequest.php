@@ -25,6 +25,8 @@ class StoreOtherFlightsRequest extends FormRequest
             'training_end_at' => 'required|array',
             'training_end_at.*' => 'required|date_format:H:i|after:training_start_at.*',
             'financial_number' => ['required', 'array', 'exists:crews,financial_number', new UniqueFinancialNumber],
+            'job_id' => ['required', 'array'],
+            'job_id.*' => ['required', 'exists:jobs,id'],
         ];
     }
 
@@ -50,6 +52,10 @@ class StoreOtherFlightsRequest extends FormRequest
             'financial_number.required' => 'اختر الرقم المالي أولاً.',
             'financial_number.exists' => 'هذا الرقم المالي غير صالح.',
             'financial_number.array' => 'يجب أن تختار مجموعة من الأرقام المالية.',
+            'job_id.required' => 'اختر الوظيفة لكل فرد طاقم.',
+            'job_id.array' => 'يجب أن تختار مجموعة من الوظائف.',
+            'job_id.*.required' => 'الوظيفة مطلوبة لكل فرد طاقم.',
+            'job_id.*.exists' => 'الوظيفة المحددة غير صالحة.',
         ];
     }
 

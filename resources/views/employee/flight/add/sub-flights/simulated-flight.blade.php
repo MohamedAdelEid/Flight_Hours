@@ -18,6 +18,7 @@
 
 @push('script')
     <script>window.allCrews = @json($crews);</script>
+    <script>window.allJobs = @json($jobs);</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @include('employee/flight/add/crew-section/crewFlight' , ['typeFlight' => 'subFlight'])
 @endpush

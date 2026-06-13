@@ -22,7 +22,7 @@
         });
 
         function buildCrewSelect(id) {
-            var html = '<select name="financial_number[]" required class="financial-number-' + id +
+            var html = '<select name="financial_number[]" onchange="setDefaultJob(' + id + ')" required class="financial-number-' + id +
                 ' block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input">';
             html += '<option value="">اختر الرقم المالي ...</option>';
             if (window.allCrews) {
@@ -38,6 +38,20 @@
             return html;
         }
 
+        function buildJobSelect(id) {
+            var html = '<select name="job_id[]" required class="job-select-' + id +
+                ' block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input">';
+            html += '<option value="">اختر الوظيفة ...</option>';
+            if (window.allJobs) {
+                for (var i = 0; i < window.allJobs.length; i++) {
+                    var j = window.allJobs[i];
+                    html += '<option value="' + j.id + '">' + j.job_name + '</option>';
+                }
+            }
+            html += '</select>';
+            return html;
+        }
+
         function mainFlight(numberOfCrew) {
             var htmlContent = '';
             for (var j = 1; j <= numberOfCrew; j++) {
@@ -47,6 +61,12 @@
                             '<label class="text-gray-700 dark:text-white block text-lg">الرقم المالي' +
                                 buildCrewSelect(j) +
                                 '@error("financial_number")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
+                            '</label>' +
+                        '</div>' +
+                        '<div class="w-full me-2">' +
+                            '<label class="text-gray-700 dark:text-white block text-lg">وظيفته علي الطائرة' +
+                                buildJobSelect(j) +
+                                '@error("job_id")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
                             '</label>' +
                         '</div>' +
                     '</div>';
@@ -66,6 +86,12 @@
                                 '<label class="text-gray-700 dark:text-white block text-lg">الرقم المالي' +
                                     buildCrewSelect(j) +
                                     '@error("financial_number")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
+                                '</label>' +
+                            '</div>' +
+                            '<div class="w-full me-2">' +
+                                '<label class="text-gray-700 dark:text-white block text-lg">وظيفته علي الطائرة' +
+                                    buildJobSelect(j) +
+                                    '@error("job_id")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
                                 '</label>' +
                             '</div>' +
                         '</div>' +
@@ -89,4 +115,20 @@
             }
         }
     });
+
+    function setDefaultJob(id) {
+        var financialNumber = document.querySelector('.financial-number-' + id).value;
+        var jobSelect = document.querySelector('.job-select-' + id);
+        if (financialNumber && window.allCrews) {
+            for (var i = 0; i < window.allCrews.length; i++) {
+                var c = window.allCrews[i];
+                if (c.financial_number === financialNumber && c.job) {
+                    jobSelect.value = c.job.id;
+                    break;
+                }
+            }
+        } else {
+            jobSelect.value = '';
+        }
+    }
 </script>
