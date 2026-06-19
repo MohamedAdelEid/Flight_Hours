@@ -22,7 +22,7 @@
         });
 
         function buildCrewSelect(id) {
-            var html = '<select name="financial_number[]" onchange="setDefaultJob(' + id + ')" required class="financial-number-' + id +
+            var html = '<select name="financial_number[]" onchange="updateJobOptions(' + id + ')" required class="financial-number-' + id +
                 ' block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input">';
             html += '<option value="">اختر الرقم المالي ...</option>';
             if (window.allCrews) {
@@ -42,12 +42,6 @@
             var html = '<select name="job_id[]" required class="job-select-' + id +
                 ' block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 dark:text-gray-300 form-input">';
             html += '<option value="">اختر الوظيفة ...</option>';
-            if (window.allJobs) {
-                for (var i = 0; i < window.allJobs.length; i++) {
-                    var j = window.allJobs[i];
-                    html += '<option value="' + j.id + '">' + j.job_name + '</option>';
-                }
-            }
             html += '</select>';
             return html;
         }
@@ -116,19 +110,38 @@
         }
     });
 
-    function setDefaultJob(id) {
+    function updateJobOptions(id) {
         var financialNumber = document.querySelector('.financial-number-' + id).value;
         var jobSelect = document.querySelector('.job-select-' + id);
+
+        var crew = null;
         if (financialNumber && window.allCrews) {
             for (var i = 0; i < window.allCrews.length; i++) {
-                var c = window.allCrews[i];
-                if (c.financial_number === financialNumber && c.job) {
-                    jobSelect.value = c.job.id;
+                if (window.allCrews[i].financial_number === financialNumber) {
+                    crew = window.allCrews[i];
                     break;
                 }
             }
-        } else {
-            jobSelect.value = '';
+        }
+
+        var typeId = crew && crew.job ? crew.job.type_id : null;
+
+        jobSelect.innerHTML = '<option value="">اختر الوظيفة ...</option>';
+
+        if (window.allJobs && typeId !== null) {
+            for (var i = 0; i < window.allJobs.length; i++) {
+                var j = window.allJobs[i];
+                if (j.type_id === typeId) {
+                    var option = document.createElement('option');
+                    option.value = j.id;
+                    option.textContent = j.job_name;
+                    jobSelect.appendChild(option);
+                }
+            }
+        }
+
+        if (crew && crew.job) {
+            jobSelect.value = crew.job.id;
         }
     }
 </script>

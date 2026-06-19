@@ -36,7 +36,7 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-            'crews' => Crew::all(),
+            'crews' => Crew::with('job')->get(),
         ]);
     }
     // create unloaded flight
@@ -46,7 +46,7 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-            'crews' => Crew::all(),
+            'crews' => Crew::with('job')->get(),
         ]);
     }
     // create simulated flight
@@ -56,7 +56,7 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-            'crews' => Crew::all(),
+            'crews' => Crew::with('job')->get(),
         ]);
     }
     // create flying test
@@ -66,7 +66,7 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-            'crews' => Crew::all(),
+            'crews' => Crew::with('job')->get(),
         ]);
     }
     public function store(FlightRequest $flightRequest)
@@ -144,7 +144,7 @@ class FlightController extends Controller
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
-            'crews' => Crew::all(),
+            'crews' => Crew::with('job')->get(),
             'crewFlights' => $crewFlight,
         ]);
     }
