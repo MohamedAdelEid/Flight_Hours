@@ -5,9 +5,10 @@
         var divInputsCrew = document.querySelector('#icontainer-inputs-crew');
 
         var savedNumberOfCrew = localStorage.getItem('numOfCrew');
-        if (savedNumberOfCrew) {
-            numOfCrew.value = savedNumberOfCrew;
-            {{ $typeFlight }}(parseInt(savedNumberOfCrew));
+        var initialCrew = savedNumberOfCrew || (numOfCrew.value && parseInt(numOfCrew.value));
+        if (initialCrew) {
+            numOfCrew.value = initialCrew;
+            {{ $typeFlight }}(parseInt(initialCrew));
         }
 
         submitOfCrew.addEventListener('click', function(event) {
@@ -44,6 +45,42 @@
             html += '<option value="">اختر الوظيفة ...</option>';
             html += '</select>';
             return html;
+        }
+
+        function editMainFlight(numberOfCrew) {
+            var htmlContent = '';
+            for (var j = 1; j <= numberOfCrew; j++) {
+                var crewData = window.editCrewFlights && window.editCrewFlights[j - 1]
+                    ? window.editCrewFlights[j - 1] : null;
+                htmlContent +=
+                    '<div class="block md:flex lg:flex xl:flex items-center mb-3 rounded-md border border-stroke py-5 px-2.5 shadow-1 dark:border-gray-600">' +
+                        '<div class="w-full me-2">' +
+                            '<label class="text-gray-700 dark:text-white block text-lg">الرقم المالي' +
+                                buildCrewSelect(j) +
+                                '@error("financial_number")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
+                            '</label>' +
+                        '</div>' +
+                        '<div class="w-full me-2">' +
+                            '<label class="text-gray-700 dark:text-white block text-lg">وظيفته علي الطائرة' +
+                                buildJobSelect(j) +
+                                '@error("job_id")<span class="text-xs text-red-600 dark:text-red-400 ms-3">{{ $message }}</span>@enderror' +
+                            '</label>' +
+                        '</div>' +
+                    '</div>';
+            }
+            if (divInputsCrew) {
+                divInputsCrew.innerHTML = htmlContent;
+            }
+            if (window.editCrewFlights) {
+                for (var j = 1; j <= numberOfCrew && j <= window.editCrewFlights.length; j++) {
+                    var crewData = window.editCrewFlights[j - 1];
+                    var finSelect = document.querySelector('.financial-number-' + j);
+                    if (finSelect && crewData && crewData.crew) {
+                        finSelect.value = crewData.crew.financial_number;
+                        updateJobOptions(j);
+                    }
+                }
+            }
         }
 
         function mainFlight(numberOfCrew) {

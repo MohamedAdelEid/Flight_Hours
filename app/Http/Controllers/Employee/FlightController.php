@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class FlightController extends Controller
 {
@@ -74,7 +75,10 @@ class FlightController extends Controller
         $data = $flightRequest->validated();
 
         try {
+            $roundTripId = (string) \Illuminate\Support\Str::uuid();
+
             $departureFlight = Flight::create([
+                'round_trip_id' => $roundTripId,
                 'flight_number' => $data['departure_flight_number'],
                 'flight_date' => $data['departure_flight_date'],
                 'aircraft_id' => $data['departure_aircraft_id'],
@@ -88,6 +92,7 @@ class FlightController extends Controller
             FlightHour::calcFlightHours($departureFlight);
 
             $returnFlight = Flight::create([
+                'round_trip_id' => $roundTripId,
                 'flight_number' => $data['return_flight_number'],
                 'flight_date' => $data['return_flight_date'],
                 'aircraft_id' => $data['return_aircraft_id'],
@@ -136,23 +141,121 @@ class FlightController extends Controller
     }
     public function edit(Flight $flight)
     {
+        $departureFlight = $flight;
+        $returnFlight = null;
+        $crewFlights = collect();
 
-        $crewFlight = CrewNormalFlights::where('flight_id', $flight->id)->get();
+        if ($flight->round_trip_id) {
+            $pair = Flight::where('round_trip_id', $flight->round_trip_id)
+                ->where('id', '!=', $flight->id)
+                ->first();
+
+            $departureFlight = $flight->origin_airport_id < ($pair?->origin_airport_id ?? $flight->origin_airport_id) ? $flight : $pair;
+            $returnFlight = $flight->origin_airport_id < ($pair?->origin_airport_id ?? $flight->origin_airport_id) ? $pair : $flight;
+
+            if (!$returnFlight) {
+                $returnFlight = $departureFlight;
+            }
+
+            $crewFlights = CrewNormalFlights::where('flight_id', $departureFlight->id)->with('crew.job', 'job')->get();
+        } else {
+            $crewFlights = CrewNormalFlights::where('flight_id', $flight->id)->with('crew.job', 'job')->get();
+        }
 
         return view('employee.flight.edit', [
-            'flight' => $flight,
+            'departureFlight' => $departureFlight,
+            'returnFlight' => $returnFlight,
             'aircrafts' => Aircraft::all(),
             'airports' => Airport::all(),
             'jobs' => Job::all(),
             'crews' => Crew::with('job')->get(),
-            'crewFlights' => $crewFlight,
+            'crewFlights' => $crewFlights,
         ]);
     }
     public function update(UpdateFlightRequest $request, Flight $flight)
     {
-        $validatedData = $request->validated();
-        $flight->update($validatedData);
-        $flight->refresh();
+        $data = $request->validated();
+
+        try {
+            if ($flight->round_trip_id) {
+                $returnFlight = Flight::where('round_trip_id', $flight->round_trip_id)
+                    ->where('id', '!=', $flight->id)
+                    ->first();
+            } else {
+                $returnFlight = null;
+            }
+
+            $flight->update([
+                'flight_number' => $data['departure_flight_number'],
+                'flight_date' => $data['departure_flight_date'],
+                'aircraft_id' => $data['departure_aircraft_id'],
+                'origin_airport_id' => $data['departure_origin_airport_id'],
+                'destination_airport_id' => $data['departure_destination_airport_id'],
+                'departure_time' => $data['departure_departure_time'],
+                'arrival_time' => $data['departure_arrival_time'],
+                'aircraft_number' => $data['departure_aircraft_number'],
+            ]);
+
+            $this->recalcHours($flight);
+
+            if ($returnFlight) {
+                $returnFlight->update([
+                    'flight_number' => $data['return_flight_number'],
+                    'flight_date' => $data['return_flight_date'],
+                    'aircraft_id' => $data['return_aircraft_id'],
+                    'origin_airport_id' => $data['return_origin_airport_id'],
+                    'destination_airport_id' => $data['return_destination_airport_id'],
+                    'departure_time' => $data['return_departure_time'],
+                    'arrival_time' => $data['return_arrival_time'],
+                    'aircraft_number' => $data['return_aircraft_number'],
+                ]);
+
+                $this->recalcHours($returnFlight);
+            }
+
+            $flightId = $departureFlightId = $flight->id;
+            $returnFlightId = $returnFlight?->id ?? $flightId;
+
+            CrewNormalFlights::where('flight_id', $flightId)->delete();
+            if ($returnFlightId !== $flightId) {
+                CrewNormalFlights::where('flight_id', $returnFlightId)->delete();
+            }
+
+            $financial_numbers = $data['financial_number'];
+            $job_ids = $data['job_id'];
+            foreach ($financial_numbers as $index => $financial_number) {
+                $crew_id = Crew::where('financial_number', $financial_number)->value('id');
+                if (!$crew_id) {
+                    throw new \Exception('Invalid crew ID for financial number: ' . $financial_number);
+                }
+
+                $job_id = $job_ids[$index] ?? null;
+
+                CrewNormalFlights::create([
+                    'flight_id' => $flightId,
+                    'crew_id' => $crew_id,
+                    'job_id' => $job_id,
+                    'user_id' => auth()->user()->id,
+                ]);
+
+                if ($returnFlightId !== $flightId) {
+                    CrewNormalFlights::create([
+                        'flight_id' => $returnFlightId,
+                        'crew_id' => $crew_id,
+                        'job_id' => $job_id,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
+            }
+
+            return redirect()->route('flight.index')->with('success', 'تم تعديل الرحلة بنجاح');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء تعديل الرحلة: ' . $e->getMessage());
+        }
+    }
+
+    private function recalcHours(Flight $flight)
+    {
         $departureTime = Carbon::parse($flight->departure_time);
         $arrivalTime = Carbon::parse($flight->arrival_time);
         $diff = $arrivalTime->diff($departureTime);
@@ -160,9 +263,7 @@ class FlightController extends Controller
 
         $flightHours = FlightHour::where('flight_id', $flight->id)->first();
         if ($flightHours) {
-            $flightHours->update([
-                'hours' => $hours
-            ]);
+            $flightHours->update(['hours' => $hours]);
         } else {
             FlightHour::create([
                 'aircraft_id' => $flight->aircraft_id,
@@ -170,17 +271,24 @@ class FlightController extends Controller
                 'hours' => $hours
             ]);
         }
-        return redirect()->route('flight.index')->with('success', 'تم تعديل الرحلة بنجاح');
     }
 
     public function approve(Flight $flight)
     {
-        $flight->update([
+        $data = [
             'status' => Flight::STATUS_COMPLETED,
             'reviewed_by' => auth()->id(),
             'reviewed_at' => now(),
             'rejection_reason' => null,
-        ]);
+        ];
+        $flight->update($data);
+
+        if ($flight->round_trip_id) {
+            Flight::where('round_trip_id', $flight->round_trip_id)
+                ->where('id', '!=', $flight->id)
+                ->update($data);
+        }
+
         return redirect()->route('flight.index')->with('success', 'تم اعتماد الرحلة بنجاح');
     }
 
@@ -189,12 +297,20 @@ class FlightController extends Controller
         $request->validate([
             'rejection_reason' => 'required|string|max:1000',
         ]);
-        $flight->update([
+        $data = [
             'status' => Flight::STATUS_REJECTED,
             'reviewed_by' => auth()->id(),
             'reviewed_at' => now(),
             'rejection_reason' => $request->rejection_reason,
-        ]);
+        ];
+        $flight->update($data);
+
+        if ($flight->round_trip_id) {
+            Flight::where('round_trip_id', $flight->round_trip_id)
+                ->where('id', '!=', $flight->id)
+                ->update($data);
+        }
+
         return redirect()->route('flight.index')->with('success', 'تم رفض الرحلة');
     }
 

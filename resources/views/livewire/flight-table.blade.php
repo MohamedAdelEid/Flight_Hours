@@ -28,19 +28,22 @@
     </div>
 
     @php
-        function flightCrew($flight) {
-            if ($flight->flight_source === 'flights') {
-                return $flight->crewNormalFlights->map(fn($cnf) => [
-                    'name' => ($cnf->crew->first_name ?? '') . ' ' . ($cnf->crew->last_name ?? ''),
-                    'financial_number' => $cnf->crew->financial_number ?? '',
-                    'job' => $cnf->job?->job_name ?? ($cnf->crew->job->job_name ?? '—'),
+        if (!function_exists('flightCrew')) {
+            function flightCrew($flight) {
+                $crew = collect();
+                if (isset($flight->_isCombined) && $flight->_isCombined) {
+                    $crew = $flight->crewNormalFlights ?? collect();
+                } elseif ($flight->flight_source === 'flights') {
+                    $crew = $flight->crewNormalFlights ?? collect();
+                } elseif (isset($flight->crewFlights)) {
+                    $crew = $flight->crewFlights ?? collect();
+                }
+                return $crew->map(fn($m) => [
+                    'name' => ($m->crew->first_name ?? '') . ' ' . ($m->crew->last_name ?? ''),
+                    'financial_number' => $m->crew->financial_number ?? '',
+                    'job' => $m->job?->job_name ?? ($m->crew->job->job_name ?? '—'),
                 ]);
             }
-            return $flight->crewFlights->map(fn($cf) => [
-                'name' => ($cf->crew->first_name ?? '') . ' ' . ($cf->crew->last_name ?? ''),
-                'financial_number' => $cf->crew->financial_number ?? '',
-                'job' => $cf->job?->job_name ?? ($cf->crew->job->job_name ?? '—'),
-            ]);
         }
     @endphp
 
@@ -50,8 +53,7 @@
                 <th scope="col">اسم الطائرة</th>
                 <th scope="col">رقم الرحلة</th>
                 <th scope="col">تاريخ الرحلة</th>
-                <th scope="col">مطار القيام</th>
-                <th scope="col">مطار الوصول</th>
+                <th scope="col">المطار</th>
                 <th scope="col">نوع الرحلة</th>
                 <th scope="col">طاقم الرحلة</th>
                 <th scope="col">ساعات الرحلة</th>
@@ -63,25 +65,65 @@
 
         @forelse ($flights as $flight)
             @php
-                $isNormal = $flight->flight_type === 'normal_flight';
+                $isCombined = isset($flight->_isCombined) && $flight->_isCombined;
                 $crewMembers = flightCrew($flight);
                 $crewCount = $crewMembers->count();
             @endphp
             <tr wire:key="flight-{{ $flight->flight_source }}-{{ $flight->id }}">
                 <td data-label="اسم الطائرة" class="font-medium">{{ $flight->aircraft?->aircraft_name ?? '—' }}</td>
-                <td data-label="رقم الرحلة">{{ $flight->flight_number }}</td>
-                <td data-label="تاريخ الرحلة">{{ $flight->flight_date }}</td>
-                <td data-label="مطار القيام">{{ optional($flight->originAirport ?? $flight->airport)->airport_name ?? '—' }}</td>
-                <td data-label="مطار الوصول">{{ $isNormal ? ($flight->destinationAirport->airport_name ?? '—') : '—' }}</td>
+                <td data-label="رقم الرحلة">
+                    @if ($isCombined)
+                        <div class="text-xs leading-relaxed">
+                            <span class="text-blue-600 dark:text-blue-400 font-semibold">ذهاب:</span> {{ $flight->flight_number }}<br>
+                            <span class="text-emerald-600 dark:text-emerald-400 font-semibold">عودة:</span> {{ $flight->return_flight_number }}
+                        </div>
+                    @else
+                        {{ $flight->flight_number }}
+                    @endif
+                </td>
+                <td data-label="تاريخ الرحلة">
+                    @if ($isCombined)
+                        <div class="text-xs leading-relaxed">
+                            <span class="text-blue-600 dark:text-blue-400">ذهاب:</span> {{ $flight->flight_date }}<br>
+                            <span class="text-emerald-600 dark:text-emerald-400">عودة:</span> {{ $flight->return_flight_date }}
+                        </div>
+                    @else
+                        {{ $flight->flight_date }}
+                    @endif
+                </td>
+                <td data-label="المطار">
+                    @if ($isCombined)
+                        <div class="text-xs leading-relaxed">
+                            <div class="mb-1">
+                                <span class="text-blue-600 dark:text-blue-400 font-medium">ذهاب:</span>
+                                {{ $flight->origin_airport?->airport_name ?? '—' }}
+                                <i class="fa-solid fa-arrow-left text-xs mx-0.5"></i>
+                                {{ $flight->destination_airport?->airport_name ?? '—' }}
+                            </div>
+                            <div>
+                                <span class="text-emerald-600 dark:text-emerald-400 font-medium">عودة:</span>
+                                {{ $flight->return_origin_airport?->airport_name ?? '—' }}
+                                <i class="fa-solid fa-arrow-left text-xs mx-0.5"></i>
+                                {{ $flight->return_destination_airport?->airport_name ?? '—' }}
+                            </div>
+                        </div>
+                    @else
+                        {{ optional($flight->originAirport ?? $flight->airport)->airport_name ?? '—' }}
+                        @if ($flight->flight_source === 'flights' && !$isCombined)
+                            <i class="fa-solid fa-arrow-left text-xs mx-0.5"></i>
+                            {{ $flight->destinationAirport->airport_name ?? '—' }}
+                        @endif
+                    @endif
+                </td>
                 <td data-label="نوع الرحلة">
                     @if ($flight->flight_type === 'normal_flight')
-                        رحلة عادية
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">رحلة عادية</span>
                     @elseif ($flight->flight_type === 'simulated_flight')
-                        طيران تشبيهي
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400">طيران تشبيهي</span>
                     @elseif ($flight->flight_type === 'unloaded_flight')
-                        طيران غير محمل
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400">طيران غير محمل</span>
                     @elseif ($flight->flight_type === 'airplane_test')
-                        اختبار طائرة
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400">اختبار طائرة</span>
                     @else
                         {{ $flight->flight_type }}
                     @endif
@@ -120,31 +162,85 @@
                     @endif
                 </td>
                 <td data-label="ساعات الرحلة">
-                    @if ($isNormal && $flight->flightHours?->isNotEmpty())
+                    @if ($isCombined)
+                        <div class="text-xs leading-relaxed">
+                            @php
+                                $depHours = $flight->flightHours?->first()?->hours ?? 'N/A';
+                                $retHours = $flight->returnFlightHours?->first()?->hours ?? 'N/A';
+                                $total = is_numeric($depHours) && is_numeric($retHours) ? $depHours + $retHours : 'N/A';
+                            @endphp
+                            <span class="text-blue-600 dark:text-blue-400">ذهاب:</span> {{ is_numeric($depHours) ? number_format($depHours, 1) : $depHours }}<br>
+                            <span class="text-emerald-600 dark:text-emerald-400">عودة:</span> {{ is_numeric($retHours) ? number_format($retHours, 1) : $retHours }}<br>
+                            <span class="font-semibold text-gray-800 dark:text-gray-200">المجموع:</span> {{ is_numeric($total) ? number_format($total, 1) : $total }}
+                        </div>
+                    @elseif ($flight->flight_source === 'flights' && $flight->flightHours?->isNotEmpty())
                         {{ $flight->flightHours->first()->hours }}
                     @else
                         N/A
                     @endif
                 </td>
-                <td data-label="رقم تسجيل الطائرة">{{ $isNormal ? ($flight->aircraft_number ?? '—') : '—' }}</td>
+                <td data-label="رقم تسجيل الطائرة">{{ $isCombined ? ($flight->aircraft_number ?? '—') : ($flight->aircraft_number ?? ($flight->flight_source === 'flights' ? ($flight->aircraft_number ?? '—') : '—')) }}</td>
                 <td data-label="الحالة">
-                    @if ($flight->status === 'completed')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">مكتملة</span>
-                    @elseif ($flight->status === 'rejected')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20">مرفوضة</span>
-                    @elseif ($flight->status === 'pending_review')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-500 dark:ring-amber-500/20">قيد المراجعة</span>
+                    @if ($isCombined)
+                        @php $mergedStatus = $flight->status; @endphp
+                        @if ($mergedStatus === 'completed')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">مكتملة</span>
+                        @elseif ($mergedStatus === 'rejected')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20">مرفوضة</span>
+                        @elseif ($mergedStatus === 'pending_review')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-500 dark:ring-amber-500/20">قيد المراجعة</span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/10 dark:bg-gray-500/10 dark:text-gray-400 dark:ring-gray-500/20">{{ $flight->status }}</span>
+                        @endif
+                    @elseif ($flight->flight_source === 'flights')
+                        @if ($flight->status === 'completed')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">مكتملة</span>
+                        @elseif ($flight->status === 'rejected')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20">مرفوضة</span>
+                        @elseif ($flight->status === 'pending_review')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-500 dark:ring-amber-500/20">قيد المراجعة</span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/10 dark:bg-gray-500/10 dark:text-gray-400 dark:ring-gray-500/20">{{ $flight->status }}</span>
+                        @endif
                     @else
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/10 dark:bg-gray-500/10 dark:text-gray-400 dark:ring-gray-500/20">{{ $flight->status }}</span>
+                        @if ($flight->status === 'completed')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">مكتملة</span>
+                        @elseif ($flight->status === 'rejected')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20">مرفوضة</span>
+                        @elseif ($flight->status === 'pending_review')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-500 dark:ring-amber-500/20">قيد المراجعة</span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/10 dark:bg-gray-500/10 dark:text-gray-400 dark:ring-gray-500/20">{{ $flight->status }}</span>
+                        @endif
                     @endif
                 </td>
                 <td data-label="إجراءات">
                     <div class="emp-actions">
-                        @if ($isNormal && $flight->flight_source === 'flights')
+                        @if ($isCombined)
+                            <x-employee.table.edit-link :href="route('flight.edit', $flight->id)" />
+                        @elseif ($flight->flight_source === 'flights')
                             <x-employee.table.edit-link :href="route('flight.edit', $flight->id)" />
                         @endif
 
-                        @if ($flight->flight_source === 'flights' && $flight->status === 'pending_review')
+                        @if ($isCombined && $flight->_depStatus === 'pending_review')
+                            <form action="{{ route('flight.approve', $flight->_depId) }}" method="POST" class="inline-block" id="approve-form-{{ $flight->_depId }}">
+                                @csrf
+                                @method('PATCH')
+                                <button type="button" class="emp-action emp-action--approve" aria-label="اعتماد"
+                                    onclick="confirmApprove({{ $flight->_depId }})">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                </button>
+                            </form>
+                            <button type="button" class="emp-action emp-action--reject" aria-label="رفض"
+                                onclick="confirmReject({{ $flight->_depId }})">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                            <form action="{{ route('flight.reject', $flight->_depId) }}" method="POST" class="inline-block" id="reject-form-{{ $flight->_depId }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="rejection_reason" id="rejection_reason_{{ $flight->_depId }}">
+                            </form>
+                        @elseif ($flight->flight_source === 'flights' && !$isCombined && $flight->status === 'pending_review')
                             <form action="{{ route('flight.approve', $flight->id) }}" method="POST" class="inline-block" id="approve-form-{{ $flight->id }}">
                                 @csrf
                                 @method('PATCH')
@@ -170,7 +266,7 @@
                             @click="
                                 Swal.fire({
                                     title: 'هل أنت متأكد؟',
-                                    html: 'أنت تريد حذف <strong>' + @js($flight->flight_number) + '</strong>',
+                                    html: 'أنت تريد حذف <strong>' + @js($isCombined ? $flight->flight_number . ' / ' . $flight->return_flight_number : $flight->flight_number) + '</strong>',
                                     icon: 'warning',
                                     showCancelButton: true,
                                     cancelButtonText: 'إلغاء',
@@ -178,7 +274,7 @@
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
                                 }).then((result) => {
-                                    if (result.isConfirmed) $wire.delete({{ $flight->id }}, '{{ $flight->flight_source }}');
+                                    if (result.isConfirmed) $wire.delete({{ $isCombined ? $flight->id : $flight->id }}, '{{ $isCombined ? 'combined' : ($flight->flight_source === 'flights' ? 'flights' : 'other_flights') }}');
                                 });
                             ">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -192,7 +288,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="11" class="emp-data-table__empty">لا يوجد رحلات</td>
+                <td colspan="10" class="emp-data-table__empty">لا يوجد رحلات</td>
             </tr>
         @endforelse
     </x-employee.data-table>
