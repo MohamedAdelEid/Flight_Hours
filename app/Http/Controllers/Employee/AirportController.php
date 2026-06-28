@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Airport;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -12,8 +13,9 @@ class AirportController extends Controller
 {
     public function index()
     {
-        $airports = Airport::all()->sortByDesc('created_at');
-        return view('employee.airport.index', ['airports' => $airports]);
+        return view('employee.airport.index', [
+            'airports' => Airport::orderByDesc('created_at')->get(),
+        ]);
     }
 
     public function create()
@@ -23,19 +25,7 @@ class AirportController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'airport_name' => ['required', 'string', 'max:255'],
-            'airport_code' => ['required', 'string', 'max:10','unique:airports,airport_code'],
-        ], [
-            'airport_name.required' => 'حقل اسم المطار مطلوب.',
-            'airport_name.string' => 'يجب أن يكون اسم المطار نصًا.',
-            'airport_name.max' => 'قد لا يكون اسم المطار أكبر من 255 حرفًا.',
-            'airport_code.required' => 'حقل كود المطار مطلوب.',
-            'airport_code.string' => 'يجب أن يكون رمز المطار نصًا.',
-            'airport_code.max' => 'قد لا يكون رمز المطار أكبر من 10 أحرف.',
-            'airport_code.unique' => 'لا يمكن تكرار هذا الكود لاكثر من مطار'
-        ]);
-
+        $validatedData = $this->validatedData($request);
 
         Airport::create([
             'airport_name' => $validatedData['airport_name'],
@@ -58,37 +48,33 @@ class AirportController extends Controller
 
     public function update(Request $request, Airport $airport)
     {
-        $validatedData = $request->validate([
+        $validatedData = $this->validatedData($request, $airport);
+        $airport->update($validatedData);
+
+        return redirect()->route('airport.index')->with('successUpdate', 'تم تعديل المطار بنجاح');
+    }
+
+    public function destroy(Airport $airport)
+    {
+        try {
+            $airport->delete();
+        } catch (QueryException) {
+            return redirect()->route('airport.index')->with('error', 'لا يمكن حذف المطار لأنه مرتبط برحلات');
+        }
+
+        return redirect()->route('airport.index')->with('success', 'تم حذف المطار بنجاح');
+    }
+
+    private function validatedData(Request $request, ?Airport $airport = null): array
+    {
+        return $request->validate([
             'airport_name' => ['required', 'string', 'max:255'],
             'airport_code' => [
                 'required',
                 'string',
                 'max:10',
-                Rule::unique('airports', 'airport_code')->ignore($airport->id),
+                Rule::unique('airports', 'airport_code')->ignore($airport?->id),
             ],
-        ], [
-            'airport_name.required' => 'حقل اسم المطار مطلوب.',
-            'airport_name.string' => 'يجب أن يكون اسم المطار نصًا.',
-            'airport_name.max' => 'قد لا يكون اسم المطار أكبر من 255 حرفًا.',
-            'airport_code.required' => 'حقل كود المطار مطلوب.',
-            'airport_code.string' => 'يجب أن يكون رمز المطار نصًا.',
-            'airport_code.max' => 'قد لا يكون رمز المطار أكبر من 10 أحرف.',
-            'airport_code.unique' => 'لا يمكن تكرار هذا الكود لاكثر من مطار',
         ]);
-
-        $airport->update([
-            'airport_name' => $validatedData['airport_name'],
-            'airport_code' => $validatedData['airport_code'],
-        ]);
-
-        return redirect()->route('airport.index')
-            ->with('successUpdate', 'تم التعديل علي المطار بنجاح');
     }
-
-    public function destroy(Airport $airport)
-    {
-        $airport->delete();
-        return redirect()->route('airport.index')->with('success', 'تم حذف المطار بنجاح');
-    }
-
 }

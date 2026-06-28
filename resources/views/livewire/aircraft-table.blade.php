@@ -46,6 +46,12 @@
                     position: 'topRight',
                 });
             });
+            $wire.on('delete-failed', () => {
+                iziToast.error({
+                    title: 'لا يمكن حذف الطائرة لأنها مرتبطة برحلات أو ساعات طيران',
+                    position: 'topRight',
+                });
+            });
         </script>
     @endscript
 </div>

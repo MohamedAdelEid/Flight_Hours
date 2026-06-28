@@ -34,8 +34,12 @@ class JobTable extends Component
 
     public function delete(int $id): void
     {
-        Job::findOrFail($id)->delete();
-        $this->dispatch('deleted');
+        try {
+            Job::findOrFail($id)->delete();
+            $this->dispatch('deleted');
+        } catch (QueryException) {
+            $this->dispatch('delete-failed');
+        }
     }
 
     public function render()

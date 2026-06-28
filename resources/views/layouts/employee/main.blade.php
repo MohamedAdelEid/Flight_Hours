@@ -3,6 +3,7 @@
 
 <head>
     @include('components.theme-init')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- ===== Header Start ===== -->
     @include('layouts.employee.partials.header')

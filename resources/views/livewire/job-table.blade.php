@@ -54,6 +54,12 @@
                     position: 'topRight',
                 });
             });
+            $wire.on('delete-failed', () => {
+                iziToast.error({
+                    title: 'لا يمكن حذف الوظيفة لأنها مرتبطة ببيانات أخرى',
+                    position: 'topRight',
+                });
+            });
         </script>
     @endscript
 </div>

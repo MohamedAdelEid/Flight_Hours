@@ -175,22 +175,22 @@
                     <td>
                         <div class="actions-wrap">
                             <!-- Edit -->
-                            <button onclick="openEditModal({{ $user->toJson() }})" class="action-btn" title="تعديل">
+                            <button onclick="openEditModal({{ Illuminate\Support\Js::from($user) }})" class="action-btn" title="تعديل">
                                 <i class="fas fa-edit"></i>
                             </button>
 
                             <!-- Toggle active/inactive -->
-                            <button onclick="openToggleModal({{ $user->id }}, '{{ $user->name }}', {{ $user->is_active ? 'true' : 'false' }})" class="action-btn" title="{{ $user->is_active ? 'تعطيل' : 'تفعيل' }}">
+                            <button onclick="openToggleModal({{ $user->id }}, {{ Illuminate\Support\Js::from($user->name) }}, {{ $user->is_active ? 'true' : 'false' }})" class="action-btn" title="{{ $user->is_active ? 'تعطيل' : 'تفعيل' }}">
                                 <i class="fas fa-toggle-{{ $user->is_active ? 'on' : 'off' }}" style="color:{{ $user->is_active ? '#10b981' : 'rgba(255,255,255,0.3)' }}"></i>
                             </button>
 
                             <!-- Reset password -->
-                            <button onclick="openResetModal({{ $user->id }}, '{{ $user->name }}')" class="action-btn" title="إعادة تعيين كلمة المرور">
+                            <button onclick="openResetModal({{ $user->id }}, {{ Illuminate\Support\Js::from($user->name) }})" class="action-btn" title="إعادة تعيين كلمة المرور">
                                 <i class="fas fa-key" style="color:#f59e0b"></i>
                             </button>
 
                             <!-- Delete -->
-                            <button onclick="openDeleteModal({{ $user->id }}, '{{ $user->name }}')" class="action-btn" title="حذف">
+                            <button onclick="openDeleteModal({{ $user->id }}, {{ Illuminate\Support\Js::from($user->name) }})" class="action-btn" title="حذف">
                                 <i class="fas fa-trash" style="color:#ef4444"></i>
                             </button>
                         </div>

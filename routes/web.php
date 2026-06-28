@@ -7,6 +7,7 @@ use App\Http\Controllers\Employee\FlightController;
 use App\Http\Controllers\Employee\JobController;
 use App\Http\Controllers\Employee\OtherFlightsController;
 use App\Http\Controllers\Employee\ProfileController;
+use App\Http\Controllers\Employee\ReportController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminMiddleware as admin;
 use App\Http\Middleware\EmployeeMiddleware as employee;
@@ -23,6 +24,8 @@ Route::middleware(employee::class)->group(function () {
     Route::get('/employee/index', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('/employee/reports/pilot-hours', [EmployeeController::class, 'pilotHoursReport'])->name('employee.pilotHoursReport');
     Route::get('/employee/reports/aircraft-hours', [EmployeeController::class, 'aircraftHoursReport'])->name('employee.aircraftHoursReport');
+    Route::get('/employee/reports', [ReportController::class, 'index'])->name('employee.reports.index');
+    Route::get('/employee/reports/export/{type}', [ReportController::class, 'export'])->name('employee.reports.export');
     Route::post('/change-photo', [ProfileController::class, 'changePhoto'])->name('employee.changePhoto');
     Route::resource('job', JobController::class);
     Route::resource('airport', AirportController::class);

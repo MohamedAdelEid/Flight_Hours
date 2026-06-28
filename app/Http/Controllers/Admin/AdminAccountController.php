@@ -7,6 +7,7 @@ use App\Mail\AccountCredentials;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -25,9 +26,9 @@ class AdminAccountController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                    ->orWhere('email', 'like', "%{$request->search}%");
             });
         }
 
@@ -58,11 +59,26 @@ class AdminAccountController extends Controller
 
         $user = User::create($data);
 
-        Mail::to($user->email)->send(new AccountCredentials($user, $plainPassword));
+        try {
+            Mail::to($user->email)->send(new AccountCredentials($user, $plainPassword));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send account credentials email.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('success', "تم إنشاء حساب {$user->name} بنجاح، لكن تعذر إرسال بيانات الدخول إلى البريد الإلكتروني");
+        }
 
         return back()->with('success', "تم إنشاء حساب {$user->name} بنجاح وإرسال بيانات الدخول إلى بريده الإلكتروني");
     }
 
+
+    public function show(User $user)
+    {
+        return redirect()->route('admin.accounts.index');
+    }
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
@@ -72,13 +88,27 @@ class AdminAccountController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
+        if ($user->role === 'admin' && $data['role'] !== 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return back()->with('error', 'لا يمكن تغيير نوع آخر حساب مدير في النظام');
+        }
+
         $user->update($data);
+
         return back()->with('success', 'تم تحديث بيانات الحساب بنجاح');
     }
 
     public function destroy(User $user)
     {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'لا يمكنك حذف حسابك الحالي');
+        }
+
+        if ($user->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return back()->with('error', 'لا يمكن حذف آخر حساب مدير في النظام');
+        }
+
         $user->delete();
+
         return back()->with('success', 'تم حذف الحساب بنجاح');
     }
 
@@ -86,6 +116,7 @@ class AdminAccountController extends Controller
     {
         $user->update(['is_active' => !$user->is_active]);
         $msg = $user->is_active ? 'تم تفعيل الحساب' : 'تم تعطيل الحساب';
+
         return back()->with('success', $msg);
     }
 
@@ -93,9 +124,19 @@ class AdminAccountController extends Controller
     {
         $newPassword = Str::random(10);
         $user->update(['password' => Hash::make($newPassword)]);
-        
-        Mail::to($user->email)->send(new AccountCredentials($user, $newPassword));
-        
+
+        try {
+            Mail::to($user->email)->send(new AccountCredentials($user, $newPassword));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send reset password email.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('success', "تم إعادة تعيين كلمة المرور، لكن تعذر إرسالها إلى بريد {$user->name}");
+        }
+
         return back()->with('success', "تم إعادة تعيين كلمة المرور وإرسالها إلى بريد {$user->name}");
     }
 }
